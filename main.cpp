@@ -4,30 +4,13 @@
 #include "vao.h"
 #include "vbo.h"
 #include "ebo.h"
-
-const char* vertexShaderSource = "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"layout (location = 1) in vec3 aColor;\n"
-"out vec3 col;\n"
-"void main()\n"
-"{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"	col = aColor;\n"
-"}\0";
-
-const char* fragmentShaderSource = "#version 330 core\n"
-"in vec3 col;\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"	FragColor = vec4(col, 1.0);\n"
-"}\0";
+#include "shaderProgram.h"
 
 float vertices[] = {
-	 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  // top right
-	 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
-	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom left
-	-0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f   // top left 
+	 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+	 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
+	-0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f
 };
 
 unsigned int indices[] = {
@@ -86,21 +69,9 @@ int main(int argc, char* args[]) {
 	vao.unbind();
 	ebo.unbind();
 
-	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
-
-	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-
-	GLuint shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\vertexShader.vert";
+	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\fragmentShader.frag";
+	ShaderProgram shaderProgram(vertexFilePath, fragmentFilePath);
 
 	uint32_t start = SDL_GetTicks();
 	while (running) {
@@ -123,6 +94,9 @@ int main(int argc, char* args[]) {
 				else if (event.key.keysym.sym == SDLK_b) {
 					b = (b - 1) * -1;
 				}
+				else if (event.key.keysym.sym == SDLK_ESCAPE) {
+					running = false;
+				}
 			}
 		}
 
@@ -130,10 +104,11 @@ int main(int argc, char* args[]) {
 		glClearColor(r, g, b, 1.0f);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-		glUseProgram(shaderProgram);
+		shaderProgram.bind();
 		vao.bind();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		vao.unbind();
+		shaderProgram.unbind();
 
 		SDL_GL_SwapWindow(window);
 

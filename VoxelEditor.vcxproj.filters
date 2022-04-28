@@ -30,6 +30,9 @@
     <ClCompile Include="ebo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="shaderProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vao.h">
@@ -41,5 +44,16 @@
     <ClInclude Include="ebo.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="shaderProgram.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="vertexShader.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="fragmentShader.frag">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

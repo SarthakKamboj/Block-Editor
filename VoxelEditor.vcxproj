@@ -154,13 +154,19 @@
     <ClCompile Include="ebo.cpp" />
     <ClCompile Include="ext\glad\src\glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="shaderProgram.cpp" />
     <ClCompile Include="vao.cpp" />
     <ClCompile Include="vbo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ebo.h" />
+    <ClInclude Include="shaderProgram.h" />
     <ClInclude Include="vao.h" />
     <ClInclude Include="vbo.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fragmentShader.frag" />
+    <None Include="vertexShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
