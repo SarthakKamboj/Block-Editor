@@ -1,6 +1,9 @@
 #include "glad/glad.h"
 #include "SDL.h"
 #include <iostream>
+#include "vao.h"
+#include "vbo.h"
+#include "ebo.h"
 
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
@@ -65,31 +68,23 @@ int main(int argc, char* args[]) {
 	float g = 0.0f;
 	float b = 0.0f;
 
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
+	VAO vao;
+	vao.bind();
 
-	GLuint vbo, ebo;
-	glGenBuffers(1, &vbo);
-	glGenBuffers(1, &ebo);
+	EBO ebo;
+	ebo.setData(indices, sizeof(indices), GL_STATIC_DRAW);
+	ebo.bind();
 
-	glBindVertexArray(vao);
+	VBO vbo;
+	vbo.bind();
+	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	vao.setAttribute(vbo, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
+	vao.setAttribute(vbo, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glBindVertexArray(0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	vbo.unbind();
+	vao.unbind();
+	ebo.unbind();
 
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -136,10 +131,9 @@ int main(int argc, char* args[]) {
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 		glUseProgram(shaderProgram);
-		glBindVertexArray(vao);
+		vao.bind();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-		glBindVertexArray(0);
+		vao.unbind();
 
 		SDL_GL_SwapWindow(window);
 
