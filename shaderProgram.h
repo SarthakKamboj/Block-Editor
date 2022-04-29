@@ -10,6 +10,7 @@ public:
 	ShaderProgram(const char* vertexFilePath, const char* fragmentFilePath);
 	void bind();
 	void unbind();
+	void setUniformF(const GLchar* varName, float value);
 
 private:
 	GLuint programId;

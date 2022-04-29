@@ -7,15 +7,47 @@
 #include "shaderProgram.h"
 
 float vertices[] = {
-	 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-	 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
-	-0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f
-};
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
 
-unsigned int indices[] = {
-	0, 1, 3,
-	1, 2, 3
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
+
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f
 };
 
 int main(int argc, char* args[]) {
@@ -32,7 +64,7 @@ int main(int argc, char* args[]) {
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-	int width = 600, height = 400;
+	int width = 800, height = 800;
 
 	SDL_Window* window = SDL_CreateWindow("window",
 		SDL_WINDOWPOS_CENTERED,
@@ -45,6 +77,10 @@ int main(int argc, char* args[]) {
 
 	gladLoadGLLoader(SDL_GL_GetProcAddress);
 
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+
 	bool running = true;
 
 	float r = 0.0f;
@@ -54,24 +90,22 @@ int main(int argc, char* args[]) {
 	VAO vao;
 	vao.bind();
 
-	EBO ebo;
-	ebo.setData(indices, sizeof(indices), GL_STATIC_DRAW);
-	ebo.bind();
-
 	VBO vbo;
 	vbo.bind();
 	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
+	vbo.unbind();
 
 	vao.setAttribute(vbo, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
 	vao.setAttribute(vbo, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 
-	vbo.unbind();
 	vao.unbind();
-	ebo.unbind();
+	// ebo.unbind();
 
 	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\vertexShader.vert";
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\fragmentShader.frag";
 	ShaderProgram shaderProgram(vertexFilePath, fragmentFilePath);
+	shaderProgram.setUniformF("windowHeight", height);
+	shaderProgram.setUniformF("loopDuration", 5.0f);
 
 	uint32_t start = SDL_GetTicks();
 	while (running) {
@@ -85,17 +119,19 @@ int main(int argc, char* args[]) {
 				running = false;
 			}
 			else if (event.type == SDL_KEYDOWN) {
-				if (event.key.keysym.sym == SDLK_r) {
+				switch (event.key.keysym.sym) {
+				case SDLK_r:
 					r = (r - 1) * -1;
-				}
-				else if (event.key.keysym.sym == SDLK_g) {
+					break;
+				case SDLK_g:
 					g = (g - 1) * -1;
-				}
-				else if (event.key.keysym.sym == SDLK_b) {
+					break;
+				case SDLK_b:
 					b = (b - 1) * -1;
-				}
-				else if (event.key.keysym.sym == SDLK_ESCAPE) {
+					break;
+				case SDLK_ESCAPE:
 					running = false;
+					break;
 				}
 			}
 		}
@@ -105,8 +141,9 @@ int main(int argc, char* args[]) {
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 		shaderProgram.bind();
+		shaderProgram.setUniformF("msTime", cur);
 		vao.bind();
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (6 * sizeof(float)));
 		vao.unbind();
 		shaderProgram.unbind();
 

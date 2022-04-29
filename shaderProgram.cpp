@@ -38,13 +38,30 @@ GLuint ShaderProgram::createShader(const char* filePath, GLenum shaderType) {
 	glGetShaderiv(id, GL_COMPILE_STATUS, &success);
 
 	if (success == GL_FALSE) {
-		std::cout << "shader compilation failed" << std::endl;
+		std::cout << "shader compilation failed for shader of type " << (shaderType == GL_VERTEX_SHADER ? "vertex" : "fragment") << std::endl;
+		int maxErrorLength = 1024;
+		char errorInfo[1024];
+		glGetShaderInfoLog(id, maxErrorLength, &maxErrorLength, errorInfo);
+		std::cout << "ERROR: " << errorInfo << std::endl;
+		glDeleteShader(id);
 	}
 	else {
-		std::cout << "shader compilation succeeded" << std::endl;
+		std::cout << (shaderType == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader compilation succeeded" << std::endl;
 	}
 
-	// std::cout << fileContentsChar << std::endl;
-
 	return id;
+}
+
+
+void ShaderProgram::setUniformF(const GLchar* varName, float value) {
+	GLint curProgramId;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &curProgramId);
+	if (curProgramId != programId) {
+		bind();
+	}
+	GLint location = glGetUniformLocation(programId, varName);
+	glUniform1f(location, value);
+	if (curProgramId != programId) {
+		unbind();
+	}
 }
