@@ -101,23 +101,10 @@ int main(int argc, char* args[]) {
 	vao.setAttribute(vbo, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 
 	vao.unbind();
-	// ebo.unbind();
 
 	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\vertexShader.vert";
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\fragmentShader.frag";
 	ShaderProgram shaderProgram(vertexFilePath, fragmentFilePath);
-
-	/*
-	vec4 origCoords = vec4(0.5f, 0.25f, 0.2f, 0.5f);
-	mat4 mat1 = getTranslationMatrix(10, 15, 20);
-	mat4 mat2 = getScaleMatrix(2, 2, 2);
-	print_vec4(origCoords);
-	std::cout << "\n" << std::endl;
-	mat4 combined = mat4_multiply_mat4(mat1, mat2);
-	print_mat4(combined);
-	std::cout << "\n" << std::endl;
-	print_vec4(mat4_multiply_vec4(combined, origCoords));
-	*/
 
 	float xPos = 0.0f, yPos = 0.0f;
 	float xScale = 1.0f, yScale = 1.0f;
@@ -133,14 +120,6 @@ int main(int argc, char* args[]) {
 		uint32_t diff = cur - start;
 		start = cur;
 
-		// yRot += (diff / 1000.0f) * 360.0f / 2;
-
-		/*
-		if (yRot > 360.0f) {
-			yRot -= 360.0f;
-		}
-		*/
-
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
@@ -148,17 +127,6 @@ int main(int argc, char* args[]) {
 			}
 			else if (event.type == SDL_KEYDOWN) {
 				switch (event.key.keysym.sym) {
-					/*
-				case SDLK_r:
-					r = (r - 1) * -1;
-					break;
-				case SDLK_g:
-					g = (g - 1) * -1;
-					break;
-				case SDLK_b:
-					b = (b - 1) * -1;
-					break;
-					*/
 				case SDLK_ESCAPE:
 					running = false;
 					break;
