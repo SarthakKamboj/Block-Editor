@@ -66,16 +66,16 @@ mat4 getRotMatrix(float x, float y, float z) {
 	xRotMat.rows[2].coords.z = cos(xRot);
 
 	mat4 yRotMat = mat4(1.0f);
-	xRotMat.rows[0].coords.x = cos(yRot);
-	xRotMat.rows[0].coords.z = -sin(yRot);
-	xRotMat.rows[2].coords.x = sin(yRot);
-	xRotMat.rows[2].coords.z = cos(yRot);
+	yRotMat.rows[0].coords.x = cos(yRot);
+	yRotMat.rows[0].coords.z = -sin(yRot);
+	yRotMat.rows[2].coords.x = sin(yRot);
+	yRotMat.rows[2].coords.z = cos(yRot);
 
 	mat4 zRotMat = mat4(1.0f);
-	xRotMat.rows[0].coords.x = cos(zRot);
-	xRotMat.rows[0].coords.y = sin(zRot);
-	xRotMat.rows[1].coords.x = -sin(zRot);
-	xRotMat.rows[1].coords.y = cos(zRot);
+	zRotMat.rows[0].coords.x = cos(zRot);
+	zRotMat.rows[0].coords.y = sin(zRot);
+	zRotMat.rows[1].coords.x = -sin(zRot);
+	zRotMat.rows[1].coords.y = cos(zRot);
 
 	return mat4_multiply_mat4(zRotMat, mat4_multiply_mat4(yRotMat, xRotMat));
 }
@@ -108,4 +108,8 @@ void print_mat4(mat4 mat) {
 		float* vals = mat.rows[row].vals;
 		std::cout << vals[0] << " " << vals[1] << " " << vals[2] << " " << vals[3] << std::endl;
 	}
+}
+
+const GLfloat* get_ptr(mat4 mat) {
+	return (GLfloat*)(&mat.rows[0].vals[0]);
 }

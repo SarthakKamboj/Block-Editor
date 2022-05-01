@@ -107,14 +107,7 @@ int main(int argc, char* args[]) {
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\fragmentShader.frag";
 	ShaderProgram shaderProgram(vertexFilePath, fragmentFilePath);
 
-	GLfloat pos[3] = { 0.4f, 0.3f, -1.0f };
-	GLfloat scale[3] = { 0.75f, 0.5f, 0.8f };
-	GLfloat eulerAngles[3] = { 0.0f, 23.4f, 0.0f };
-
-	mat4 translationMat = getTranslationMatrix(pos[0], pos[1], pos[2]);
-	mat4 scaleMat = getScaleMatrix(scale[0], scale[1], scale[2]);
-	mat4 rotMat = getRotMatrix(eulerAngles[0], eulerAngles[1], eulerAngles[2]);
-
+	/*
 	vec4 origCoords = vec4(0.5f, 0.25f, 0.2f, 0.5f);
 	mat4 mat1 = getTranslationMatrix(10, 15, 20);
 	mat4 mat2 = getScaleMatrix(2, 2, 2);
@@ -124,13 +117,14 @@ int main(int argc, char* args[]) {
 	print_mat4(combined);
 	std::cout << "\n" << std::endl;
 	print_vec4(mat4_multiply_vec4(combined, origCoords));
+	*/
 
-
-	// shaderProgram.setVec3("pos", pos);
-	// shaderProgram.setVec3("scale", scale);
-	// shaderProgram.setVec3("eulerAngles", eulerAngles);
-
-	float yRot = 0.0f;
+	float xPos = 0.0f, yPos = 0.0f;
+	float xScale = 1.0f, yScale = 1.0f;
+	float xRot = 0.0f, yRot = 0.0f, zRot = 0.0f;
+	float posDelta = 0.01f;
+	float scaleDelta = 0.1f;
+	float rotDelta = 1.0f;
 
 	uint32_t start = SDL_GetTicks();
 	while (running) {
@@ -139,11 +133,13 @@ int main(int argc, char* args[]) {
 		uint32_t diff = cur - start;
 		start = cur;
 
-		yRot += (diff / 1000.0f) * 360.0f / 2;
+		// yRot += (diff / 1000.0f) * 360.0f / 2;
 
+		/*
 		if (yRot > 360.0f) {
 			yRot -= 360.0f;
 		}
+		*/
 
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
@@ -152,6 +148,7 @@ int main(int argc, char* args[]) {
 			}
 			else if (event.type == SDL_KEYDOWN) {
 				switch (event.key.keysym.sym) {
+					/*
 				case SDLK_r:
 					r = (r - 1) * -1;
 					break;
@@ -161,10 +158,57 @@ int main(int argc, char* args[]) {
 				case SDLK_b:
 					b = (b - 1) * -1;
 					break;
+					*/
 				case SDLK_ESCAPE:
 					running = false;
 					break;
+				case SDLK_w:
+					yPos += posDelta;
+					break;
+				case SDLK_a:
+					xPos -= posDelta;
+					break;
+				case SDLK_s:
+					yPos -= posDelta;
+					break;
+				case SDLK_d:
+					xPos += posDelta;
+					break;
+
+				case SDLK_t:
+					zRot -= rotDelta;
+					break;
+				case SDLK_g:
+					zRot += rotDelta;
+					break;
+				case SDLK_f:
+					yRot -= rotDelta;
+					break;
+				case SDLK_h:
+					yRot += rotDelta;
+					break;
+				case SDLK_b:
+					xRot -= rotDelta;
+					break;
+				case SDLK_v:
+					xRot += rotDelta;
+					break;
+
+				case SDLK_k:
+					yScale -= scaleDelta;
+					break;
+				case SDLK_i:
+					yScale += scaleDelta;
+					break;
+				case SDLK_j:
+					xScale -= scaleDelta;
+					break;
+				case SDLK_l:
+					xScale += scaleDelta;
+					break;
 				}
+
+
 			}
 		}
 
@@ -175,19 +219,19 @@ int main(int argc, char* args[]) {
 		shaderProgram.bind();
 		vao.bind();
 
-		shaderProgram.setMat4("translate", GL_TRUE, &(translationMat.rows[0].vals[0]));
-		shaderProgram.setMat4("scale", GL_TRUE, &(scaleMat.rows[0].vals[0]));
-		shaderProgram.setMat4("rot", GL_TRUE, &(rotMat.rows[0].vals[0]));
+		GLfloat pos[3] = { xPos, yPos, 0.0f };
+		mat4 translationMat = getTranslationMatrix(pos[0], pos[1], pos[2]);
+		shaderProgram.setMat4("translate", GL_TRUE, get_ptr(translationMat));
 
-		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (6 * sizeof(float)));
+		GLfloat eulerAngles[3] = { xRot, yRot , zRot };
+		mat4 rotMat = getRotMatrix(eulerAngles[0], eulerAngles[1], eulerAngles[2]);
+		shaderProgram.setMat4("rot", GL_TRUE, get_ptr(rotMat));
 
-		mat4 identity(1.0f);
+		GLfloat scale[3] = { xScale, yScale, 1.0f };
+		mat4 scaleMat = getScaleMatrix(scale[0], scale[1], scale[2]);
+		shaderProgram.setMat4("scale", GL_TRUE, get_ptr(scaleMat));
 
-		shaderProgram.setMat4("translate", GL_TRUE, &(identity.rows[0].vals[0]));
-		shaderProgram.setMat4("scale", GL_TRUE, &(identity.rows[0].vals[0]));
-		shaderProgram.setMat4("rot", GL_TRUE, &(identity.rows[0].vals[0]));
-
-		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (6 * sizeof(float)));
+		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (6 * sizeof(vertices[0])));
 
 		vao.unbind();
 		shaderProgram.unbind();
