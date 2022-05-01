@@ -60,7 +60,12 @@ void ShaderProgram::setUniformF(const GLchar* varName, float value) {
 		bind();
 	}
 	GLint location = glGetUniformLocation(programId, varName);
-	glUniform1f(location, value);
+	if (location == -1) {
+		std::cout << "uniform with name " << varName << " does not exist in this shader program" << std::endl;
+	}
+	else {
+		glUniform1f(location, value);
+	}
 	if (curProgramId != programId) {
 		unbind();
 	}
@@ -73,7 +78,31 @@ void ShaderProgram::setVec3(const GLchar* varName, const GLfloat* vec3) {
 		bind();
 	}
 	GLint location = glGetUniformLocation(programId, varName);
-	glUniform3fv(location, 1, vec3);
+	if (location == -1) {
+		std::cout << "uniform with name " << varName << " does not exist in this shader program" << std::endl;
+	}
+	else {
+		glUniform3fv(location, 1, vec3);
+	}
+	if (curProgramId != programId) {
+		unbind();
+	}
+}
+
+
+void ShaderProgram::setMat4(const GLchar* varName, GLboolean transpose, const GLfloat* mat) {
+	GLint curProgramId;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &curProgramId);
+	if (curProgramId != programId) {
+		bind();
+	}
+	GLint location = glGetUniformLocation(programId, varName);
+	if (location == -1) {
+		std::cout << "uniform with name " << varName << " does not exist in this shader program" << std::endl;
+	}
+	else {
+		glUniformMatrix4fv(location, 1, transpose, mat);
+	}
 	if (curProgramId != programId) {
 		unbind();
 	}

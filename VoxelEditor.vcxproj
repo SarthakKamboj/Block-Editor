@@ -154,12 +154,14 @@
     <ClCompile Include="ebo.cpp" />
     <ClCompile Include="ext\glad\src\glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mat.cpp" />
     <ClCompile Include="shaderProgram.cpp" />
     <ClCompile Include="vao.cpp" />
     <ClCompile Include="vbo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ebo.h" />
+    <ClInclude Include="mat.h" />
     <ClInclude Include="shaderProgram.h" />
     <ClInclude Include="vao.h" />
     <ClInclude Include="vbo.h" />

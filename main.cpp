@@ -5,6 +5,7 @@
 #include "vbo.h"
 #include "ebo.h"
 #include "shaderProgram.h"
+#include "mat.h"
 
 float vertices[] = {
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
@@ -77,9 +78,10 @@ int main(int argc, char* args[]) {
 
 	gladLoadGLLoader(SDL_GL_GetProcAddress);
 
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
+	glEnable(GL_DEPTH_TEST);
+	// glEnable(GL_CULL_FACE);
+	// glCullFace(GL_BACK);
+	// glFrontFace(GL_CCW);
 
 	bool running = true;
 
@@ -104,16 +106,44 @@ int main(int argc, char* args[]) {
 	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\vertexShader.vert";
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\fragmentShader.frag";
 	ShaderProgram shaderProgram(vertexFilePath, fragmentFilePath);
-	shaderProgram.setUniformF("windowHeight", height);
-	shaderProgram.setUniformF("loopDuration", 5.0f);
-	GLfloat color[3] = { 1.0f, 0.0f, 1.0f };
-	shaderProgram.setVec3("uniformColor", color);
+
+	GLfloat pos[3] = { 0.4f, 0.3f, -1.0f };
+	GLfloat scale[3] = { 0.75f, 0.5f, 0.8f };
+	GLfloat eulerAngles[3] = { 0.0f, 23.4f, 0.0f };
+
+	mat4 translationMat = getTranslationMatrix(pos[0], pos[1], pos[2]);
+	mat4 scaleMat = getScaleMatrix(scale[0], scale[1], scale[2]);
+	mat4 rotMat = getRotMatrix(eulerAngles[0], eulerAngles[1], eulerAngles[2]);
+
+	vec4 origCoords = vec4(0.5f, 0.25f, 0.2f, 0.5f);
+	mat4 mat1 = getTranslationMatrix(10, 15, 20);
+	mat4 mat2 = getScaleMatrix(2, 2, 2);
+	print_vec4(origCoords);
+	std::cout << "\n" << std::endl;
+	mat4 combined = mat4_multiply_mat4(mat1, mat2);
+	print_mat4(combined);
+	std::cout << "\n" << std::endl;
+	print_vec4(mat4_multiply_vec4(combined, origCoords));
+
+
+	// shaderProgram.setVec3("pos", pos);
+	// shaderProgram.setVec3("scale", scale);
+	// shaderProgram.setVec3("eulerAngles", eulerAngles);
+
+	float yRot = 0.0f;
 
 	uint32_t start = SDL_GetTicks();
 	while (running) {
 
 		uint32_t cur = SDL_GetTicks();
+		uint32_t diff = cur - start;
 		start = cur;
+
+		yRot += (diff / 1000.0f) * 360.0f / 2;
+
+		if (yRot > 360.0f) {
+			yRot -= 360.0f;
+		}
 
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
@@ -143,9 +173,22 @@ int main(int argc, char* args[]) {
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 		shaderProgram.bind();
-		shaderProgram.setUniformF("msTime", cur);
 		vao.bind();
+
+		shaderProgram.setMat4("translate", GL_TRUE, &(translationMat.rows[0].vals[0]));
+		shaderProgram.setMat4("scale", GL_TRUE, &(scaleMat.rows[0].vals[0]));
+		shaderProgram.setMat4("rot", GL_TRUE, &(rotMat.rows[0].vals[0]));
+
 		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (6 * sizeof(float)));
+
+		mat4 identity(1.0f);
+
+		shaderProgram.setMat4("translate", GL_TRUE, &(identity.rows[0].vals[0]));
+		shaderProgram.setMat4("scale", GL_TRUE, &(identity.rows[0].vals[0]));
+		shaderProgram.setMat4("rot", GL_TRUE, &(identity.rows[0].vals[0]));
+
+		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (6 * sizeof(float)));
+
 		vao.unbind();
 		shaderProgram.unbind();
 

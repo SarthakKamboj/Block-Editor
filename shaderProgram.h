@@ -12,6 +12,7 @@ public:
 	void unbind();
 	void setUniformF(const GLchar* varName, float value);
 	void setVec3(const GLchar* varName, const GLfloat* vec3);
+	void setMat4(const GLchar* varName, GLboolean transpose, const GLfloat* mat);
 
 private:
 	GLuint programId;
