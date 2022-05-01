@@ -11,6 +11,7 @@ public:
 	void bind();
 	void unbind();
 	void setUniformF(const GLchar* varName, float value);
+	void setVec3(const GLchar* varName, const GLfloat* vec3);
 
 private:
 	GLuint programId;

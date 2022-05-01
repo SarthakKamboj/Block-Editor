@@ -65,3 +65,16 @@ void ShaderProgram::setUniformF(const GLchar* varName, float value) {
 		unbind();
 	}
 }
+
+void ShaderProgram::setVec3(const GLchar* varName, const GLfloat* vec3) {
+	GLint curProgramId;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &curProgramId);
+	if (curProgramId != programId) {
+		bind();
+	}
+	GLint location = glGetUniformLocation(programId, varName);
+	glUniform3fv(location, 1, vec3);
+	if (curProgramId != programId) {
+		unbind();
+	}
+}

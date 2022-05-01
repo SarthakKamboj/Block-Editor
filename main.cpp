@@ -106,6 +106,8 @@ int main(int argc, char* args[]) {
 	ShaderProgram shaderProgram(vertexFilePath, fragmentFilePath);
 	shaderProgram.setUniformF("windowHeight", height);
 	shaderProgram.setUniformF("loopDuration", 5.0f);
+	GLfloat color[3] = { 1.0f, 0.0f, 1.0f };
+	shaderProgram.setVec3("uniformColor", color);
 
 	uint32_t start = SDL_GetTicks();
 	while (running) {
