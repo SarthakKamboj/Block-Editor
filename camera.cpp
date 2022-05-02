@@ -33,6 +33,7 @@ mat4 Camera::getViewMat() {
 	projection.rows[2].coords.z = zAxis.coords.z;
 
 	mat4 camPos = getTranslationMatrix(-pos.coords.x, -pos.coords.y, -pos.coords.z);
+	mat4 camRot = getRotMatrix(-rot.coords.x, -rot.coords.y, -rot.coords.z);
 
-	return mat4_multiply_mat4(projection, camPos);
+	return mat4_multiply_mat4(projection, mat4_multiply_mat4(camPos, camRot));
 }
