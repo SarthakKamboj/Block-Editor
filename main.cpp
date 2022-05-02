@@ -5,7 +5,11 @@
 #include "vbo.h"
 #include "ebo.h"
 #include "shaderProgram.h"
-#include "mat.h"
+#include "mat4.h"
+#include "vec3.h"
+#include "imgui.h"
+#include "imgui_impl_opengl3.h"
+#include "imgui_impl_sdl.h"
 
 float vertices[] = {
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
@@ -76,7 +80,17 @@ int main(int argc, char* args[]) {
 
 	SDL_GLContext context = SDL_GL_CreateContext(window);
 
+	SDL_GL_MakeCurrent(window, context);
 	gladLoadGLLoader(SDL_GL_GetProcAddress);
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+
+	ImGui_ImplSDL2_InitForOpenGL(window, context);
+	const char* glsl_version = "#version 330";
+	ImGui_ImplOpenGL3_Init(glsl_version);
 
 	glEnable(GL_DEPTH_TEST);
 	// glEnable(GL_CULL_FACE);
@@ -106,14 +120,23 @@ int main(int argc, char* args[]) {
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\fragmentShader.frag";
 	ShaderProgram shaderProgram(vertexFilePath, fragmentFilePath);
 
-	float xPos = 0.0f, yPos = 0.0f;
-	float xScale = 1.0f, yScale = 1.0f;
-	float xRot = 0.0f, yRot = 0.0f, zRot = 0.0f;
+	vec3 pos;
+	vec3 scale(1.0f, 1.0f, 1.0f);
+	vec3 rot;
+
 	float posDelta = 0.01f;
 	float scaleDelta = 0.1f;
 	float rotDelta = 1.0f;
 
 	uint32_t start = SDL_GetTicks();
+
+	bool checked = false;
+	bool show_demo_window = true;
+
+	float val = 0.0f;
+
+	vec3 triangleColor(1.0f, 0.0f, 1.0f);
+
 	while (running) {
 
 		uint32_t cur = SDL_GetTicks();
@@ -122,6 +145,7 @@ int main(int argc, char* args[]) {
 
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
+			ImGui_ImplSDL2_ProcessEvent(&event);
 			if (event.type == SDL_QUIT) {
 				running = false;
 			}
@@ -130,83 +154,87 @@ int main(int argc, char* args[]) {
 				case SDLK_ESCAPE:
 					running = false;
 					break;
-				case SDLK_w:
-					yPos += posDelta;
-					break;
-				case SDLK_a:
-					xPos -= posDelta;
-					break;
-				case SDLK_s:
-					yPos -= posDelta;
-					break;
-				case SDLK_d:
-					xPos += posDelta;
-					break;
-
-				case SDLK_t:
-					zRot -= rotDelta;
-					break;
-				case SDLK_g:
-					zRot += rotDelta;
-					break;
-				case SDLK_f:
-					yRot -= rotDelta;
-					break;
-				case SDLK_h:
-					yRot += rotDelta;
-					break;
-				case SDLK_b:
-					xRot -= rotDelta;
-					break;
-				case SDLK_v:
-					xRot += rotDelta;
-					break;
-
-				case SDLK_k:
-					yScale -= scaleDelta;
-					break;
-				case SDLK_i:
-					yScale += scaleDelta;
-					break;
-				case SDLK_j:
-					xScale -= scaleDelta;
-					break;
-				case SDLK_l:
-					xScale += scaleDelta;
-					break;
 				}
 
 
 			}
 		}
 
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplSDL2_NewFrame();
+		ImGui::NewFrame();
 
 		glClearColor(r, g, b, 1.0f);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
+		glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+
 		shaderProgram.bind();
 		vao.bind();
 
-		GLfloat pos[3] = { xPos, yPos, 0.0f };
-		mat4 translationMat = getTranslationMatrix(pos[0], pos[1], pos[2]);
+		mat4 translationMat = getTranslationMatrix(pos.coords.x, pos.coords.y, pos.coords.z);
 		shaderProgram.setMat4("translate", GL_TRUE, get_ptr(translationMat));
 
-		GLfloat eulerAngles[3] = { xRot, yRot , zRot };
-		mat4 rotMat = getRotMatrix(eulerAngles[0], eulerAngles[1], eulerAngles[2]);
+		mat4 rotMat = getRotMatrix(rot.coords.x, rot.coords.y, rot.coords.z);
 		shaderProgram.setMat4("rot", GL_TRUE, get_ptr(rotMat));
 
-		GLfloat scale[3] = { xScale, yScale, 1.0f };
-		mat4 scaleMat = getScaleMatrix(scale[0], scale[1], scale[2]);
+		mat4 scaleMat = getScaleMatrix(scale.coords.x, scale.coords.y, scale.coords.z);
 		shaderProgram.setMat4("scale", GL_TRUE, get_ptr(scaleMat));
+
+		shaderProgram.setVec3("inColor", &triangleColor.vals[0]);
 
 		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (6 * sizeof(vertices[0])));
 
 		vao.unbind();
 		shaderProgram.unbind();
 
+		ImGui::ShowDemoWindow();
+
+		{
+			ImGui::Begin("Triangle Info");
+			if (ImGui::CollapsingHeader("transform")) {
+				if (ImGui::TreeNode("position")) {
+					ImGui::SliderFloat("x", &pos.coords.x, -1.0f, 1.0f);
+					ImGui::SliderFloat("y", &pos.coords.y, -1.0f, 1.0f);
+					ImGui::SliderFloat("z", &pos.coords.z, -1.0f, 1.0f);
+					ImGui::TreePop();
+				}
+
+				if (ImGui::TreeNode("scale")) {
+					ImGui::SliderFloat("x", &scale.coords.x, -5.0f, 5.0f);
+					ImGui::SliderFloat("y", &scale.coords.y, -5.0f, 5.0f);
+					ImGui::SliderFloat("z", &scale.coords.z, -5.0f, 5.0f);
+					ImGui::TreePop();
+				}
+
+				if (ImGui::TreeNode("rotation")) {
+					ImGui::SliderFloat("x", &rot.coords.x, -180.0f, 180.0f);
+					ImGui::SliderFloat("y", &rot.coords.y, -180.0f, 180.0f);
+					ImGui::SliderFloat("z", &rot.coords.z, -180.0f, 180.0f);
+					ImGui::TreePop();
+				}
+			}
+			if (ImGui::CollapsingHeader("color")) {
+				ImGui::ColorEdit3("Triangle color", &triangleColor.vals[0]);
+			}
+
+			ImGui::End();
+		}
+
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 		SDL_GL_SwapWindow(window);
 
 	}
+
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
+
+	SDL_GL_DeleteContext(context);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
 
 	return 0;
 }

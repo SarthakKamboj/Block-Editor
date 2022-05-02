@@ -16,6 +16,15 @@
     <Filter Include="Source Files\math">
       <UniqueIdentifier>{8b1f4123-12f7-4036-b270-b78c7ad38e71}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\imgui">
+      <UniqueIdentifier>{b9f71552-1ede-4977-ab9b-b6977577c4f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\imgui\include">
+      <UniqueIdentifier>{b385177c-f6a4-4464-9f0e-a98db8e05a49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\imgui\src">
+      <UniqueIdentifier>{f73001fe-c589-43ba-b88d-7c0411ab97bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -36,7 +45,34 @@
     <ClCompile Include="shaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mat.cpp">
+    <ClCompile Include="mat4.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="ext\imgui\imgui.cpp">
+      <Filter>Source Files\imgui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ext\imgui\imgui_demo.cpp">
+      <Filter>Source Files\imgui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ext\imgui\imgui_draw.cpp">
+      <Filter>Source Files\imgui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ext\imgui\imgui_impl_opengl3.cpp">
+      <Filter>Source Files\imgui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ext\imgui\imgui_impl_sdl.cpp">
+      <Filter>Source Files\imgui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ext\imgui\imgui_tables.cpp">
+      <Filter>Source Files\imgui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ext\imgui\imgui_widgets.cpp">
+      <Filter>Source Files\imgui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="vec4.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="vec3.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,7 +89,40 @@
     <ClInclude Include="shaderProgram.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="mat.h">
+    <ClInclude Include="mat4.h">
+      <Filter>Source Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="ext\imgui\imconfig.h">
+      <Filter>Source Files\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="ext\imgui\imgui.h">
+      <Filter>Source Files\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="ext\imgui\imgui_impl_opengl3.h">
+      <Filter>Source Files\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="ext\imgui\imgui_impl_opengl3_loader.h">
+      <Filter>Source Files\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="ext\imgui\imgui_impl_sdl.h">
+      <Filter>Source Files\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="ext\imgui\imgui_internal.h">
+      <Filter>Source Files\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="ext\imgui\imstb_rectpack.h">
+      <Filter>Source Files\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="ext\imgui\imstb_textedit.h">
+      <Filter>Source Files\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="ext\imgui\imstb_truetype.h">
+      <Filter>Source Files\imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="vec4.h">
+      <Filter>Source Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="vec3.h">
       <Filter>Source Files\math</Filter>
     </ClInclude>
   </ItemGroup>
