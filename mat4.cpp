@@ -85,3 +85,22 @@ void print_mat4(mat4 mat) {
 const GLfloat* get_ptr(mat4 mat) {
 	return (GLfloat*)(&mat.rows[0].vals[0]);
 }
+
+mat4 getProjectionMat(float fov, float near, float far, float aspectRatio) {
+	float top = near * tan(fov / 2.0f);
+	float bottom = -top;
+
+	float right = top * aspectRatio;
+	float left = -right;
+
+	mat4 projection;
+	projection.rows[0].coords.x = 2 * near / (right - left);
+	projection.rows[0].coords.z = (right + left) / (right - left);
+	projection.rows[1].coords.y = 2 * near / (top - bottom);
+	projection.rows[1].coords.z = (top + bottom) / (top - bottom);
+	projection.rows[2].coords.z = -(far + near) / (far - near);
+	projection.rows[2].coords.w = (-2 * far * near) / (far - near);
+	projection.rows[3].coords.z = -1;
+
+	return projection;
+}

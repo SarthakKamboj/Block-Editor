@@ -23,3 +23,5 @@ mat4 mat4_multiply_mat4(mat4 one, mat4 two);
 vec4 mat4_multiply_vec4(mat4 one, vec4 two);
 void print_mat4(mat4 mat);
 const GLfloat* get_ptr(mat4 mat);
+
+mat4 getProjectionMat(float fov, float near, float far, float aspectRatio);

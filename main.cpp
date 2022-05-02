@@ -11,6 +11,7 @@
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_sdl.h"
 #include "cube.h"
+#include "camera.h"
 
 int main(int argc, char* args[]) {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -83,6 +84,10 @@ int main(int argc, char* args[]) {
 
 	vec3 triangleColor(1.0f, 0.0f, 1.0f);
 
+	mat4 projection = getProjectionMat(45.0f, 0.1f, 100.0f, width / height);
+
+	Camera cam(0.0f, 0.0f, 5.0f);
+
 	while (running) {
 
 		uint32_t cur = SDL_GetTicks();
@@ -126,7 +131,12 @@ int main(int argc, char* args[]) {
 		mat4 scaleMat = getScaleMatrix(scale.coords.x, scale.coords.y, scale.coords.z);
 		shaderProgram.setMat4("scale", GL_TRUE, get_ptr(scaleMat));
 
-		shaderProgram.setVec3("inColor", &triangleColor.vals[0]);
+		// shaderProgram.setVec3("inColor", &triangleColor.vals[0]);
+		shaderProgram.setMat4("projection", GL_TRUE, get_ptr(projection));
+
+		mat4 view = cam.getViewMat();
+		shaderProgram.setMat4("view", GL_TRUE, get_ptr(view));
+		print_mat4(view);
 
 		cube.render();
 		shaderProgram.unbind();
@@ -158,6 +168,18 @@ int main(int argc, char* args[]) {
 			}
 			if (ImGui::CollapsingHeader("color")) {
 				ImGui::ColorEdit3("Triangle color", &triangleColor.vals[0]);
+			}
+
+			ImGui::End();
+		}
+
+		{
+			ImGui::Begin("Camera Info");
+
+			if (ImGui::CollapsingHeader("position")) {
+				ImGui::SliderFloat("x", &cam.pos.coords.x, -10.0f, 10.0f);
+				ImGui::SliderFloat("y", &cam.pos.coords.y, -10.0f, 10.0f);
+				ImGui::SliderFloat("z", &cam.pos.coords.z, -10.0f, 10.0f);
 			}
 
 			ImGui::End();
