@@ -2,46 +2,37 @@
 
 Camera::Camera() {
 	pos = vec3(0.0f, 0.0f, 0.0f);
-	lookAt = vec3(0.0f, 0.0f, 0.0f);
+	target = vec3(0.0f, 0.0f, 0.0f);
+	offset = vec3_sub(target, pos);
 }
 
 Camera::Camera(float xPos, float yPos, float zPos) {
 	pos = vec3(xPos, yPos, zPos);
-	lookAt = vec3(0.0f, 0.0f, 0.0f);
+	target = vec3(0.0f, 0.0f, 0.0f);
+	offset = vec3_sub(target, pos);
 }
 
 mat4 Camera::getViewMat() {
-	vec3 subDir = sub(pos, lookAt);
-	vec3 lookAtDir = normalize(subDir);
+	vec3 subDir = vec3_sub(pos, target);
+	vec3 zAxis = vec3_normalize(subDir);
 	vec3 upRough(0.0f, 1.0f, 0.0f);
-	vec3 side = cross(upRough, lookAtDir);
-	vec3 up = cross(lookAtDir, side);
-
-	up.coords.x *= -1.0f;
-	up.coords.y *= -1.0f;
-	up.coords.z *= -1.0f;
+	vec3 xAxis = vec3_normalize(vec3_cross(zAxis, upRough));
+	vec3 yAxis = vec3_cross(xAxis, zAxis);
 
 	mat4 projection(1.0f);
-	projection.rows[0].vals[0] = side.coords.x;
-	projection.rows[0].vals[1] = up.coords.x;
-	projection.rows[0].vals[2] = -lookAtDir.coords.x;
-	// projection.rows[0].vals[3] = 0.0f;
-	projection.rows[0].vals[3] = -pos.coords.x;
+	projection.rows[0].coords.x = xAxis.coords.x;
+	projection.rows[0].coords.y = xAxis.coords.y;
+	projection.rows[0].coords.z = xAxis.coords.z;
 
-	projection.rows[1].vals[0] = side.coords.y;
-	projection.rows[1].vals[1] = up.coords.y;
-	projection.rows[1].vals[2] = -lookAtDir.coords.y;
-	// projection.rows[1].vals[3] = 0.0f;
-	projection.rows[1].vals[3] = -pos.coords.y;
+	projection.rows[1].coords.x = yAxis.coords.x;
+	projection.rows[1].coords.y = yAxis.coords.y;
+	projection.rows[1].coords.z = yAxis.coords.z;
 
-	projection.rows[2].vals[0] = side.coords.z;
-	projection.rows[2].vals[1] = up.coords.z;
-	projection.rows[2].vals[2] = -lookAtDir.coords.z;
-	// projection.rows[2].vals[3] = 0.0f;
-	projection.rows[2].vals[3] = -pos.coords.z;
+	projection.rows[2].coords.x = zAxis.coords.x;
+	projection.rows[2].coords.y = zAxis.coords.y;
+	projection.rows[2].coords.z = zAxis.coords.z;
 
-	// mat4 camPos = getTranslationMatrix(-pos.coords.x, -pos.coords.y, -pos.coords.z);
+	mat4 camPos = getTranslationMatrix(-pos.coords.x, -pos.coords.y, -pos.coords.z);
 
-	// return mat4_multiply_mat4(camPos, projection);
-	return projection;
+	return mat4_multiply_mat4(projection, camPos);
 }

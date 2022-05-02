@@ -11,7 +11,8 @@ mat4::mat4(float identityVal) {
 
 mat4 getTranslationMatrix(float x, float y, float z) {
 	mat4 mat(1.0f);
-	mat.rows[0].vals[3] = x;
+	// TODO: why did I have to make this negative
+	mat.rows[0].vals[3] = -x;
 	mat.rows[1].vals[3] = y;
 	mat.rows[2].vals[3] = z;
 	return mat;
@@ -60,7 +61,7 @@ mat4 mat4_multiply_mat4(mat4 one, mat4 two) {
 			for (int rr = 0; rr < 4; rr++) {
 				colVec.vals[rr] = two.rows[rr].vals[col];
 			}
-			float val = dot(one.rows[row], colVec);
+			float val = vec4_dot(one.rows[row], colVec);
 			result.rows[row].vals[col] = val;
 		}
 	}
@@ -70,7 +71,7 @@ mat4 mat4_multiply_mat4(mat4 one, mat4 two) {
 vec4 mat4_multiply_vec4(mat4 mat, vec4 vec) {
 	vec4 result;
 	for (int row = 0; row < 4; row++) {
-		result.vals[row] = dot(mat.rows[row], vec);
+		result.vals[row] = vec4_dot(mat.rows[row], vec);
 	}
 	return result;
 }

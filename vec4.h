@@ -17,5 +17,5 @@ public:
 	vec4(float x, float y, float z, float w);
 };
 
-float dot(vec4 one, vec4 two);
-void print_vec4(vec4 vec);
+float vec4_dot(vec4 one, vec4 two);
+void vec4_print(vec4 vec);

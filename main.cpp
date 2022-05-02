@@ -109,13 +109,6 @@ int main(int argc, char* args[]) {
 					running = false;
 					break;
 				case SDLK_SPACE:
-					std::cout << "\n" << std::endl;
-
-					vec3 subDir = sub(cam.pos, cam.lookAt);
-					vec3 lookAtDir = normalize(subDir);
-					print_vec3(lookAtDir);
-					// print_mat4(view);
-
 					break;
 				}
 			}
@@ -187,6 +180,8 @@ int main(int argc, char* args[]) {
 				ImGui::SliderFloat("x", &cam.pos.coords.x, -10.0f, 10.0f);
 				ImGui::SliderFloat("y", &cam.pos.coords.y, -10.0f, 10.0f);
 				ImGui::SliderFloat("z", &cam.pos.coords.z, -10.0f, 10.0f);
+
+				cam.target = vec3_add(cam.pos, cam.offset);
 			}
 
 			ImGui::End();
