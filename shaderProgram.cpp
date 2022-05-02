@@ -53,7 +53,7 @@ GLuint ShaderProgram::createShader(const char* filePath, GLenum shaderType) {
 }
 
 
-void ShaderProgram::setUniformF(const GLchar* varName, float value) {
+void ShaderProgram::setFloat(const GLchar* varName, float value) {
 	GLint curProgramId;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &curProgramId);
 	if (curProgramId != programId) {

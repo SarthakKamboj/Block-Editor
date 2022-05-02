@@ -69,6 +69,8 @@ int main(int argc, char* args[]) {
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\fragmentShader.frag";
 	ShaderProgram shaderProgram(vertexFilePath, fragmentFilePath);
 
+	shaderProgram.setFloat("windowHeight", (float)height);
+
 	vec3 pos;
 	vec3 scale(1.0f, 1.0f, 1.0f);
 	vec3 rot;
@@ -128,18 +130,18 @@ int main(int argc, char* args[]) {
 		shaderProgram.bind();
 
 		mat4 translationMat = getTranslationMatrix(pos.coords.x, pos.coords.y, pos.coords.z);
-		shaderProgram.setMat4("translate", GL_TRUE, get_ptr(translationMat));
+		shaderProgram.setMat4("translate", GL_TRUE, mat4_get_ptr(translationMat));
 
 		mat4 rotMat = getRotMatrix(rot.coords.x, rot.coords.y, rot.coords.z);
-		shaderProgram.setMat4("rot", GL_TRUE, get_ptr(rotMat));
+		shaderProgram.setMat4("rot", GL_TRUE, mat4_get_ptr(rotMat));
 
 		mat4 scaleMat = getScaleMatrix(scale.coords.x, scale.coords.y, scale.coords.z);
-		shaderProgram.setMat4("scale", GL_TRUE, get_ptr(scaleMat));
+		shaderProgram.setMat4("scale", GL_TRUE, mat4_get_ptr(scaleMat));
 
-		// shaderProgram.setVec3("inColor", &triangleColor.vals[0]);
-		shaderProgram.setMat4("projection", GL_TRUE, get_ptr(projection));
+		shaderProgram.setMat4("projection", GL_TRUE, mat4_get_ptr(projection));
 
-		shaderProgram.setMat4("view", GL_TRUE, get_ptr(view));
+		shaderProgram.setMat4("view", GL_TRUE, mat4_get_ptr(view));
+		shaderProgram.setVec3("inColor", vec3_get_ptr(triangleColor));
 
 		cube.render();
 		shaderProgram.unbind();
@@ -152,6 +154,11 @@ int main(int argc, char* args[]) {
 					ImGui::SliderFloat("x", &pos.coords.x, -1.0f, 1.0f);
 					ImGui::SliderFloat("y", &pos.coords.y, -1.0f, 1.0f);
 					ImGui::SliderFloat("z", &pos.coords.z, -1.0f, 1.0f);
+
+					if (ImGui::Button("reset")) {
+						pos = vec3();
+					}
+
 					ImGui::TreePop();
 				}
 
@@ -159,6 +166,11 @@ int main(int argc, char* args[]) {
 					ImGui::SliderFloat("x", &scale.coords.x, -5.0f, 5.0f);
 					ImGui::SliderFloat("y", &scale.coords.y, -5.0f, 5.0f);
 					ImGui::SliderFloat("z", &scale.coords.z, -5.0f, 5.0f);
+
+					if (ImGui::Button("reset")) {
+						scale = vec3(1.0f, 1.0f, 1.0f);
+					}
+
 					ImGui::TreePop();
 				}
 
@@ -166,6 +178,11 @@ int main(int argc, char* args[]) {
 					ImGui::SliderFloat("x", &rot.coords.x, -180.0f, 180.0f);
 					ImGui::SliderFloat("y", &rot.coords.y, -180.0f, 180.0f);
 					ImGui::SliderFloat("z", &rot.coords.z, -180.0f, 180.0f);
+
+					if (ImGui::Button("reset")) {
+						rot = vec3();
+					}
+
 					ImGui::TreePop();
 				}
 			}
@@ -186,13 +203,18 @@ int main(int argc, char* args[]) {
 					ImGui::SliderFloat("z", &cam.pos.coords.z, -10.0f, 10.0f);
 
 					cam.target = vec3_add(cam.pos, cam.offset);
+					if (ImGui::Button("reset")) {
+						cam.pos = vec3(0.0f, 0.0f, 5.0f);
+					}
 					ImGui::TreePop();
 				}
 				if (ImGui::TreeNode("rotation")) {
 					ImGui::SliderFloat("x", &cam.rot.coords.x, -180.0f, 180.0f);
 					ImGui::SliderFloat("y", &cam.rot.coords.y, -180.0f, 180.0f);
 					ImGui::SliderFloat("z", &cam.rot.coords.z, -180.0f, 180.0f);
-
+					if (ImGui::Button("reset")) {
+						cam.rot = vec3();
+					}
 					ImGui::TreePop();
 				}
 			}

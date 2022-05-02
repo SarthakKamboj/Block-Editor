@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cmath>
+#include "glad/glad.h"
 
 union vec3 {
 	struct {
@@ -25,3 +26,4 @@ vec3 vec3_add(vec3 one, vec3 two);
 vec3 vec3_cross(vec3 a, vec3 b);
 vec3 vec3_multiply(vec3 vec, float multiplier);
 float vec3_dot(vec3 one, vec3 two);
+const GLfloat* vec3_get_ptr(vec3& vec);

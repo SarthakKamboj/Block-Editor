@@ -12,7 +12,7 @@ uniform mat4 rot;
 uniform mat4 projection;
 uniform mat4 view;
 
-// uniform vec3 inColor;
+uniform vec3 inColor;
 
 void main() {
 
@@ -20,5 +20,5 @@ void main() {
 	mat4 model = translate * rot * scale;
 	gl_Position = projection * view * model * newPos;
 
-	color = aColor;
+	color = inColor;
 }

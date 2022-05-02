@@ -83,7 +83,7 @@ void print_mat4(mat4 mat) {
 	}
 }
 
-const GLfloat* get_ptr(mat4 mat) {
+const GLfloat* mat4_get_ptr(mat4& mat) {
 	return (GLfloat*)(&mat.rows[0].vals[0]);
 }
 

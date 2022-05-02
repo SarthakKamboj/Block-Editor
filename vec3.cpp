@@ -48,3 +48,7 @@ vec3 vec3_multiply(vec3 vec, float multiplier) {
 float vec3_dot(vec3 one, vec3 two) {
 	return (one.coords.x * two.coords.x) + (one.coords.y * two.coords.y) + (one.coords.z * two.coords.z);
 }
+
+const GLfloat* vec3_get_ptr(vec3& vec) {
+	return &vec.coords.x;
+}
