@@ -20,5 +20,5 @@ public:
 void print_vec3(vec3 vec);
 float mag(vec3 vec);
 vec3 normalize(vec3 vec);
-vec3 sub(vec3 one, vec3 two);
+vec3 sub(vec3 from, vec3 to);
 vec3 cross(vec3 a, vec3 b);

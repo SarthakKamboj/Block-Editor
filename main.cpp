@@ -95,6 +95,9 @@ int main(int argc, char* args[]) {
 		start = cur;
 
 		SDL_Event event;
+
+		mat4 view = cam.getViewMat();
+
 		while (SDL_PollEvent(&event)) {
 			ImGui_ImplSDL2_ProcessEvent(&event);
 			if (event.type == SDL_QUIT) {
@@ -105,9 +108,16 @@ int main(int argc, char* args[]) {
 				case SDLK_ESCAPE:
 					running = false;
 					break;
+				case SDLK_SPACE:
+					std::cout << "\n" << std::endl;
+
+					vec3 subDir = sub(cam.pos, cam.lookAt);
+					vec3 lookAtDir = normalize(subDir);
+					print_vec3(lookAtDir);
+					// print_mat4(view);
+
+					break;
 				}
-
-
 			}
 		}
 
@@ -134,13 +144,10 @@ int main(int argc, char* args[]) {
 		// shaderProgram.setVec3("inColor", &triangleColor.vals[0]);
 		shaderProgram.setMat4("projection", GL_TRUE, get_ptr(projection));
 
-		mat4 view = cam.getViewMat();
 		shaderProgram.setMat4("view", GL_TRUE, get_ptr(view));
-		print_mat4(view);
 
 		cube.render();
 		shaderProgram.unbind();
-
 
 		{
 			ImGui::Begin("Triangle Info");

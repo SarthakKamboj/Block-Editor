@@ -30,7 +30,7 @@ vec3 normalize(vec3 vec) {
 }
 
 vec3 sub(vec3 from, vec3 to) {
-	return vec3(from.coords.x - to.coords.x, from.coords.y - to.coords.y, from.coords.z - to.coords.z);
+	return vec3(to.coords.x - from.coords.x, to.coords.y - from.coords.y, to.coords.z - from.coords.z);
 }
 
 vec3 cross(vec3 a, vec3 b) {
