@@ -179,12 +179,22 @@ int main(int argc, char* args[]) {
 		{
 			ImGui::Begin("Camera Info");
 
-			if (ImGui::CollapsingHeader("position")) {
-				ImGui::SliderFloat("x", &cam.pos.coords.x, -10.0f, 10.0f);
-				ImGui::SliderFloat("y", &cam.pos.coords.y, -10.0f, 10.0f);
-				ImGui::SliderFloat("z", &cam.pos.coords.z, -10.0f, 10.0f);
+			if (ImGui::CollapsingHeader("transform")) {
+				if (ImGui::TreeNode("position")) {
+					ImGui::SliderFloat("x", &cam.pos.coords.x, -10.0f, 10.0f);
+					ImGui::SliderFloat("y", &cam.pos.coords.y, -10.0f, 10.0f);
+					ImGui::SliderFloat("z", &cam.pos.coords.z, -10.0f, 10.0f);
 
-				cam.target = vec3_add(cam.pos, cam.offset);
+					cam.target = vec3_add(cam.pos, cam.offset);
+					ImGui::TreePop();
+				}
+				if (ImGui::TreeNode("rotation")) {
+					ImGui::SliderFloat("x", &cam.rot.coords.x, -180.0f, 180.0f);
+					ImGui::SliderFloat("y", &cam.rot.coords.y, -180.0f, 180.0f);
+					ImGui::SliderFloat("z", &cam.rot.coords.z, -180.0f, 180.0f);
+
+					ImGui::TreePop();
+				}
 			}
 
 			ImGui::End();
