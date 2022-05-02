@@ -5,7 +5,7 @@
 #include <glad/glad.h>
 #include "vec4.h"
 
-#define M_PI 3.1415926535897932384626433832795
+#define M_PI 3.1415926535897932384626433832795f
 #define DEG_2_RAD (M_PI / 180.0f)
 
 struct mat4 {

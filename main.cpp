@@ -46,6 +46,8 @@ int main(int argc, char* args[]) {
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	ImGui::StyleColorsDark();
 
+	ImFont* robotoFont = io.Fonts->AddFontFromFileTTF("ext\\imgui\\fonts\\Roboto-Medium.ttf", 16.0f);
+
 	ImGui_ImplSDL2_InitForOpenGL(window, context);
 	const char* glsl_version = "#version 330";
 	ImGui_ImplOpenGL3_Init(glsl_version);
@@ -84,7 +86,7 @@ int main(int argc, char* args[]) {
 
 	vec3 triangleColor(1.0f, 0.0f, 1.0f);
 
-	mat4 projection = getProjectionMat(45.0f, 0.1f, 100.0f, width / height);
+	mat4 projection = getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
 
 	Camera cam(0.0f, 0.0f, 5.0f);
 
@@ -142,6 +144,7 @@ int main(int argc, char* args[]) {
 		cube.render();
 		shaderProgram.unbind();
 
+		ImGui::PushFont(robotoFont);
 		{
 			ImGui::Begin("Triangle Info");
 			if (ImGui::CollapsingHeader("transform")) {
@@ -187,12 +190,14 @@ int main(int argc, char* args[]) {
 			ImGui::End();
 		}
 
+		ImGui::PopFont();
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		SDL_GL_SwapWindow(window);
 
 	}
+
 
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
