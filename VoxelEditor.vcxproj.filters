@@ -75,6 +75,9 @@
     <ClCompile Include="vec3.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
+    <ClCompile Include="cube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vao.h">
@@ -124,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="vec3.h">
       <Filter>Source Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="cube.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
