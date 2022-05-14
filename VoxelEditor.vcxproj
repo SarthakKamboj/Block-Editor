@@ -162,6 +162,7 @@
     <ClCompile Include="ext\imgui\imgui_impl_sdl.cpp" />
     <ClCompile Include="ext\imgui\imgui_tables.cpp" />
     <ClCompile Include="ext\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mat4.cpp" />
     <ClCompile Include="shaderProgram.cpp" />
@@ -183,8 +184,10 @@
     <ClInclude Include="ext\imgui\imstb_rectpack.h" />
     <ClInclude Include="ext\imgui\imstb_textedit.h" />
     <ClInclude Include="ext\imgui\imstb_truetype.h" />
+    <ClInclude Include="input.h" />
     <ClInclude Include="mat4.h" />
     <ClInclude Include="shaderProgram.h" />
+    <ClInclude Include="test.h" />
     <ClInclude Include="vao.h" />
     <ClInclude Include="vbo.h" />
     <ClInclude Include="vec3.h" />

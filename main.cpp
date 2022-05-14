@@ -12,6 +12,10 @@
 #include "imgui_impl_sdl.h"
 #include "cube.h"
 #include "camera.h"
+#include "input.h"
+#include <map>
+
+extern std::map<SDL_Keycode, bool> keyPressedMap;
 
 int main(int argc, char* args[]) {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -101,22 +105,12 @@ int main(int argc, char* args[]) {
 		SDL_Event event;
 
 		mat4 view = cam.getViewMat();
+        
+        handle_input(event);
 
-		while (SDL_PollEvent(&event)) {
-			ImGui_ImplSDL2_ProcessEvent(&event);
-			if (event.type == SDL_QUIT) {
-				running = false;
-			}
-			else if (event.type == SDL_KEYDOWN) {
-				switch (event.key.keysym.sym) {
-				case SDLK_ESCAPE:
-					running = false;
-					break;
-				case SDLK_SPACE:
-					break;
-				}
-			}
-		}
+        if (keyPressedMap[SDL_QUIT] || keyPressedMap[SDLK_ESCAPE]) {
+            running = false;
+        }
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplSDL2_NewFrame();
