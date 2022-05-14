@@ -1,4 +1,5 @@
 #include "shaderProgram.h"
+#include <iostream>
 
 ShaderProgram::ShaderProgram(const char* vertexFilePath, const char* fragmentFilePath) {
 	GLuint vertexId = createShader(vertexFilePath, GL_VERTEX_SHADER);
@@ -91,7 +92,7 @@ void ShaderProgram::setVec3(const GLchar* varName, const GLfloat* vec3) {
 
 
 void ShaderProgram::setMat4(const GLchar* varName, GLboolean transpose, const GLfloat* mat) {
-	GLint curProgramId;
+	GLint curProgramId = 0;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &curProgramId);
 	if (curProgramId != programId) {
 		bind();

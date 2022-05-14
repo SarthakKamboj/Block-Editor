@@ -15,6 +15,8 @@
 #include "input.h"
 #include <map>
 
+#define OBJ 0
+
 extern std::map<SDL_Keycode, bool> keyPressedMap;
 
 int main(int argc, char* args[]) {
@@ -57,6 +59,7 @@ int main(int argc, char* args[]) {
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
 	glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
 	// glEnable(GL_CULL_FACE);
 	// glCullFace(GL_BACK);
 	// glFrontFace(GL_CCW);
@@ -75,8 +78,13 @@ int main(int argc, char* args[]) {
 
 	shaderProgram.setFloat("windowHeight", (float)height);
 
+    const char* outlineVertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.vert";
+	const char* outlineFragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.frag";
+	ShaderProgram outlineProgram(outlineVertexFilePath, outlineFragmentFilePath);
+
 	vec3 pos;
 	vec3 scale(1.0f, 1.0f, 1.0f);
+	vec3 outlineScale(1.05f, 1.05f, 0.95f);
 	vec3 rot;
 
 	float posDelta = 0.01f;
@@ -121,24 +129,48 @@ int main(int argc, char* args[]) {
 
 		glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
-		shaderProgram.bind();
+        {
+            shaderProgram.bind();
 
-		mat4 translationMat = getTranslationMatrix(pos.coords.x, pos.coords.y, pos.coords.z);
-		shaderProgram.setMat4("translate", GL_TRUE, mat4_get_ptr(translationMat));
+            mat4 translationMat = getTranslationMatrix(pos.coords.x, pos.coords.y, pos.coords.z);
+            shaderProgram.setMat4("translate", GL_TRUE, mat4_get_ptr(translationMat));
 
-		mat4 rotMat = getRotMatrix(rot.coords.x, rot.coords.y, rot.coords.z);
-		shaderProgram.setMat4("rot", GL_TRUE, mat4_get_ptr(rotMat));
+            mat4 rotMat = getRotMatrix(rot.coords.x, rot.coords.y, rot.coords.z);
+            shaderProgram.setMat4("rot", GL_TRUE, mat4_get_ptr(rotMat));
 
-		mat4 scaleMat = getScaleMatrix(scale.coords.x, scale.coords.y, scale.coords.z);
-		shaderProgram.setMat4("scale", GL_TRUE, mat4_get_ptr(scaleMat));
+            mat4 scaleMat = getScaleMatrix(scale.coords.x, scale.coords.y, scale.coords.z);
+            shaderProgram.setMat4("scale", GL_TRUE, mat4_get_ptr(scaleMat));
 
-		shaderProgram.setMat4("projection", GL_TRUE, mat4_get_ptr(projection));
+            shaderProgram.setMat4("projection", GL_TRUE, mat4_get_ptr(projection));
 
-		shaderProgram.setMat4("view", GL_TRUE, mat4_get_ptr(view));
-		shaderProgram.setVec3("inColor", vec3_get_ptr(triangleColor));
+            shaderProgram.setMat4("view", GL_TRUE, mat4_get_ptr(view));
+            shaderProgram.setVec3("inColor", vec3_get_ptr(triangleColor));
 
-		cube.render();
-		shaderProgram.unbind();
+            cube.render();
+            shaderProgram.unbind();
+
+        }
+
+        {
+        
+            outlineProgram.bind();
+
+            mat4 translationMat = getTranslationMatrix(pos.coords.x, pos.coords.y, pos.coords.z);
+            outlineProgram.setMat4("translate", GL_TRUE, mat4_get_ptr(translationMat));
+
+            mat4 rotMat = getRotMatrix(rot.coords.x, rot.coords.y, rot.coords.z);
+            outlineProgram.setMat4("rot", GL_TRUE, mat4_get_ptr(rotMat));
+
+            mat4 scaleMat = getScaleMatrix(outlineScale.coords.x, outlineScale.coords.y, outlineScale.coords.z);
+            outlineProgram.setMat4("scale", GL_TRUE, mat4_get_ptr(scaleMat));
+
+            outlineProgram.setMat4("projection", GL_TRUE, mat4_get_ptr(projection));
+
+            outlineProgram.setMat4("view", GL_TRUE, mat4_get_ptr(view));
+
+            cube.render();
+            outlineProgram.unbind();
+        }
 
 		ImGui::PushFont(robotoFont);
 		{
