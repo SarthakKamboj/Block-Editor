@@ -16,6 +16,8 @@
 #include <map>
 
 extern std::map<SDL_Keycode, bool> keyPressedMap;
+extern mouse_click_state_t mouse_click_state;
+extern mouse_state_t mouse_state;
 
 int main(int argc, char* args[]) {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -130,6 +132,13 @@ int main(int argc, char* args[]) {
 
         if (keyPressedMap[SDL_QUIT] || keyPressedMap[SDLK_ESCAPE]) {
             running = false;
+        }
+
+        if (mouse_click_state.left) {
+            std::cout << "left clicked" << std::endl;
+        }
+        if (mouse_click_state.right) {
+            std::cout << "right clicked" << std::endl;
         }
 
 		ImGui_ImplOpenGL3_NewFrame();
