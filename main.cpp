@@ -15,8 +15,6 @@
 #include "input.h"
 #include <map>
 
-#define OBJ 0
-
 extern std::map<SDL_Keycode, bool> keyPressedMap;
 
 int main(int argc, char* args[]) {
@@ -32,6 +30,7 @@ int main(int argc, char* args[]) {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
 	int width = 800, height = 800;
 
@@ -59,6 +58,7 @@ int main(int argc, char* args[]) {
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_STENCIL_TEST);
     glDepthFunc(GL_LESS);
 	// glEnable(GL_CULL_FACE);
 	// glCullFace(GL_BACK);
@@ -78,13 +78,13 @@ int main(int argc, char* args[]) {
 
 	shaderProgram.setFloat("windowHeight", (float)height);
 
-    const char* outlineVertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.vert";
-	const char* outlineFragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.frag";
-	ShaderProgram outlineProgram(outlineVertexFilePath, outlineFragmentFilePath);
+    const char* outlineVert = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.vert";
+	const char* outlineFrag = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.frag";
+	ShaderProgram outlineProgram(outlineVert, outlineFrag);
 
 	vec3 pos;
 	vec3 scale(1.0f, 1.0f, 1.0f);
-	vec3 outlineScale(1.05f, 1.05f, 0.95f);
+	vec3 outlineScale(1.05f, 1.05f, 1.05f);
 	vec3 rot;
 
 	float posDelta = 0.01f;
@@ -103,6 +103,12 @@ int main(int argc, char* args[]) {
 	mat4 projection = getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
 
 	Camera cam(0.0f, 0.0f, 5.0f);
+
+    int stencilBits;
+    glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL, GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE, &stencilBits);
+    std::cout << "stencilBits: " << stencilBits << std::endl;
+
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
 	while (running) {
 
@@ -125,9 +131,12 @@ int main(int argc, char* args[]) {
 		ImGui::NewFrame();
 
 		glClearColor(r, g, b, 1.0f);
-		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		glClearStencil(0);
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+
+        glStencilFunc(GL_ALWAYS, 1, 0xFF);
 
         {
             shaderProgram.bind();
@@ -151,8 +160,8 @@ int main(int argc, char* args[]) {
 
         }
 
+        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
         {
-        
             outlineProgram.bind();
 
             mat4 translationMat = getTranslationMatrix(pos.coords.x, pos.coords.y, pos.coords.z);
@@ -170,6 +179,7 @@ int main(int argc, char* args[]) {
 
             cube.render();
             outlineProgram.unbind();
+
         }
 
 		ImGui::PushFont(robotoFont);
