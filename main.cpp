@@ -110,6 +110,8 @@ int main(int argc, char* args[]) {
 
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
+    bool outline = false;
+
 	while (running) {
 
 		uint32_t cur = SDL_GetTicks();
@@ -121,6 +123,10 @@ int main(int argc, char* args[]) {
 		mat4 view = cam.getViewMat();
         
         handle_input(event);
+
+        if (keyPressedMap[SDLK_o]) {
+            outline = !outline;
+        }
 
         if (keyPressedMap[SDL_QUIT] || keyPressedMap[SDLK_ESCAPE]) {
             running = false;
@@ -160,26 +166,28 @@ int main(int argc, char* args[]) {
 
         }
 
-        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-        {
-            outlineProgram.bind();
+        if (outline) {
+            glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+            {
+                outlineProgram.bind();
 
-            mat4 translationMat = getTranslationMatrix(pos.coords.x, pos.coords.y, pos.coords.z);
-            outlineProgram.setMat4("translate", GL_TRUE, mat4_get_ptr(translationMat));
+                mat4 translationMat = getTranslationMatrix(pos.coords.x, pos.coords.y, pos.coords.z);
+                outlineProgram.setMat4("translate", GL_TRUE, mat4_get_ptr(translationMat));
 
-            mat4 rotMat = getRotMatrix(rot.coords.x, rot.coords.y, rot.coords.z);
-            outlineProgram.setMat4("rot", GL_TRUE, mat4_get_ptr(rotMat));
+                mat4 rotMat = getRotMatrix(rot.coords.x, rot.coords.y, rot.coords.z);
+                outlineProgram.setMat4("rot", GL_TRUE, mat4_get_ptr(rotMat));
 
-            mat4 scaleMat = getScaleMatrix(outlineScale.coords.x, outlineScale.coords.y, outlineScale.coords.z);
-            outlineProgram.setMat4("scale", GL_TRUE, mat4_get_ptr(scaleMat));
+                mat4 scaleMat = getScaleMatrix(outlineScale.coords.x, outlineScale.coords.y, outlineScale.coords.z);
+                outlineProgram.setMat4("scale", GL_TRUE, mat4_get_ptr(scaleMat));
 
-            outlineProgram.setMat4("projection", GL_TRUE, mat4_get_ptr(projection));
+                outlineProgram.setMat4("projection", GL_TRUE, mat4_get_ptr(projection));
 
-            outlineProgram.setMat4("view", GL_TRUE, mat4_get_ptr(view));
+                outlineProgram.setMat4("view", GL_TRUE, mat4_get_ptr(view));
 
-            cube.render();
-            outlineProgram.unbind();
+                cube.render();
+                outlineProgram.unbind();
 
+            }
         }
 
 		ImGui::PushFont(robotoFont);
@@ -225,6 +233,10 @@ int main(int argc, char* args[]) {
 			if (ImGui::CollapsingHeader("color")) {
 				ImGui::ColorEdit3("Triangle color", &triangleColor.vals[0]);
 			}
+
+            if (ImGui::Button("toggle outline")) {
+                outline = !outline;
+            }
 
 			ImGui::End();
 		}

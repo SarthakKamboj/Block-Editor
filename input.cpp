@@ -4,7 +4,7 @@
 
 std::map<SDL_Keycode, bool> keyPressedMap;
 SDL_Keycode keysToHandle[] = {
-    SDLK_ESCAPE, SDLK_SPACE, SDL_QUIT
+    SDLK_ESCAPE, SDLK_SPACE, SDL_QUIT, SDLK_o
 };
 
 void handle_input(SDL_Event& event) {
