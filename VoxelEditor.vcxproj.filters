@@ -154,5 +154,11 @@
     <None Include="fragmentShader.frag">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="outline.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="outline.vert">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
