@@ -19,6 +19,18 @@ extern std::map<SDL_Keycode, bool> keyPressedMap;
 extern mouse_click_state_t mouse_click_state;
 extern mouse_state_t mouse_state;
 
+// TODO: create func to go from cube world coords to screen coords,
+// keep track of z values, and use this info to see what hit
+// * might have to learn collision detection
+
+vec3 world_to_screen(vec3 vertex_pt, vec3 world_coords, vec3 scale, vec3 rot, mat4 projection, mat4 view) {
+    mat4 transMat = getTranslationMatrix(world_coords.x, world_coords.y, world_coords.z); 
+    mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z); 
+    mat4 rotMat = getRotMatrix(rot.x, rot.y, rot.z); 
+    
+
+}
+
 int main(int argc, char* args[]) {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		std::cout << "sdl gave error" << std::endl;
@@ -135,7 +147,7 @@ int main(int argc, char* args[]) {
         }
 
         if (mouse_click_state.left) {
-            std::cout << "left clicked" << std::endl;
+            std::cout << mouse_state.x << ", " << mouse_state.y << std::endl;
         }
         if (mouse_click_state.right) {
             std::cout << "right clicked" << std::endl;
