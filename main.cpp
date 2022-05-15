@@ -25,12 +25,11 @@ extern mouse_state_t mouse_state;
 // keep track of z values, and use this info to see what hit
 // * might have to learn collision detection
 
-int main(int argc, char* args[]) {
+// motionstates are the way bullet physics tells you the world transform of the objects
 
-	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
-	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
-	btBroadphaseInterface* overlappingPairCache = new btDbvtBroadphase();
-	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+int width = 800, height = 800;
+
+int main(int argc, char* args[]) {
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		std::cout << "sdl gave error" << std::endl;
@@ -46,7 +45,6 @@ int main(int argc, char* args[]) {
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-	int width = 800, height = 800;
 
 	SDL_Window* window = SDL_CreateWindow("window",
 		SDL_WINDOWPOS_CENTERED,
@@ -80,12 +78,17 @@ int main(int argc, char* args[]) {
 
 	bool running = true;
 
+    vec3 clearColor(0.0f, 0.0f, 0.0f);
+
+    /*
 	float r = 0.0f;
 	float g = 0.0f;
 	float b = 0.0f;
+    */
 
 	Cube cube;
 
+    /*
 	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\vertexShader.vert";
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\fragmentShader.frag";
 	ShaderProgram shaderProgram(vertexFilePath, fragmentFilePath);
@@ -100,6 +103,7 @@ int main(int argc, char* args[]) {
 	vec3 scale(1.0f, 1.0f, 1.0f);
 	vec3 outlineScale(1.05f, 1.05f, 1.05f);
 	vec3 rot;
+    */
 
 	float posDelta = 0.01f;
 	float scaleDelta = 0.1f;
@@ -112,7 +116,7 @@ int main(int argc, char* args[]) {
 
 	float val = 0.0f;
 
-	vec3 triangleColor(1.0f, 0.0f, 1.0f);
+	// vec3 color(1.0f, 0.0f, 1.0f);
 
 	mat4 projection = getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
 
@@ -124,7 +128,7 @@ int main(int argc, char* args[]) {
 
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-	bool outline = false;
+	// bool outline = false;
 
 	while (running) {
 
@@ -139,7 +143,7 @@ int main(int argc, char* args[]) {
 		handle_input(event);
 
 		if (keyPressedMap[SDLK_o]) {
-			outline = !outline;
+			cube.outline = !cube.outline;
 		}
 
 		if (keyPressedMap[SDL_QUIT] || keyPressedMap[SDLK_ESCAPE]) {
@@ -157,12 +161,15 @@ int main(int argc, char* args[]) {
 		ImGui_ImplSDL2_NewFrame();
 		ImGui::NewFrame();
 
-		glClearColor(r, g, b, 1.0f);
+		glClearColor(clearColor.coords.x, clearColor.coords.y, clearColor.coords.z, 1.0f);
 		glClearStencil(0);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
+        cube.render(projection, view);
+
+        /*
 		glStencilFunc(GL_ALWAYS, 1, 0xFF);
 
 		{
@@ -180,7 +187,7 @@ int main(int argc, char* args[]) {
 			shaderProgram.setMat4("projection", GL_TRUE, mat4_get_ptr(projection));
 
 			shaderProgram.setMat4("view", GL_TRUE, mat4_get_ptr(view));
-			shaderProgram.setVec3("inColor", vec3_get_ptr(triangleColor));
+			shaderProgram.setVec3("inColor", vec3_get_ptr(color));
 
 			cube.render();
 			shaderProgram.unbind();
@@ -210,53 +217,54 @@ int main(int argc, char* args[]) {
 
 			}
 		}
+        */
 
 		ImGui::PushFont(robotoFont);
 		{
 			ImGui::Begin("Triangle Info");
 			if (ImGui::CollapsingHeader("transform")) {
 				if (ImGui::TreeNode("position")) {
-					ImGui::SliderFloat("x", &pos.coords.x, -1.0f, 1.0f);
-					ImGui::SliderFloat("y", &pos.coords.y, -1.0f, 1.0f);
-					ImGui::SliderFloat("z", &pos.coords.z, -1.0f, 1.0f);
+					ImGui::SliderFloat("x", &cube.pos.coords.x, -3.0f, 3.0f);
+					ImGui::SliderFloat("y", &cube.pos.coords.y, -3.0f, 3.0f);
+					ImGui::SliderFloat("z", &cube.pos.coords.z, -3.0f, 3.0f);
 
 					if (ImGui::Button("reset")) {
-						pos = vec3();
+						cube.pos = vec3();
 					}
 
 					ImGui::TreePop();
 				}
 
 				if (ImGui::TreeNode("scale")) {
-					ImGui::SliderFloat("x", &scale.coords.x, -5.0f, 5.0f);
-					ImGui::SliderFloat("y", &scale.coords.y, -5.0f, 5.0f);
-					ImGui::SliderFloat("z", &scale.coords.z, -5.0f, 5.0f);
+					ImGui::SliderFloat("x", &cube.scale.coords.x, -5.0f, 5.0f);
+					ImGui::SliderFloat("y", &cube.scale.coords.y, -5.0f, 5.0f);
+					ImGui::SliderFloat("z", &cube.scale.coords.z, -5.0f, 5.0f);
 
 					if (ImGui::Button("reset")) {
-						scale = vec3(1.0f, 1.0f, 1.0f);
+						cube.scale = vec3(1.0f, 1.0f, 1.0f);
 					}
 
 					ImGui::TreePop();
 				}
 
 				if (ImGui::TreeNode("rotation")) {
-					ImGui::SliderFloat("x", &rot.coords.x, -180.0f, 180.0f);
-					ImGui::SliderFloat("y", &rot.coords.y, -180.0f, 180.0f);
-					ImGui::SliderFloat("z", &rot.coords.z, -180.0f, 180.0f);
+					ImGui::SliderFloat("x", &cube.rot.coords.x, -180.0f, 180.0f);
+					ImGui::SliderFloat("y", &cube.rot.coords.y, -180.0f, 180.0f);
+					ImGui::SliderFloat("z", &cube.rot.coords.z, -180.0f, 180.0f);
 
 					if (ImGui::Button("reset")) {
-						rot = vec3();
+						cube.rot = vec3();
 					}
 
 					ImGui::TreePop();
 				}
 			}
 			if (ImGui::CollapsingHeader("color")) {
-				ImGui::ColorEdit3("Triangle color", &triangleColor.vals[0]);
+				ImGui::ColorEdit3("Triangle color", &cube.color.vals[0]);
 			}
 
 			if (ImGui::Button("toggle outline")) {
-				outline = !outline;
+				cube.outline = !cube.outline;
 			}
 
 			ImGui::End();
