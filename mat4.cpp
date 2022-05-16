@@ -1,5 +1,4 @@
 #include "mat4.h"
-#include "glm/glm.hpp"
 
 mat4::mat4() {}
 
@@ -27,11 +26,6 @@ mat4 getScaleMatrix(float x, float y, float z) {
 	return mat;
 }
 
-
-mat4 get_inverse(mat4& m) {
-	return mat4(1.0f);
-}
-
 mat4 getRotMatrix(float x, float y, float z) {
 
 	float xRot = x * DEG_2_RAD;
@@ -55,8 +49,6 @@ mat4 getRotMatrix(float x, float y, float z) {
 	zRotMat.rows[0].coords.y = sin(zRot);
 	zRotMat.rows[1].coords.x = -sin(zRot);
 	zRotMat.rows[1].coords.y = cos(zRot);
-
-	glm::mat4 m;
 
 	return mat4_multiply_mat4(zRotMat, mat4_multiply_mat4(yRotMat, xRotMat));
 }
