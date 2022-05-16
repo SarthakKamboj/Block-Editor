@@ -10,6 +10,5 @@ public:
 	Camera();
 	Camera(float xPos, float yPos, float zPos);
 	glm::mat4 getViewMat();
-	// glm::vec3 target, pos, offset;
 	glm::vec3 pos, rot;
 };

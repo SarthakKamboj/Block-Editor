@@ -194,7 +194,6 @@ int main(int argc, char* args[]) {
 					ImGui::SliderFloat("y", &cam.pos.y, -10.0f, 10.0f);
 					ImGui::SliderFloat("z", &cam.pos.z, -10.0f, 10.0f);
 
-					// cam.target = vec3_add(cam.pos, cam.offset);
 					if (ImGui::Button("reset")) {
 						cam.pos = glm::vec3(0.0f, 0.0f, 5.0f);
 					}

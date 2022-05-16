@@ -195,7 +195,6 @@
     <ClInclude Include="mat4.h" />
     <ClInclude Include="boxCollider.h" />
     <ClInclude Include="shaderProgram.h" />
-    <ClInclude Include="test.h" />
     <ClInclude Include="vao.h" />
     <ClInclude Include="vbo.h" />
     <ClInclude Include="vec3.h" />
