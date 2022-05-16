@@ -1,3 +1,4 @@
+/*
 #include "vec3.h"
 
 vec3::vec3() {
@@ -52,3 +53,4 @@ float vec3_dot(vec3 one, vec3 two) {
 const GLfloat* vec3_get_ptr(vec3& vec) {
 	return &vec.coords.x;
 }
+*/

@@ -1,5 +1,6 @@
 #pragma once
 
+/*
 #include <iostream>
 
 union vec4 {
@@ -19,3 +20,4 @@ public:
 
 float vec4_dot(vec4 one, vec4 two);
 void vec4_print(vec4 vec);
+*/

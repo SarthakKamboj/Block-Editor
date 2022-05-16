@@ -1,5 +1,6 @@
 #pragma once
 
+/*
 #include <cmath>
 #include <iostream>
 #include <glad/glad.h>
@@ -25,3 +26,4 @@ void print_mat4(mat4 mat);
 const GLfloat* mat4_get_ptr(mat4& mat);
 
 mat4 getProjectionMat(float fov, float near, float far, float aspectRatio);
+*/

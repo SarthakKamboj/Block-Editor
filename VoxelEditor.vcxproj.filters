@@ -25,6 +25,9 @@
     <Filter Include="Source Files\imgui\src">
       <UniqueIdentifier>{f73001fe-c589-43ba-b88d-7c0411ab97bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\shaders">
+      <UniqueIdentifier>{65d30a0d-a930-4f8b-92c2-144a72027899}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -94,6 +97,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cameraEditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arrow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -167,22 +173,31 @@
     <ClInclude Include="cameraEditor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="arrow.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="vertexShader.vert">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="fragmentShader.frag">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="outline.frag">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\shaders</Filter>
     </None>
     <None Include="outline.vert">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="outline.frag">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="vertexShader.vert">
+      <Filter>Source Files\shaders</Filter>
     </None>
     <None Include="transparent.frag">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="arrow.vert">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="arrow.frag">
+      <Filter>Source Files\shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

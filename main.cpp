@@ -16,6 +16,7 @@
 #include <map>
 #include "cube_editor.h"
 #include "cameraEditor.h"
+#include "arrow.h"
 
 extern std::map<SDL_Keycode, bool> keyPressedMap;
 extern mouse_click_state_t mouse_click_state;
@@ -66,8 +67,6 @@ int main(int argc, char* args[]) {
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
-	// glDisable(GL_STENCIL_TEST);
 	glDepthFunc(GL_LESS);
 	// glEnable(GL_CULL_FACE);
 	// glCullFace(GL_BACK);
@@ -75,7 +74,7 @@ int main(int argc, char* args[]) {
 
 	bool running = true;
 
-	vec3 clearColor(0.0f, 0.0f, 0.0f);
+	glm::vec3 clearColor(0.0f, 0.0f, 0.0f);
 
 	CubeEditor cubeEditor;
 	cubeEditorPtr = &cubeEditor;
@@ -97,6 +96,14 @@ int main(int argc, char* args[]) {
 	Camera cam(0.0f, 0.0f, 5.0f);
 
 	CameraEditor cameraEditor(&cam);
+	Arrow xArrow(glm::vec3(1.0f, 0.0f, 0.0f));
+	Arrow yArrow(glm::vec3(0.0f, 1.0f, 0.0f));
+	Arrow zArrow(glm::vec3(0.0f, 0.0f, 1.0f));
+
+	xArrow.rot = glm::vec3(0.0f, 0.0f, 90.0f);
+	zArrow.rot = glm::vec3(90.0f, 0.0f, 0.0f);
+
+	Arrow arrows[3] = { xArrow, yArrow, zArrow };
 
 	int stencilBits;
 	glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL, GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE, &stencilBits);
@@ -141,7 +148,7 @@ int main(int argc, char* args[]) {
 			}
 		}
 
-		glClearColor(clearColor.coords.x, clearColor.coords.y, clearColor.coords.z, 1.0f);
+		glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.0f);
 		glClearStencil(0);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -153,6 +160,10 @@ int main(int argc, char* args[]) {
 		}
 
 		cubeEditorPtr->cube->render_outline();
+		// arrow.render(projection, view);
+		for (int i = 0; i < sizeof(arrows) / sizeof(arrows[0]); i++) {
+			arrows[i].render(projection, view);
+		}
 
 		ImGui::PopFont();
 		ImGui::Render();

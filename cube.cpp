@@ -11,7 +11,7 @@ extern mouse_state_t mouse_state;
 
 int Cube::idx = 0;
 
-float vertices[] = {
+static float vertices[] = {
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
 		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f,
 		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
@@ -77,7 +77,6 @@ Cube::Cube() {
 	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\vertexShader.vert";
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\fragmentShader.frag";
 	shaderProgram = ShaderProgram(vertexFilePath, fragmentFilePath);
-	shaderProgram.setFloat("windowHeight", (float)height);
 
 	const char* outlineVert = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.vert";
 	const char* outlineFrag = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.frag";

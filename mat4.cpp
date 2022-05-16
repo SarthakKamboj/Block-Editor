@@ -1,3 +1,4 @@
+/*
 #include "mat4.h"
 
 mat4::mat4() {}
@@ -104,3 +105,4 @@ mat4 getProjectionMat(float fov, float near, float far, float aspectRatio) {
 
 	return projection;
 }
+*/

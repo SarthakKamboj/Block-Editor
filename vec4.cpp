@@ -1,3 +1,5 @@
+/*
+
 #include "vec4.h"
 
 vec4::vec4() {
@@ -27,3 +29,4 @@ float vec4_dot(vec4 one, vec4 two) {
 void vec4_print(vec4 vec) {
 	std::cout << vec.vals[0] << " " << vec.vals[1] << " " << vec.vals[2] << " " << vec.vals[3] << std::endl;
 }
+*/

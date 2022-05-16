@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="arrow.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cameraEditor.cpp" />
     <ClCompile Include="cube.cpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="vec4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="arrow.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="cameraEditor.h" />
     <ClInclude Include="cube.h" />
@@ -205,6 +207,8 @@
     <ClInclude Include="vec4.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="arrow.frag" />
+    <None Include="arrow.vert" />
     <None Include="fragmentShader.frag" />
     <None Include="outline.frag" />
     <None Include="outline.vert" />
