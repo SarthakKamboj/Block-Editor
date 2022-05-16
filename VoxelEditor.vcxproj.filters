@@ -84,7 +84,7 @@
     <ClCompile Include="input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="boxCollider.cpp">
+    <ClCompile Include="physics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -143,10 +143,13 @@
     <ClInclude Include="camera.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="test.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
     <ClInclude Include="input.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="boxCollider.h">
+    <ClInclude Include="physics.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
