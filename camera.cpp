@@ -1,18 +1,24 @@
 #include "camera.h"
 
 Camera::Camera() {
-	pos = vec3(0.0f, 0.0f, 0.0f);
-	target = vec3(0.0f, 0.0f, 0.0f);
-	offset = vec3_sub(target, pos);
+	pos = glm::vec3(0.0f, 0.0f, 0.0f);
+	rot = glm::vec3(0.0f, 0.0f, 0.0f);
+	// target = vec3(0.0f, 0.0f, 0.0f);
+	// offset = vec3_sub(target, pos);
 }
 
 Camera::Camera(float xPos, float yPos, float zPos) {
-	pos = vec3(xPos, yPos, zPos);
-	target = vec3(0.0f, 0.0f, 0.0f);
-	offset = vec3_sub(target, pos);
+	pos = glm::vec3(xPos, yPos, zPos);
+	rot = glm::vec3(0.0f, 0.0f, 0.0f);
+	// target = vec3(0.0f, 0.0f, 0.0f);
+	// offset = vec3_sub(target, pos);
 }
 
-mat4 Camera::getViewMat() {
+glm::mat4 Camera::getViewMat() {
+	glm::mat4 posMat = _getTranslationMatrix(-pos.x, -pos.y, -pos.z);
+	glm::mat4 rotMat = _getRotMatrix(-rot.x, -rot.y, -rot.z);
+	return posMat * rotMat;
+	/*
 	vec3 subDir = vec3_sub(pos, target);
 	vec3 zAxis = vec3_normalize(subDir);
 	vec3 upRough(0.0f, 1.0f, 0.0f);
@@ -35,5 +41,7 @@ mat4 Camera::getViewMat() {
 	mat4 camPos = getTranslationMatrix(-pos.coords.x, -pos.coords.y, -pos.coords.z);
 	mat4 camRot = getRotMatrix(-rot.coords.x, -rot.coords.y, -rot.coords.z);
 
-	return mat4_multiply_mat4(projection, mat4_multiply_mat4(camPos, camRot));
+	// return mat4_multiply_mat4(projection, mat4_multiply_mat4(camPos, camRot));
+	return mat4_multiply_mat4(camPos, camRot);
+	*/
 }

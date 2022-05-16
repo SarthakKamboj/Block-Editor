@@ -4,7 +4,7 @@ extern int width, height;
 
 glm::mat4 _getTranslationMatrix(float x, float y, float z) {
 	glm::mat4 t(1.0f);
-	return glm::translate(t, glm::vec3(-x, y, z));
+	return glm::translate(t, glm::vec3(x, y, z));
 }
 
 glm::mat4 _getScaleMatrix(float x, float y, float z) {

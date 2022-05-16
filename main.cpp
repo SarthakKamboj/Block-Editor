@@ -85,7 +85,7 @@ int main(int argc, char* args[]) {
 
 	float val = 0.0f;
 
-	mat4 projection = getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
+	glm::mat4 projection = _getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
 
 	Camera cam(0.0f, 0.0f, 5.0f);
 
@@ -103,7 +103,7 @@ int main(int argc, char* args[]) {
 
 		SDL_Event event;
 
-		mat4 view = cam.getViewMat();
+		glm::mat4 view = cam.getViewMat();
 
 		handle_input(event);
 
@@ -190,22 +190,22 @@ int main(int argc, char* args[]) {
 
 			if (ImGui::CollapsingHeader("transform")) {
 				if (ImGui::TreeNode("position")) {
-					ImGui::SliderFloat("x", &cam.pos.coords.x, -10.0f, 10.0f);
-					ImGui::SliderFloat("y", &cam.pos.coords.y, -10.0f, 10.0f);
-					ImGui::SliderFloat("z", &cam.pos.coords.z, -10.0f, 10.0f);
+					ImGui::SliderFloat("x", &cam.pos.x, -10.0f, 10.0f);
+					ImGui::SliderFloat("y", &cam.pos.y, -10.0f, 10.0f);
+					ImGui::SliderFloat("z", &cam.pos.z, -10.0f, 10.0f);
 
-					cam.target = vec3_add(cam.pos, cam.offset);
+					// cam.target = vec3_add(cam.pos, cam.offset);
 					if (ImGui::Button("reset")) {
-						cam.pos = vec3(0.0f, 0.0f, 5.0f);
+						cam.pos = glm::vec3(0.0f, 0.0f, 5.0f);
 					}
 					ImGui::TreePop();
 				}
 				if (ImGui::TreeNode("rotation")) {
-					ImGui::SliderFloat("x", &cam.rot.coords.x, -180.0f, 180.0f);
-					ImGui::SliderFloat("y", &cam.rot.coords.y, -180.0f, 180.0f);
-					ImGui::SliderFloat("z", &cam.rot.coords.z, -180.0f, 180.0f);
+					ImGui::SliderFloat("x", &cam.rot.x, -180.0f, 180.0f);
+					ImGui::SliderFloat("y", &cam.rot.y, -180.0f, 180.0f);
+					ImGui::SliderFloat("z", &cam.rot.z, -180.0f, 180.0f);
 					if (ImGui::Button("reset")) {
-						cam.rot = vec3();
+						cam.rot = glm::vec3();
 					}
 					ImGui::TreePop();
 				}

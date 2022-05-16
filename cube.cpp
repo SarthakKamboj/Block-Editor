@@ -75,7 +75,7 @@ Cube::Cube() {
 	color = glm::vec3(1.0f, 0.0f, 1.0f);
 }
 
-void Cube::render(mat4& projection, mat4& view) {
+void Cube::render(glm::mat4& projection, glm::mat4& view) {
 
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_ALWAYS, 1, 0xFF);
@@ -92,9 +92,9 @@ void Cube::render(mat4& projection, mat4& view) {
 		glm::mat4 scaleMat = _getScaleMatrix(scale.x, scale.y, scale.z);
 		shaderProgram.setMat4("scale", GL_FALSE, _mat4_get_ptr(scaleMat));
 
-		shaderProgram.setMat4("projection", GL_TRUE, mat4_get_ptr(projection));
+		shaderProgram.setMat4("projection", GL_FALSE, _mat4_get_ptr(projection));
 
-		shaderProgram.setMat4("view", GL_TRUE, mat4_get_ptr(view));
+		shaderProgram.setMat4("view", GL_FALSE, _mat4_get_ptr(view));
 		shaderProgram.setVec3("inColor", glm::value_ptr(color));
 
 		drawCube();
@@ -116,9 +116,9 @@ void Cube::render(mat4& projection, mat4& view) {
 			glm::mat4 scaleMat = _getScaleMatrix(outlineScale.x * scale.x, outlineScale.y * scale.y, outlineScale.z * scale.z);
 			outlineProgram.setMat4("scale", GL_FALSE, _mat4_get_ptr(scaleMat));
 
-			outlineProgram.setMat4("projection", GL_TRUE, mat4_get_ptr(projection));
+			outlineProgram.setMat4("projection", GL_FALSE, _mat4_get_ptr(projection));
 
-			outlineProgram.setMat4("view", GL_TRUE, mat4_get_ptr(view));
+			outlineProgram.setMat4("view", GL_FALSE, _mat4_get_ptr(view));
 
 			drawCube();
 			outlineProgram.unbind();

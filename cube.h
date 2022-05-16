@@ -12,7 +12,7 @@
 class Cube {
 public:
 	Cube();
-	void render(mat4& projection, mat4& view);
+	void render(glm::mat4& projection, glm::mat4& view);
 
 	glm::vec3 pos;
 	glm::vec3 scale;
