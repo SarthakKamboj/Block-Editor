@@ -15,9 +15,9 @@
 #include "input.h"
 #include <map>
 #include "cube_editor.h"
+#include "cameraEditor.h"
 
 // TODO: - do not select cubes when doing imgui input
-// - render outlines through objects
 
 extern std::map<SDL_Keycode, bool> keyPressedMap;
 extern mouse_click_state_t mouse_click_state;
@@ -80,6 +80,7 @@ int main(int argc, char* args[]) {
 	cubeEditorPtr = &cubeEditor;
 
 	Cube cubes[3];
+	cubeEditorPtr->cube = &cubes[2];
 
 	uint32_t start = SDL_GetTicks();
 
@@ -91,6 +92,8 @@ int main(int argc, char* args[]) {
 	glm::mat4 projection = _getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
 
 	Camera cam(0.0f, 0.0f, 5.0f);
+
+	CameraEditor cameraEditor(&cam);
 
 	int stencilBits;
 	glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL, GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE, &stencilBits);
@@ -135,38 +138,12 @@ int main(int argc, char* args[]) {
 		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
 			cubes[i].render(projection, view);
 		}
+		cubeEditorPtr->cube->render_outline();
 
 		ImGui::PushFont(robotoFont);
 
 		cubeEditor.render();
-
-		{
-			ImGui::Begin("Camera Info");
-
-			if (ImGui::CollapsingHeader("transform")) {
-				if (ImGui::TreeNode("position")) {
-					ImGui::SliderFloat("x", &cam.pos.x, -10.0f, 10.0f);
-					ImGui::SliderFloat("y", &cam.pos.y, -10.0f, 10.0f);
-					ImGui::SliderFloat("z", &cam.pos.z, -10.0f, 10.0f);
-
-					if (ImGui::Button("reset")) {
-						cam.pos = glm::vec3(0.0f, 0.0f, 5.0f);
-					}
-					ImGui::TreePop();
-				}
-				if (ImGui::TreeNode("rotation")) {
-					ImGui::SliderFloat("x", &cam.rot.x, -180.0f, 180.0f);
-					ImGui::SliderFloat("y", &cam.rot.y, -180.0f, 180.0f);
-					ImGui::SliderFloat("z", &cam.rot.z, -180.0f, 180.0f);
-					if (ImGui::Button("reset")) {
-						cam.rot = glm::vec3();
-					}
-					ImGui::TreePop();
-				}
-			}
-
-			ImGui::End();
-		}
+		cameraEditor.render();
 
 		ImGui::PopFont();
 		ImGui::Render();

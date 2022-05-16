@@ -124,7 +124,6 @@ void Cube::late_update() {
 
 void Cube::render(glm::mat4& projection, glm::mat4& view) {
 
-	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_ALWAYS, 1, 0xFF);
 
 	shaderProgram.bind();
@@ -147,9 +146,7 @@ void Cube::render(glm::mat4& projection, glm::mat4& view) {
 	shaderProgram.unbind();
 
 	if (outline) {
-		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 		outlineProgram.bind();
-
 		outlineProgram.setMat4("translate", GL_FALSE, _mat4_get_ptr(translationMat));
 
 		outlineProgram.setMat4("rot", GL_FALSE, _mat4_get_ptr(rotMat));
@@ -160,14 +157,23 @@ void Cube::render(glm::mat4& projection, glm::mat4& view) {
 		outlineProgram.setMat4("projection", GL_FALSE, _mat4_get_ptr(projection));
 
 		outlineProgram.setMat4("view", GL_FALSE, _mat4_get_ptr(view));
-
-		drawCube();
 		outlineProgram.unbind();
-
 	}
+
 
 }
 
+
+void Cube::render_outline() {
+	glDisable(GL_DEPTH_TEST);
+	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+	outlineProgram.bind();
+
+	drawCube();
+	outlineProgram.unbind();
+
+	glEnable(GL_DEPTH_TEST);
+}
 
 void Cube::drawCube() {
 	vao.bind();
