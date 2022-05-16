@@ -3,6 +3,11 @@
 #include "vec3.h"
 #include "glm/glm.hpp"
 
+typedef struct ray_t {
+	glm::vec3 dir;
+	glm::vec3 origin;
+} ray_t;
+
 class BoxCollider {
 public:
 	BoxCollider();
@@ -13,5 +18,6 @@ public:
 	glm::vec3 transform;
 
 	bool point_collide(glm::vec3& point);
+	bool ray_collide(ray_t& point);
 
 };

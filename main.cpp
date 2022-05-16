@@ -32,8 +32,6 @@ int main(int argc, char* args[]) {
 		return -1;
 	}
 
-	std::cout << "sdl works" << std::endl;
-
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -106,6 +104,7 @@ int main(int argc, char* args[]) {
 		glm::mat4 view = cam.getViewMat();
 
 		handle_input(event);
+		cube.update(cam);
 
 		if (keyPressedMap[SDLK_o]) {
 			cube.outline = !cube.outline;
@@ -113,13 +112,6 @@ int main(int argc, char* args[]) {
 
 		if (keyPressedMap[SDL_QUIT] || keyPressedMap[SDLK_ESCAPE]) {
 			running = false;
-		}
-
-		if (mouse_click_state.left) {
-			std::cout << mouse_state.x << ", " << mouse_state.y << std::endl;
-		}
-		if (mouse_click_state.right) {
-			std::cout << "right clicked" << std::endl;
 		}
 
 		ImGui_ImplOpenGL3_NewFrame();
