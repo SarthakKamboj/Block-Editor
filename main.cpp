@@ -22,10 +22,6 @@ extern mouse_state_t mouse_state;
 
 CubeEditor* cubeEditorPtr;
 
-// TODO: create func to go from cube world coords to screen coords,
-// keep track of z values, and use this info to see what hit
-// * might have to learn collision detection
-
 int width = 800, height = 800;
 
 int main(int argc, char* args[]) {
@@ -81,7 +77,6 @@ int main(int argc, char* args[]) {
 	cubeEditorPtr = &cubeEditor;
 
 	Cube cubes[3];
-	// Cube cube;
 
 	uint32_t start = SDL_GetTicks();
 
@@ -134,7 +129,6 @@ int main(int argc, char* args[]) {
 
 		glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
-		// cube.render(projection, view);
 		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
 			cubes[i].render(projection, view);
 		}
