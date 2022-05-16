@@ -16,6 +16,9 @@
 #include <map>
 #include "cube_editor.h"
 
+// TODO: - do not select cubes when doing imgui input
+// - render outlines through objects
+
 extern std::map<SDL_Keycode, bool> keyPressedMap;
 extern mouse_click_state_t mouse_click_state;
 extern mouse_state_t mouse_state;

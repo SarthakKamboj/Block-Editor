@@ -21,9 +21,9 @@ void CubeEditor::render() {
 		}
 
 		if (ImGui::TreeNode("scale")) {
-			ImGui::SliderFloat("x", &cube->scale.x, -5.0f, 5.0f);
-			ImGui::SliderFloat("y", &cube->scale.y, -5.0f, 5.0f);
-			ImGui::SliderFloat("z", &cube->scale.z, -5.0f, 5.0f);
+			ImGui::SliderFloat("x", &cube->scale.x, 0.0f, 5.0f);
+			ImGui::SliderFloat("y", &cube->scale.y, 0.0f, 5.0f);
+			ImGui::SliderFloat("z", &cube->scale.z, 0.0f, 5.0f);
 
 			if (ImGui::Button("reset")) {
 				cube->scale = glm::vec3(1.0f, 1.0f, 1.0f);
