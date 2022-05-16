@@ -9,6 +9,8 @@ extern int width, height;
 extern mouse_click_state_t mouse_click_state;
 extern mouse_state_t mouse_state;
 
+int Cube::idx = 0;
+
 float vertices[] = {
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
 		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f,
@@ -54,6 +56,10 @@ float vertices[] = {
 };
 
 Cube::Cube() {
+
+	name = "Cube " + std::to_string(Cube::idx);
+	Cube::idx += 1;
+
 	vbo.bind();
 	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
 	vbo.unbind();
@@ -76,6 +82,9 @@ Cube::Cube() {
 	const char* outlineVert = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.vert";
 	const char* outlineFrag = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.frag";
 	outlineProgram = ShaderProgram(outlineVert, outlineFrag);
+
+	const char* transparentFrag = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\transparent.frag";
+	transparentProgram = ShaderProgram(vertexFilePath, transparentFrag);
 
 	outline = false;
 
@@ -122,9 +131,35 @@ void Cube::late_update() {
 	outline = (cubeEditorPtr->cube == this);
 }
 
-void Cube::render(glm::mat4& projection, glm::mat4& view) {
-
+void Cube::setup_render_outline(glm::mat4& projection, glm::mat4& view) {
+	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_ALWAYS, 1, 0xFF);
+
+	transparentProgram.bind();
+
+	glm::mat4 translationMat = _getTranslationMatrix(pos.x, pos.y, pos.z);
+	transparentProgram.setMat4("translate", GL_FALSE, _mat4_get_ptr(translationMat));
+
+	glm::mat4 rotMat = _getRotMatrix(rot.x, rot.y, rot.z);
+	transparentProgram.setMat4("rot", GL_FALSE, _mat4_get_ptr(rotMat));
+
+	glm::mat4 scaleMat = _getScaleMatrix(scale.x, scale.y, scale.z);
+	transparentProgram.setMat4("scale", GL_FALSE, _mat4_get_ptr(scaleMat));
+
+	transparentProgram.setMat4("projection", GL_FALSE, _mat4_get_ptr(projection));
+
+	transparentProgram.setMat4("view", GL_FALSE, _mat4_get_ptr(view));
+	transparentProgram.setVec3("inColor", glm::value_ptr(color));
+
+	drawCube();
+	transparentProgram.unbind();
+
+	glDisable(GL_STENCIL_TEST);
+
+
+}
+
+void Cube::render(glm::mat4& projection, glm::mat4& view) {
 
 	shaderProgram.bind();
 
@@ -159,20 +194,20 @@ void Cube::render(glm::mat4& projection, glm::mat4& view) {
 		outlineProgram.setMat4("view", GL_FALSE, _mat4_get_ptr(view));
 		outlineProgram.unbind();
 	}
-
-
 }
 
 
 void Cube::render_outline() {
 	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-	outlineProgram.bind();
 
+	outlineProgram.bind();
 	drawCube();
 	outlineProgram.unbind();
 
 	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_STENCIL_TEST);
 }
 
 void Cube::drawCube() {

@@ -4,9 +4,16 @@ CubeEditor::CubeEditor() {
 	cube = NULL;
 }
 
-void CubeEditor::render() {
+extern bool editorHover;
+void CubeEditor::update() {
 	if (cube == NULL) return;
+
 	ImGui::Begin("Triangle Info");
+
+	editorHover |= ImGui::IsWindowHovered() | ImGui::IsAnyItemHovered();
+
+	ImGui::Text(cube->name.c_str());
+
 	if (ImGui::CollapsingHeader("transform")) {
 		if (ImGui::TreeNode("position")) {
 			ImGui::SliderFloat("x", &cube->pos.x, -3.0f, 3.0f);
@@ -46,10 +53,6 @@ void CubeEditor::render() {
 	}
 	if (ImGui::CollapsingHeader("color")) {
 		ImGui::ColorEdit3("Triangle color", &cube->color.x);
-	}
-
-	if (ImGui::Button("toggle outline")) {
-		cube->outline = !cube->outline;
 	}
 
 	ImGui::End();

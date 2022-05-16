@@ -6,7 +6,7 @@
 class CubeEditor {
 public:
 	CubeEditor();
-	void render();
+	void update();
 
 	Cube* cube;
 };

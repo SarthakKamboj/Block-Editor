@@ -17,8 +17,6 @@
 #include "cube_editor.h"
 #include "cameraEditor.h"
 
-// TODO: - do not select cubes when doing imgui input
-
 extern std::map<SDL_Keycode, bool> keyPressedMap;
 extern mouse_click_state_t mouse_click_state;
 extern mouse_state_t mouse_state;
@@ -26,6 +24,7 @@ extern mouse_state_t mouse_state;
 CubeEditor* cubeEditorPtr;
 
 int width = 800, height = 800;
+bool editorHover;
 
 int main(int argc, char* args[]) {
 
@@ -41,6 +40,7 @@ int main(int argc, char* args[]) {
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
+	editorHover = false;
 
 	SDL_Window* window = SDL_CreateWindow("window",
 		SDL_WINDOWPOS_CENTERED,
@@ -66,7 +66,8 @@ int main(int argc, char* args[]) {
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_STENCIL_TEST);
+	glEnable(GL_BLEND);
+	// glDisable(GL_STENCIL_TEST);
 	glDepthFunc(GL_LESS);
 	// glEnable(GL_CULL_FACE);
 	// glCullFace(GL_BACK);
@@ -80,7 +81,9 @@ int main(int argc, char* args[]) {
 	cubeEditorPtr = &cubeEditor;
 
 	Cube cubes[3];
-	cubeEditorPtr->cube = &cubes[2];
+	cubeEditorPtr->cube = &cubes[0];
+	cubes[1].pos = glm::vec3(1.0f, 0.0f, 0.0f);
+	cubes[2].pos = glm::vec3(-1.0f, 0.0f, 0.0f);
 
 	uint32_t start = SDL_GetTicks();
 
@@ -103,6 +106,8 @@ int main(int argc, char* args[]) {
 
 	while (running) {
 
+		editorHover = false;
+
 		uint32_t cur = SDL_GetTicks();
 		uint32_t diff = cur - start;
 		start = cur;
@@ -113,14 +118,6 @@ int main(int argc, char* args[]) {
 
 		handle_input(event);
 
-		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
-			cubes[i].update(cam);
-		}
-
-		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
-			cubes[i].late_update();
-		}
-
 		if (keyPressedMap[SDL_QUIT] || keyPressedMap[SDLK_ESCAPE]) {
 			running = false;
 		}
@@ -129,21 +126,33 @@ int main(int argc, char* args[]) {
 		ImGui_ImplSDL2_NewFrame();
 		ImGui::NewFrame();
 
+		ImGui::PushFont(robotoFont);
+
+		cubeEditor.update();
+		cameraEditor.update();
+
+		if (!editorHover) {
+			for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
+				cubes[i].update(cam);
+			}
+
+			for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
+				cubes[i].late_update();
+			}
+		}
+
 		glClearColor(clearColor.coords.x, clearColor.coords.y, clearColor.coords.z, 1.0f);
 		glClearStencil(0);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
+		cubeEditorPtr->cube->setup_render_outline(projection, view);
 		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
 			cubes[i].render(projection, view);
 		}
+
 		cubeEditorPtr->cube->render_outline();
-
-		ImGui::PushFont(robotoFont);
-
-		cubeEditor.render();
-		cameraEditor.render();
 
 		ImGui::PopFont();
 		ImGui::Render();

@@ -7,5 +7,6 @@ out vec4 FragColor;
 uniform float windowHeight;
 
 void main() {
-	FragColor = vec4((gl_FragCoord.y / windowHeight) * color, 1.0);
+	// FragColor = vec4((gl_FragCoord.y / windowHeight) * color, 1.0);
+	FragColor = vec4(color, 1.0);
 }

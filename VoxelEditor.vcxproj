@@ -208,6 +208,7 @@
     <None Include="fragmentShader.frag" />
     <None Include="outline.frag" />
     <None Include="outline.vert" />
+    <None Include="transparent.frag" />
     <None Include="vertexShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

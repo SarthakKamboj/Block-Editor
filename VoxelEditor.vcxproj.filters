@@ -181,5 +181,8 @@
     <None Include="outline.vert">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="transparent.frag">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

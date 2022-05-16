@@ -6,7 +6,7 @@
 class CameraEditor {
 public:
 	CameraEditor(Camera* camera);
-	void render();
+	void update();
 
 	Camera* cam;
 };

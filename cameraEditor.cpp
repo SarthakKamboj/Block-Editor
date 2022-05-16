@@ -4,8 +4,11 @@ CameraEditor::CameraEditor(Camera* _camera) {
 	cam = _camera;
 }
 
-void CameraEditor::render() {
+extern bool editorHover;
+void CameraEditor::update() {
 	ImGui::Begin("Camera Info");
+
+	editorHover |= ImGui::IsWindowHovered();
 
 	if (ImGui::CollapsingHeader("transform")) {
 		if (ImGui::TreeNode("position")) {
