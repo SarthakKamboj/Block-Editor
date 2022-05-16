@@ -14,6 +14,7 @@ public:
 	Cube();
 	void render(glm::mat4& projection, glm::mat4& view);
 	void update(Camera& camera);
+	void late_update();
 
 	glm::vec3 pos;
 	glm::vec3 scale;

@@ -1,6 +1,10 @@
 #include "cube.h"
 #include "input.h"
 
+#include "cube_editor.h"
+
+extern CubeEditor* cubeEditorPtr;
+
 extern int width, height;
 extern mouse_click_state_t mouse_click_state;
 extern mouse_state_t mouse_state;
@@ -108,10 +112,14 @@ void Cube::update(Camera& camera) {
 		ray.origin = nearCoord;
 		ray.dir = glm::normalize(farCoord - nearCoord);
 		if (boxCollider.ray_collide(ray)) {
-			outline = !outline;
+			cubeEditorPtr->cube = this;
 		}
-
 	}
+}
+
+
+void Cube::late_update() {
+	outline = (cubeEditorPtr->cube == this);
 }
 
 void Cube::render(glm::mat4& projection, glm::mat4& view) {

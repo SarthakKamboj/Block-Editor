@@ -14,10 +14,13 @@
 #include "camera.h"
 #include "input.h"
 #include <map>
+#include "cube_editor.h"
 
 extern std::map<SDL_Keycode, bool> keyPressedMap;
 extern mouse_click_state_t mouse_click_state;
 extern mouse_state_t mouse_state;
+
+CubeEditor* cubeEditorPtr;
 
 // TODO: create func to go from cube world coords to screen coords,
 // keep track of z values, and use this info to see what hit
@@ -74,7 +77,11 @@ int main(int argc, char* args[]) {
 
 	vec3 clearColor(0.0f, 0.0f, 0.0f);
 
-	Cube cube;
+	CubeEditor cubeEditor;
+	cubeEditorPtr = &cubeEditor;
+
+	Cube cubes[3];
+	// Cube cube;
 
 	uint32_t start = SDL_GetTicks();
 
@@ -104,10 +111,13 @@ int main(int argc, char* args[]) {
 		glm::mat4 view = cam.getViewMat();
 
 		handle_input(event);
-		cube.update(cam);
 
-		if (keyPressedMap[SDLK_o]) {
-			cube.outline = !cube.outline;
+		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
+			cubes[i].update(cam);
+		}
+
+		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
+			cubes[i].late_update();
 		}
 
 		if (keyPressedMap[SDL_QUIT] || keyPressedMap[SDLK_ESCAPE]) {
@@ -124,58 +134,14 @@ int main(int argc, char* args[]) {
 
 		glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
-		cube.render(projection, view);
+		// cube.render(projection, view);
+		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
+			cubes[i].render(projection, view);
+		}
 
 		ImGui::PushFont(robotoFont);
-		{
-			ImGui::Begin("Triangle Info");
-			if (ImGui::CollapsingHeader("transform")) {
-				if (ImGui::TreeNode("position")) {
-					ImGui::SliderFloat("x", &cube.pos.x, -3.0f, 3.0f);
-					ImGui::SliderFloat("y", &cube.pos.y, -3.0f, 3.0f);
-					ImGui::SliderFloat("z", &cube.pos.z, -3.0f, 3.0f);
 
-					if (ImGui::Button("reset")) {
-						cube.pos = glm::vec3();
-					}
-
-					ImGui::TreePop();
-				}
-
-				if (ImGui::TreeNode("scale")) {
-					ImGui::SliderFloat("x", &cube.scale.x, -5.0f, 5.0f);
-					ImGui::SliderFloat("y", &cube.scale.y, -5.0f, 5.0f);
-					ImGui::SliderFloat("z", &cube.scale.z, -5.0f, 5.0f);
-
-					if (ImGui::Button("reset")) {
-						cube.scale = glm::vec3(1.0f, 1.0f, 1.0f);
-					}
-
-					ImGui::TreePop();
-				}
-
-				if (ImGui::TreeNode("rotation")) {
-					ImGui::SliderFloat("x", &cube.rot.x, -180.0f, 180.0f);
-					ImGui::SliderFloat("y", &cube.rot.y, -180.0f, 180.0f);
-					ImGui::SliderFloat("z", &cube.rot.z, -180.0f, 180.0f);
-
-					if (ImGui::Button("reset")) {
-						cube.rot = glm::vec3();
-					}
-
-					ImGui::TreePop();
-				}
-			}
-			if (ImGui::CollapsingHeader("color")) {
-				ImGui::ColorEdit3("Triangle color", &cube.color.x);
-			}
-
-			if (ImGui::Button("toggle outline")) {
-				cube.outline = !cube.outline;
-			}
-
-			ImGui::End();
-		}
+		cubeEditor.render();
 
 		{
 			ImGui::Begin("Camera Info");

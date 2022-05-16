@@ -90,6 +90,9 @@
     <ClCompile Include="lin_alg_helper.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
+    <ClCompile Include="cube_editor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vao.h">
@@ -154,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="lin_alg_helper.h">
       <Filter>Source Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="cube_editor.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
