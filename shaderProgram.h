@@ -7,6 +7,7 @@
 
 class ShaderProgram {
 public:
+	ShaderProgram();
 	ShaderProgram(const char* vertexFilePath, const char* fragmentFilePath);
 	void bind();
 	void unbind();

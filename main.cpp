@@ -23,30 +23,22 @@ extern mouse_state_t mouse_state;
 // keep track of z values, and use this info to see what hit
 // * might have to learn collision detection
 
-vec3 world_to_screen(vec3 vertex_pt, vec3 world_coords, vec3 scale, vec3 rot, mat4 projection, mat4 view) {
-    mat4 transMat = getTranslationMatrix(world_coords.x, world_coords.y, world_coords.z); 
-    mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z); 
-    mat4 rotMat = getRotMatrix(rot.x, rot.y, rot.z); 
-    
-
-}
+int width = 800, height = 800;
 
 int main(int argc, char* args[]) {
+
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		std::cout << "sdl gave error" << std::endl;
 		return -1;
 	}
-
-	std::cout << "sdl works" << std::endl;
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-	int width = 800, height = 800;
 
 	SDL_Window* window = SDL_CreateWindow("window",
 		SDL_WINDOWPOS_CENTERED,
@@ -73,37 +65,16 @@ int main(int argc, char* args[]) {
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_STENCIL_TEST);
-    glDepthFunc(GL_LESS);
+	glDepthFunc(GL_LESS);
 	// glEnable(GL_CULL_FACE);
 	// glCullFace(GL_BACK);
 	// glFrontFace(GL_CCW);
 
 	bool running = true;
 
-	float r = 0.0f;
-	float g = 0.0f;
-	float b = 0.0f;
+	vec3 clearColor(0.0f, 0.0f, 0.0f);
 
 	Cube cube;
-
-	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\vertexShader.vert";
-	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\fragmentShader.frag";
-	ShaderProgram shaderProgram(vertexFilePath, fragmentFilePath);
-
-	shaderProgram.setFloat("windowHeight", (float)height);
-
-    const char* outlineVert = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.vert";
-	const char* outlineFrag = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.frag";
-	ShaderProgram outlineProgram(outlineVert, outlineFrag);
-
-	vec3 pos;
-	vec3 scale(1.0f, 1.0f, 1.0f);
-	vec3 outlineScale(1.05f, 1.05f, 1.05f);
-	vec3 rot;
-
-	float posDelta = 0.01f;
-	float scaleDelta = 0.1f;
-	float rotDelta = 1.0f;
 
 	uint32_t start = SDL_GetTicks();
 
@@ -112,19 +83,15 @@ int main(int argc, char* args[]) {
 
 	float val = 0.0f;
 
-	vec3 triangleColor(1.0f, 0.0f, 1.0f);
-
-	mat4 projection = getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
+	glm::mat4 projection = _getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
 
 	Camera cam(0.0f, 0.0f, 5.0f);
 
-    int stencilBits;
-    glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL, GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE, &stencilBits);
-    std::cout << "stencilBits: " << stencilBits << std::endl;
+	int stencilBits;
+	glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL, GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE, &stencilBits);
+	std::cout << "stencilBits: " << stencilBits << std::endl;
 
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-
-    bool outline = false;
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
 	while (running) {
 
@@ -134,130 +101,78 @@ int main(int argc, char* args[]) {
 
 		SDL_Event event;
 
-		mat4 view = cam.getViewMat();
-        
-        handle_input(event);
+		glm::mat4 view = cam.getViewMat();
 
-        if (keyPressedMap[SDLK_o]) {
-            outline = !outline;
-        }
+		handle_input(event);
+		cube.update(cam);
 
-        if (keyPressedMap[SDL_QUIT] || keyPressedMap[SDLK_ESCAPE]) {
-            running = false;
-        }
+		if (keyPressedMap[SDLK_o]) {
+			cube.outline = !cube.outline;
+		}
 
-        if (mouse_click_state.left) {
-            std::cout << mouse_state.x << ", " << mouse_state.y << std::endl;
-        }
-        if (mouse_click_state.right) {
-            std::cout << "right clicked" << std::endl;
-        }
+		if (keyPressedMap[SDL_QUIT] || keyPressedMap[SDLK_ESCAPE]) {
+			running = false;
+		}
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplSDL2_NewFrame();
 		ImGui::NewFrame();
 
-		glClearColor(r, g, b, 1.0f);
+		glClearColor(clearColor.coords.x, clearColor.coords.y, clearColor.coords.z, 1.0f);
 		glClearStencil(0);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
-        glStencilFunc(GL_ALWAYS, 1, 0xFF);
-
-        {
-            shaderProgram.bind();
-
-            mat4 translationMat = getTranslationMatrix(pos.coords.x, pos.coords.y, pos.coords.z);
-            shaderProgram.setMat4("translate", GL_TRUE, mat4_get_ptr(translationMat));
-
-            mat4 rotMat = getRotMatrix(rot.coords.x, rot.coords.y, rot.coords.z);
-            shaderProgram.setMat4("rot", GL_TRUE, mat4_get_ptr(rotMat));
-
-            mat4 scaleMat = getScaleMatrix(scale.coords.x, scale.coords.y, scale.coords.z);
-            shaderProgram.setMat4("scale", GL_TRUE, mat4_get_ptr(scaleMat));
-
-            shaderProgram.setMat4("projection", GL_TRUE, mat4_get_ptr(projection));
-
-            shaderProgram.setMat4("view", GL_TRUE, mat4_get_ptr(view));
-            shaderProgram.setVec3("inColor", vec3_get_ptr(triangleColor));
-
-            cube.render();
-            shaderProgram.unbind();
-
-        }
-
-        if (outline) {
-            glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-            {
-                outlineProgram.bind();
-
-                mat4 translationMat = getTranslationMatrix(pos.coords.x, pos.coords.y, pos.coords.z);
-                outlineProgram.setMat4("translate", GL_TRUE, mat4_get_ptr(translationMat));
-
-                mat4 rotMat = getRotMatrix(rot.coords.x, rot.coords.y, rot.coords.z);
-                outlineProgram.setMat4("rot", GL_TRUE, mat4_get_ptr(rotMat));
-
-                mat4 scaleMat = getScaleMatrix(outlineScale.coords.x, outlineScale.coords.y, outlineScale.coords.z);
-                outlineProgram.setMat4("scale", GL_TRUE, mat4_get_ptr(scaleMat));
-
-                outlineProgram.setMat4("projection", GL_TRUE, mat4_get_ptr(projection));
-
-                outlineProgram.setMat4("view", GL_TRUE, mat4_get_ptr(view));
-
-                cube.render();
-                outlineProgram.unbind();
-
-            }
-        }
+		cube.render(projection, view);
 
 		ImGui::PushFont(robotoFont);
 		{
 			ImGui::Begin("Triangle Info");
 			if (ImGui::CollapsingHeader("transform")) {
 				if (ImGui::TreeNode("position")) {
-					ImGui::SliderFloat("x", &pos.coords.x, -1.0f, 1.0f);
-					ImGui::SliderFloat("y", &pos.coords.y, -1.0f, 1.0f);
-					ImGui::SliderFloat("z", &pos.coords.z, -1.0f, 1.0f);
+					ImGui::SliderFloat("x", &cube.pos.x, -3.0f, 3.0f);
+					ImGui::SliderFloat("y", &cube.pos.y, -3.0f, 3.0f);
+					ImGui::SliderFloat("z", &cube.pos.z, -3.0f, 3.0f);
 
 					if (ImGui::Button("reset")) {
-						pos = vec3();
+						cube.pos = glm::vec3();
 					}
 
 					ImGui::TreePop();
 				}
 
 				if (ImGui::TreeNode("scale")) {
-					ImGui::SliderFloat("x", &scale.coords.x, -5.0f, 5.0f);
-					ImGui::SliderFloat("y", &scale.coords.y, -5.0f, 5.0f);
-					ImGui::SliderFloat("z", &scale.coords.z, -5.0f, 5.0f);
+					ImGui::SliderFloat("x", &cube.scale.x, -5.0f, 5.0f);
+					ImGui::SliderFloat("y", &cube.scale.y, -5.0f, 5.0f);
+					ImGui::SliderFloat("z", &cube.scale.z, -5.0f, 5.0f);
 
 					if (ImGui::Button("reset")) {
-						scale = vec3(1.0f, 1.0f, 1.0f);
+						cube.scale = glm::vec3(1.0f, 1.0f, 1.0f);
 					}
 
 					ImGui::TreePop();
 				}
 
 				if (ImGui::TreeNode("rotation")) {
-					ImGui::SliderFloat("x", &rot.coords.x, -180.0f, 180.0f);
-					ImGui::SliderFloat("y", &rot.coords.y, -180.0f, 180.0f);
-					ImGui::SliderFloat("z", &rot.coords.z, -180.0f, 180.0f);
+					ImGui::SliderFloat("x", &cube.rot.x, -180.0f, 180.0f);
+					ImGui::SliderFloat("y", &cube.rot.y, -180.0f, 180.0f);
+					ImGui::SliderFloat("z", &cube.rot.z, -180.0f, 180.0f);
 
 					if (ImGui::Button("reset")) {
-						rot = vec3();
+						cube.rot = glm::vec3();
 					}
 
 					ImGui::TreePop();
 				}
 			}
 			if (ImGui::CollapsingHeader("color")) {
-				ImGui::ColorEdit3("Triangle color", &triangleColor.vals[0]);
+				ImGui::ColorEdit3("Triangle color", &cube.color.x);
 			}
 
-            if (ImGui::Button("toggle outline")) {
-                outline = !outline;
-            }
+			if (ImGui::Button("toggle outline")) {
+				cube.outline = !cube.outline;
+			}
 
 			ImGui::End();
 		}
@@ -267,22 +182,21 @@ int main(int argc, char* args[]) {
 
 			if (ImGui::CollapsingHeader("transform")) {
 				if (ImGui::TreeNode("position")) {
-					ImGui::SliderFloat("x", &cam.pos.coords.x, -10.0f, 10.0f);
-					ImGui::SliderFloat("y", &cam.pos.coords.y, -10.0f, 10.0f);
-					ImGui::SliderFloat("z", &cam.pos.coords.z, -10.0f, 10.0f);
+					ImGui::SliderFloat("x", &cam.pos.x, -10.0f, 10.0f);
+					ImGui::SliderFloat("y", &cam.pos.y, -10.0f, 10.0f);
+					ImGui::SliderFloat("z", &cam.pos.z, -10.0f, 10.0f);
 
-					cam.target = vec3_add(cam.pos, cam.offset);
 					if (ImGui::Button("reset")) {
-						cam.pos = vec3(0.0f, 0.0f, 5.0f);
+						cam.pos = glm::vec3(0.0f, 0.0f, 5.0f);
 					}
 					ImGui::TreePop();
 				}
 				if (ImGui::TreeNode("rotation")) {
-					ImGui::SliderFloat("x", &cam.rot.coords.x, -180.0f, 180.0f);
-					ImGui::SliderFloat("y", &cam.rot.coords.y, -180.0f, 180.0f);
-					ImGui::SliderFloat("z", &cam.rot.coords.z, -180.0f, 180.0f);
+					ImGui::SliderFloat("x", &cam.rot.x, -180.0f, 180.0f);
+					ImGui::SliderFloat("y", &cam.rot.y, -180.0f, 180.0f);
+					ImGui::SliderFloat("z", &cam.rot.z, -180.0f, 180.0f);
 					if (ImGui::Button("reset")) {
-						cam.rot = vec3();
+						cam.rot = glm::vec3();
 					}
 					ImGui::TreePop();
 				}

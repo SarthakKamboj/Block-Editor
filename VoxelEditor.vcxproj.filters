@@ -84,6 +84,12 @@
     <ClCompile Include="input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="boxCollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lin_alg_helper.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vao.h">
@@ -140,11 +146,14 @@
     <ClInclude Include="camera.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="test.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="input.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boxCollider.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lin_alg_helper.h">
+      <Filter>Source Files\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

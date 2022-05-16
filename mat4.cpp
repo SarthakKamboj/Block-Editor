@@ -11,8 +11,7 @@ mat4::mat4(float identityVal) {
 
 mat4 getTranslationMatrix(float x, float y, float z) {
 	mat4 mat(1.0f);
-	// TODO: why did I have to make this negative
-	mat.rows[0].vals[3] = -x;
+	mat.rows[0].vals[3] = x;
 	mat.rows[1].vals[3] = y;
 	mat.rows[2].vals[3] = z;
 	return mat;
