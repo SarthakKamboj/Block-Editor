@@ -11,6 +11,12 @@ union vec3 {
 		float z;
 	} coords;
 
+    struct {
+		float r;
+		float g;
+		float b;
+	} colors;
+
 	float vals[3];
 
 public:

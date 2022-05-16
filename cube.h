@@ -2,32 +2,38 @@
 
 #include "vao.h"
 #include "vbo.h"
-#include "physics.h"
+#include "boxCollider.h"
 #include "vec3.h"
 #include "mat4.h"
 #include "shaderProgram.h"
+#include "glm/glm.hpp"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class Cube {
 public:
 	Cube();
-	void render(mat4& projection, mat4& view);
+	void render(glm::mat4& projection, glm::mat4& view);
+	void update();
 
-    vec3 pos;
-    vec3 scale;
-    vec3 rot;
+	glm::vec3 pos;
+	glm::vec3 scale;
+	glm::vec3 rot;
 
-	vec3 color;
-    bool outline;
+	glm::vec3 color;
+	bool outline;
 
 private:
 
 	VAO vao;
 	VBO vbo;
-    
-	vec3 outlineScale;
 
-    ShaderProgram shaderProgram;
-    ShaderProgram outlineProgram;
+	glm::vec3 outlineScale;
 
-    void drawCube();
+	ShaderProgram shaderProgram;
+	ShaderProgram outlineProgram;
+
+	BoxCollider boxCollider;
+
+	void drawCube();
 };
