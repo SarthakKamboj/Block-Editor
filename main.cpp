@@ -15,8 +15,6 @@
 #include "input.h"
 #include <map>
 
-#include "btBulletDynamicsCommon.h"
-
 extern std::map<SDL_Keycode, bool> keyPressedMap;
 extern mouse_click_state_t mouse_click_state;
 extern mouse_state_t mouse_state;
@@ -24,8 +22,6 @@ extern mouse_state_t mouse_state;
 // TODO: create func to go from cube world coords to screen coords,
 // keep track of z values, and use this info to see what hit
 // * might have to learn collision detection
-
-// motionstates are the way bullet physics tells you the world transform of the objects
 
 int width = 800, height = 800;
 
@@ -78,36 +74,9 @@ int main(int argc, char* args[]) {
 
 	bool running = true;
 
-    vec3 clearColor(0.0f, 0.0f, 0.0f);
-
-    /*
-	float r = 0.0f;
-	float g = 0.0f;
-	float b = 0.0f;
-    */
+	vec3 clearColor(0.0f, 0.0f, 0.0f);
 
 	Cube cube;
-
-    /*
-	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\vertexShader.vert";
-	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\fragmentShader.frag";
-	ShaderProgram shaderProgram(vertexFilePath, fragmentFilePath);
-
-	shaderProgram.setFloat("windowHeight", (float)height);
-
-	const char* outlineVert = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.vert";
-	const char* outlineFrag = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.frag";
-	ShaderProgram outlineProgram(outlineVert, outlineFrag);
-
-	vec3 pos;
-	vec3 scale(1.0f, 1.0f, 1.0f);
-	vec3 outlineScale(1.05f, 1.05f, 1.05f);
-	vec3 rot;
-    */
-
-	float posDelta = 0.01f;
-	float scaleDelta = 0.1f;
-	float rotDelta = 1.0f;
 
 	uint32_t start = SDL_GetTicks();
 
@@ -115,8 +84,6 @@ int main(int argc, char* args[]) {
 	bool show_demo_window = true;
 
 	float val = 0.0f;
-
-	// vec3 color(1.0f, 0.0f, 1.0f);
 
 	mat4 projection = getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
 
@@ -127,8 +94,6 @@ int main(int argc, char* args[]) {
 	std::cout << "stencilBits: " << stencilBits << std::endl;
 
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-
-	// bool outline = false;
 
 	while (running) {
 
@@ -167,100 +132,50 @@ int main(int argc, char* args[]) {
 
 		glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
-        cube.render(projection, view);
-
-        /*
-		glStencilFunc(GL_ALWAYS, 1, 0xFF);
-
-		{
-			shaderProgram.bind();
-
-			mat4 translationMat = getTranslationMatrix(pos.coords.x, pos.coords.y, pos.coords.z);
-			shaderProgram.setMat4("translate", GL_TRUE, mat4_get_ptr(translationMat));
-
-			mat4 rotMat = getRotMatrix(rot.coords.x, rot.coords.y, rot.coords.z);
-			shaderProgram.setMat4("rot", GL_TRUE, mat4_get_ptr(rotMat));
-
-			mat4 scaleMat = getScaleMatrix(scale.coords.x, scale.coords.y, scale.coords.z);
-			shaderProgram.setMat4("scale", GL_TRUE, mat4_get_ptr(scaleMat));
-
-			shaderProgram.setMat4("projection", GL_TRUE, mat4_get_ptr(projection));
-
-			shaderProgram.setMat4("view", GL_TRUE, mat4_get_ptr(view));
-			shaderProgram.setVec3("inColor", vec3_get_ptr(color));
-
-			cube.render();
-			shaderProgram.unbind();
-
-		}
-
-		if (outline) {
-			glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-			{
-				outlineProgram.bind();
-
-				mat4 translationMat = getTranslationMatrix(pos.coords.x, pos.coords.y, pos.coords.z);
-				outlineProgram.setMat4("translate", GL_TRUE, mat4_get_ptr(translationMat));
-
-				mat4 rotMat = getRotMatrix(rot.coords.x, rot.coords.y, rot.coords.z);
-				outlineProgram.setMat4("rot", GL_TRUE, mat4_get_ptr(rotMat));
-
-				mat4 scaleMat = getScaleMatrix(outlineScale.coords.x, outlineScale.coords.y, outlineScale.coords.z);
-				outlineProgram.setMat4("scale", GL_TRUE, mat4_get_ptr(scaleMat));
-
-				outlineProgram.setMat4("projection", GL_TRUE, mat4_get_ptr(projection));
-
-				outlineProgram.setMat4("view", GL_TRUE, mat4_get_ptr(view));
-
-				cube.render();
-				outlineProgram.unbind();
-
-			}
-		}
-        */
+		cube.render(projection, view);
 
 		ImGui::PushFont(robotoFont);
 		{
 			ImGui::Begin("Triangle Info");
 			if (ImGui::CollapsingHeader("transform")) {
 				if (ImGui::TreeNode("position")) {
-					ImGui::SliderFloat("x", &cube.pos.coords.x, -3.0f, 3.0f);
-					ImGui::SliderFloat("y", &cube.pos.coords.y, -3.0f, 3.0f);
-					ImGui::SliderFloat("z", &cube.pos.coords.z, -3.0f, 3.0f);
+					ImGui::SliderFloat("x", &cube.pos.x, -3.0f, 3.0f);
+					ImGui::SliderFloat("y", &cube.pos.y, -3.0f, 3.0f);
+					ImGui::SliderFloat("z", &cube.pos.z, -3.0f, 3.0f);
 
 					if (ImGui::Button("reset")) {
-						cube.pos = vec3();
+						cube.pos = glm::vec3();
 					}
 
 					ImGui::TreePop();
 				}
 
 				if (ImGui::TreeNode("scale")) {
-					ImGui::SliderFloat("x", &cube.scale.coords.x, -5.0f, 5.0f);
-					ImGui::SliderFloat("y", &cube.scale.coords.y, -5.0f, 5.0f);
-					ImGui::SliderFloat("z", &cube.scale.coords.z, -5.0f, 5.0f);
+					ImGui::SliderFloat("x", &cube.scale.x, -5.0f, 5.0f);
+					ImGui::SliderFloat("y", &cube.scale.y, -5.0f, 5.0f);
+					ImGui::SliderFloat("z", &cube.scale.z, -5.0f, 5.0f);
 
 					if (ImGui::Button("reset")) {
-						cube.scale = vec3(1.0f, 1.0f, 1.0f);
+						cube.scale = glm::vec3(1.0f, 1.0f, 1.0f);
 					}
 
 					ImGui::TreePop();
 				}
 
 				if (ImGui::TreeNode("rotation")) {
-					ImGui::SliderFloat("x", &cube.rot.coords.x, -180.0f, 180.0f);
-					ImGui::SliderFloat("y", &cube.rot.coords.y, -180.0f, 180.0f);
-					ImGui::SliderFloat("z", &cube.rot.coords.z, -180.0f, 180.0f);
+					ImGui::SliderFloat("x", &cube.rot.x, -180.0f, 180.0f);
+					ImGui::SliderFloat("y", &cube.rot.y, -180.0f, 180.0f);
+					ImGui::SliderFloat("z", &cube.rot.z, -180.0f, 180.0f);
 
 					if (ImGui::Button("reset")) {
-						cube.rot = vec3();
+						cube.rot = glm::vec3();
 					}
 
 					ImGui::TreePop();
 				}
 			}
 			if (ImGui::CollapsingHeader("color")) {
-				ImGui::ColorEdit3("Triangle color", &cube.color.vals[0]);
+				ImGui::ColorEdit3("Triangle color", &cube.color.x);
 			}
 
 			if (ImGui::Button("toggle outline")) {
