@@ -48,9 +48,6 @@
     <ClCompile Include="shaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mat4.cpp">
-      <Filter>Source Files\math</Filter>
-    </ClCompile>
     <ClCompile Include="ext\imgui\imgui.cpp">
       <Filter>Source Files\imgui\src</Filter>
     </ClCompile>
@@ -71,12 +68,6 @@
     </ClCompile>
     <ClCompile Include="ext\imgui\imgui_widgets.cpp">
       <Filter>Source Files\imgui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="vec4.cpp">
-      <Filter>Source Files\math</Filter>
-    </ClCompile>
-    <ClCompile Include="vec3.cpp">
-      <Filter>Source Files\math</Filter>
     </ClCompile>
     <ClCompile Include="cube.cpp">
       <Filter>Source Files</Filter>
@@ -116,9 +107,6 @@
     <ClInclude Include="shaderProgram.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="mat4.h">
-      <Filter>Source Files\math</Filter>
-    </ClInclude>
     <ClInclude Include="ext\imgui\imconfig.h">
       <Filter>Source Files\imgui\include</Filter>
     </ClInclude>
@@ -146,12 +134,6 @@
     <ClInclude Include="ext\imgui\imstb_truetype.h">
       <Filter>Source Files\imgui\include</Filter>
     </ClInclude>
-    <ClInclude Include="vec4.h">
-      <Filter>Source Files\math</Filter>
-    </ClInclude>
-    <ClInclude Include="vec3.h">
-      <Filter>Source Files\math</Filter>
-    </ClInclude>
     <ClInclude Include="cube.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -176,6 +158,12 @@
     <ClInclude Include="arrow.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="translateTool.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ray.h">
+      <Filter>Source Files\math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="fragmentShader.frag">
@@ -197,6 +185,9 @@
       <Filter>Source Files\shaders</Filter>
     </None>
     <None Include="arrow.frag">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="boxCollider.vert">
       <Filter>Source Files\shaders</Filter>
     </None>
   </ItemGroup>

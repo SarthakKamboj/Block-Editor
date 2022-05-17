@@ -2,7 +2,7 @@
 #include <iostream>
 
 ShaderProgram::ShaderProgram() {
-    programId = -1;
+	programId = -1;
 }
 
 ShaderProgram::ShaderProgram(const char* vertexFilePath, const char* fragmentFilePath) {
@@ -19,7 +19,7 @@ ShaderProgram::ShaderProgram(const char* vertexFilePath, const char* fragmentFil
 }
 
 void ShaderProgram::bind() {
-    if (programId == -1) return;
+	if (programId == -1) return;
 	glUseProgram(programId);
 }
 
@@ -51,16 +51,13 @@ GLuint ShaderProgram::createShader(const char* filePath, GLenum shaderType) {
 		std::cout << "ERROR: " << errorInfo << std::endl;
 		glDeleteShader(id);
 	}
-	else {
-		std::cout << (shaderType == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader compilation succeeded" << std::endl;
-	}
 
 	return id;
 }
 
 
 void ShaderProgram::setFloat(const GLchar* varName, float value) {
-    if (programId == -1) return;
+	if (programId == -1) return;
 	GLint curProgramId;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &curProgramId);
 	if (curProgramId != programId) {
@@ -79,7 +76,7 @@ void ShaderProgram::setFloat(const GLchar* varName, float value) {
 }
 
 void ShaderProgram::setVec3(const GLchar* varName, const GLfloat* vec3) {
-    if (programId == -1) return;
+	if (programId == -1) return;
 	GLint curProgramId;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &curProgramId);
 	if (curProgramId != programId) {
@@ -99,7 +96,7 @@ void ShaderProgram::setVec3(const GLchar* varName, const GLfloat* vec3) {
 
 
 void ShaderProgram::setMat4(const GLchar* varName, GLboolean transpose, const GLfloat* mat) {
-    if (programId == -1) return;
+	if (programId == -1) return;
 	GLint curProgramId = 0;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &curProgramId);
 	if (curProgramId != programId) {

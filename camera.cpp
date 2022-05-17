@@ -11,7 +11,7 @@ Camera::Camera(float xPos, float yPos, float zPos) {
 }
 
 glm::mat4 Camera::getViewMat() {
-	glm::mat4 posMat = _getTranslationMatrix(-pos.x, -pos.y, -pos.z);
-	glm::mat4 rotMat = _getRotMatrix(-rot.x, -rot.y, -rot.z);
+	glm::mat4 posMat = getTranslationMatrix(-pos.x, -pos.y, -pos.z);
+	glm::mat4 rotMat = getRotMatrix(-rot.x, -rot.y, -rot.z);
 	return posMat * rotMat;
 }

@@ -11,6 +11,8 @@ extern mouse_state_t mouse_state;
 
 int Cube::idx = 0;
 
+extern glm::mat4 projection, view;
+
 static float vertices[] = {
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
 		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f,
@@ -94,31 +96,17 @@ Cube::Cube() {
 
 void Cube::update(Camera& camera) {
 	if (mouse_click_state.left) {
-
-		float xNdc = ((float)(mouse_state.x - (width / 2.0f))) / (width / 2.0f);
-		float yNdc = -1.0f * ((float)(mouse_state.y - (height / 2.0f))) / (height / 2.0f);
-		glm::vec4 nearNdc(xNdc, yNdc, -1.0f, 1.0f);
-		glm::vec4 farNdc(xNdc, yNdc, 1.0f, 1.0f);
-
-		glm::mat4 proj = _getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
+		glm::mat4 proj = getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
 		glm::mat4 view = camera.getViewMat();
 
 		glm::mat4 model(1.0f);
 		model = glm::translate(model, pos);
-		model = model * _getRotMatrix(rot.x, rot.y, rot.z);
+		model = model * getRotMatrix(rot.x, rot.y, rot.z);
 		model = glm::scale(model, scale);
 
-		glm::mat4 screenToWorldMat = glm::inverse(proj * view * model);
-		glm::vec4 nearCoord = screenToWorldMat * nearNdc;
-		glm::vec4 farCoord = screenToWorldMat * farNdc;
+		glm::vec2 screenCoords(mouse_state.x, mouse_state.y);
+		ray_t ray = screenToWorldRay(screenCoords, proj, view, model);
 
-		nearCoord /= nearCoord.w;
-		farCoord /= farCoord.w;
-
-		glm::vec3 nearVec3(nearCoord.x, nearCoord.y, nearCoord.z);
-		ray_t ray;
-		ray.origin = nearCoord;
-		ray.dir = glm::normalize(farCoord - nearCoord);
 		if (boxCollider.ray_collide(ray)) {
 			cubeEditorPtr->cube = this;
 		}
@@ -130,24 +118,25 @@ void Cube::late_update() {
 	outline = (cubeEditorPtr->cube == this);
 }
 
-void Cube::setup_render_outline(glm::mat4& projection, glm::mat4& view) {
+// void Cube::setup_render_outline(glm::mat4& projection, glm::mat4& view) {
+void Cube::setup_render_outline() {
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_ALWAYS, 1, 0xFF);
 
 	transparentProgram.bind();
 
-	glm::mat4 translationMat = _getTranslationMatrix(pos.x, pos.y, pos.z);
-	transparentProgram.setMat4("translate", GL_FALSE, _mat4_get_ptr(translationMat));
+	glm::mat4 translationMat = getTranslationMatrix(pos.x, pos.y, pos.z);
+	transparentProgram.setMat4("translate", GL_FALSE, mat4_get_ptr(translationMat));
 
-	glm::mat4 rotMat = _getRotMatrix(rot.x, rot.y, rot.z);
-	transparentProgram.setMat4("rot", GL_FALSE, _mat4_get_ptr(rotMat));
+	glm::mat4 rotMat = getRotMatrix(rot.x, rot.y, rot.z);
+	transparentProgram.setMat4("rot", GL_FALSE, mat4_get_ptr(rotMat));
 
-	glm::mat4 scaleMat = _getScaleMatrix(scale.x, scale.y, scale.z);
-	transparentProgram.setMat4("scale", GL_FALSE, _mat4_get_ptr(scaleMat));
+	glm::mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z);
+	transparentProgram.setMat4("scale", GL_FALSE, mat4_get_ptr(scaleMat));
 
-	transparentProgram.setMat4("projection", GL_FALSE, _mat4_get_ptr(projection));
+	transparentProgram.setMat4("projection", GL_FALSE, mat4_get_ptr(projection));
 
-	transparentProgram.setMat4("view", GL_FALSE, _mat4_get_ptr(view));
+	transparentProgram.setMat4("view", GL_FALSE, mat4_get_ptr(view));
 	transparentProgram.setVec3("inColor", glm::value_ptr(color));
 
 	drawCube();
@@ -158,22 +147,23 @@ void Cube::setup_render_outline(glm::mat4& projection, glm::mat4& view) {
 
 }
 
-void Cube::render(glm::mat4& projection, glm::mat4& view) {
+//void Cube::render(glm::mat4& projection, glm::mat4& view) {
+void Cube::render() {
 
 	shaderProgram.bind();
 
-	glm::mat4 translationMat = _getTranslationMatrix(pos.x, pos.y, pos.z);
-	shaderProgram.setMat4("translate", GL_FALSE, _mat4_get_ptr(translationMat));
+	glm::mat4 translationMat = getTranslationMatrix(pos.x, pos.y, pos.z);
+	shaderProgram.setMat4("translate", GL_FALSE, mat4_get_ptr(translationMat));
 
-	glm::mat4 rotMat = _getRotMatrix(rot.x, rot.y, rot.z);
-	shaderProgram.setMat4("rot", GL_FALSE, _mat4_get_ptr(rotMat));
+	glm::mat4 rotMat = getRotMatrix(rot.x, rot.y, rot.z);
+	shaderProgram.setMat4("rot", GL_FALSE, mat4_get_ptr(rotMat));
 
-	glm::mat4 scaleMat = _getScaleMatrix(scale.x, scale.y, scale.z);
-	shaderProgram.setMat4("scale", GL_FALSE, _mat4_get_ptr(scaleMat));
+	glm::mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z);
+	shaderProgram.setMat4("scale", GL_FALSE, mat4_get_ptr(scaleMat));
 
-	shaderProgram.setMat4("projection", GL_FALSE, _mat4_get_ptr(projection));
+	shaderProgram.setMat4("projection", GL_FALSE, mat4_get_ptr(projection));
 
-	shaderProgram.setMat4("view", GL_FALSE, _mat4_get_ptr(view));
+	shaderProgram.setMat4("view", GL_FALSE, mat4_get_ptr(view));
 	shaderProgram.setVec3("inColor", glm::value_ptr(color));
 
 	drawCube();
@@ -181,16 +171,16 @@ void Cube::render(glm::mat4& projection, glm::mat4& view) {
 
 	if (outline) {
 		outlineProgram.bind();
-		outlineProgram.setMat4("translate", GL_FALSE, _mat4_get_ptr(translationMat));
+		outlineProgram.setMat4("translate", GL_FALSE, mat4_get_ptr(translationMat));
 
-		outlineProgram.setMat4("rot", GL_FALSE, _mat4_get_ptr(rotMat));
+		outlineProgram.setMat4("rot", GL_FALSE, mat4_get_ptr(rotMat));
 
-		glm::mat4 outlineScaleMat = _getScaleMatrix(outlineScale.x * scale.x, outlineScale.y * scale.y, outlineScale.z * scale.z);
-		outlineProgram.setMat4("scale", GL_FALSE, _mat4_get_ptr(outlineScaleMat));
+		glm::mat4 outlineScaleMat = getScaleMatrix(outlineScale.x * scale.x, outlineScale.y * scale.y, outlineScale.z * scale.z);
+		outlineProgram.setMat4("scale", GL_FALSE, mat4_get_ptr(outlineScaleMat));
 
-		outlineProgram.setMat4("projection", GL_FALSE, _mat4_get_ptr(projection));
+		outlineProgram.setMat4("projection", GL_FALSE, mat4_get_ptr(projection));
 
-		outlineProgram.setMat4("view", GL_FALSE, _mat4_get_ptr(view));
+		outlineProgram.setMat4("view", GL_FALSE, mat4_get_ptr(view));
 		outlineProgram.unbind();
 	}
 }

@@ -3,7 +3,6 @@
 #include "vao.h"
 #include "vbo.h"
 #include "boxCollider.h"
-#include "mat4.h"
 #include "shaderProgram.h"
 #include "glm/glm.hpp"
 #include "lin_alg_helper.h"
@@ -13,8 +12,10 @@
 class Cube {
 public:
 	Cube();
-	void setup_render_outline(glm::mat4& projection, glm::mat4& view);
-	void render(glm::mat4& projection, glm::mat4& view);
+	// void setup_render_outline(glm::mat4& projection, glm::mat4& view);
+	void setup_render_outline();
+	// void render(glm::mat4& projection, glm::mat4& view);
+	void render();
 	void render_outline();
 
 	void update(Camera& camera);

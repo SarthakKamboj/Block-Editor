@@ -5,8 +5,6 @@
 #include "vbo.h"
 #include "ebo.h"
 #include "shaderProgram.h"
-#include "mat4.h"
-#include "vec3.h"
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_sdl.h"
@@ -23,6 +21,7 @@ extern mouse_click_state_t mouse_click_state;
 extern mouse_state_t mouse_state;
 
 CubeEditor* cubeEditorPtr;
+glm::mat4 projection(1.0f), view(1.0f);
 
 int width = 800, height = 800;
 bool editorHover;
@@ -91,7 +90,8 @@ int main(int argc, char* args[]) {
 
 	float val = 0.0f;
 
-	glm::mat4 projection = _getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
+	// glm::mat4 projection = getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
+	projection = getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
 
 	Camera cam(0.0f, 0.0f, 5.0f);
 
@@ -121,7 +121,8 @@ int main(int argc, char* args[]) {
 
 		SDL_Event event;
 
-		glm::mat4 view = cam.getViewMat();
+		// glm::mat4 view = cam.getViewMat();
+		view = cam.getViewMat();
 
 		handle_input(event);
 
@@ -135,7 +136,7 @@ int main(int argc, char* args[]) {
 
 		ImGui::PushFont(robotoFont);
 
-		cubeEditor.update();
+		cubeEditor.update(projection, view);
 		cameraEditor.update();
 
 		if (!editorHover) {
@@ -154,16 +155,14 @@ int main(int argc, char* args[]) {
 
 		glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
-		cubeEditorPtr->cube->setup_render_outline(projection, view);
+		cubeEditorPtr->cube->setup_render_outline();
 		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
-			cubes[i].render(projection, view);
+			// cubes[i].render(projection, view);
+			cubes[i].render();
 		}
 
 		cubeEditorPtr->cube->render_outline();
-		// arrow.render(projection, view);
-		for (int i = 0; i < sizeof(arrows) / sizeof(arrows[0]); i++) {
-			arrows[i].render(projection, view);
-		}
+		cubeEditorPtr->render(projection, view);
 
 		ImGui::PopFont();
 		ImGui::Render();

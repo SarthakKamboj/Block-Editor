@@ -1,7 +1,5 @@
 #pragma once
 
-#include "vec3.h"
-#include "mat4.h"
 #include "glm/glm.hpp"
 #include "lin_alg_helper.h"
 

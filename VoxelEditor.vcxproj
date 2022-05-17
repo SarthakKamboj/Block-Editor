@@ -172,13 +172,10 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="lin_alg_helper.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mat4.cpp" />
     <ClCompile Include="boxCollider.cpp" />
     <ClCompile Include="shaderProgram.cpp" />
     <ClCompile Include="vao.cpp" />
     <ClCompile Include="vbo.cpp" />
-    <ClCompile Include="vec3.cpp" />
-    <ClCompile Include="vec4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arrow.h" />
@@ -198,17 +195,17 @@
     <ClInclude Include="ext\imgui\imstb_truetype.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="lin_alg_helper.h" />
-    <ClInclude Include="mat4.h" />
     <ClInclude Include="boxCollider.h" />
+    <ClInclude Include="ray.h" />
     <ClInclude Include="shaderProgram.h" />
+    <ClInclude Include="translateTool.h" />
     <ClInclude Include="vao.h" />
     <ClInclude Include="vbo.h" />
-    <ClInclude Include="vec3.h" />
-    <ClInclude Include="vec4.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="arrow.frag" />
     <None Include="arrow.vert" />
+    <None Include="boxCollider.vert" />
     <None Include="fragmentShader.frag" />
     <None Include="outline.frag" />
     <None Include="outline.vert" />

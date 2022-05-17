@@ -1,15 +1,81 @@
 #include "boxCollider.h"
 
+static float vertices[] = {
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+
+		-0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
+
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f, -0.5f,
+
+		-0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f
+};
+
+extern glm::mat4 projection, view;
+
 BoxCollider::BoxCollider() {
 	dimensions = glm::vec3(1.0f, 1.0f, 1.0f);
 	scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	transform = glm::vec3();
+
+	// const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.vert";
+	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\boxCollider.vert";
+	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.frag";
+	colliderProgram = ShaderProgram(vertexFilePath, fragmentFilePath);
+	glm::vec3 green(0.0f, 1.0f, 0.0f);
+	colliderProgram.setVec3("color", glm::value_ptr(green));
+
+	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
+	vao.setAttribute(vbo, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
 }
 
 BoxCollider::BoxCollider(glm::vec3 _dim, glm::vec3 _scale, glm::vec3 _trans) {
 	dimensions = _dim;
 	scale = _scale;
 	transform = _trans;
+
+	// const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.vert";
+	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\boxCollider.vert";
+	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.frag";
+	colliderProgram = ShaderProgram(vertexFilePath, fragmentFilePath);
+	glm::vec3 green(0.0f, 1.0f, 0.0f);
+	colliderProgram.setVec3("color", glm::value_ptr(green));
+
+	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
+	vao.setAttribute(vbo, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
 }
 
 bool BoxCollider::point_collide(glm::vec3& point) {
@@ -21,6 +87,36 @@ bool BoxCollider::point_collide(glm::vec3& point) {
 		point.z >= (transform.z - (scale.y * dimensions.z / 2.0f)) &&
 		point.z <= (transform.z + (scale.y * dimensions.z / 2.0f))
 		);
+}
+
+void BoxCollider::render() {
+	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glDisable(GL_DEPTH_TEST);
+
+	colliderProgram.bind();
+
+	// glm::mat4 translationMat = getTranslationMatrix(transform.x, transform.y, transform.z);
+	glm::mat4 translationMat(1.0f);
+	colliderProgram.setMat4("translate", GL_FALSE, mat4_get_ptr(translationMat));
+
+	glm::mat4 rotMat(1.0f);
+	colliderProgram.setMat4("rot", GL_FALSE, mat4_get_ptr(rotMat));
+
+	// glm::mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z);
+	glm::mat4 scaleMat(1.0f);
+	colliderProgram.setMat4("scale", GL_FALSE, mat4_get_ptr(scaleMat));
+
+	colliderProgram.setMat4("projection", GL_FALSE, mat4_get_ptr(projection));
+
+	colliderProgram.setMat4("view", GL_FALSE, mat4_get_ptr(view));
+
+	vao.bind();
+	glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (3 * sizeof(vertices[0])));
+	vao.unbind();
+	colliderProgram.unbind();
+
+	glEnable(GL_DEPTH_TEST);
+	// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 bool BoxCollider::ray_collide(ray_t& ray) {
