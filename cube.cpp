@@ -62,9 +62,9 @@ Cube::Cube() {
 	name = "Cube " + std::to_string(Cube::idx);
 	Cube::idx += 1;
 
-	vbo.bind();
+	// vbo.bind();
 	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
-	vbo.unbind();
+	// vbo.unbind();
 
 	vao.bind();
 	vao.setAttribute(vbo, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
@@ -91,21 +91,25 @@ Cube::Cube() {
 
 	color = glm::vec3(1.0f, 0.0f, 1.0f);
 
-	boxCollider = BoxCollider(glm::vec3(1.0f, 1.0f, 1.0f), scale, pos);
+	boxCollider = BoxCollider(pos, scale, rot);
 }
 
 void Cube::update(Camera& camera) {
-	if (mouse_click_state.left) {
-		glm::mat4 proj = getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
-		glm::mat4 view = camera.getViewMat();
+	boxCollider.transform = pos;
 
+	if (mouse_click_state.left) {
+		// glm::mat4 proj = getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
+		// glm::mat4 view = camera.getViewMat();
+
+		/*
 		glm::mat4 model(1.0f);
 		model = glm::translate(model, pos);
 		model = model * getRotMatrix(rot.x, rot.y, rot.z);
 		model = glm::scale(model, scale);
+		*/
 
 		glm::vec2 screenCoords(mouse_state.x, mouse_state.y);
-		ray_t ray = screenToWorldRay(screenCoords, proj, view, model);
+		ray_t ray = boxCollider.screenToLocalRay(screenCoords);
 
 		if (boxCollider.ray_collide(ray)) {
 			cubeEditorPtr->cube = this;

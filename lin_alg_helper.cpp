@@ -28,7 +28,8 @@ glm::mat4 getProjectionMat(float fov, float near, float far, float aspectRatio) 
 	return glm::perspective(glm::radians(fov), aspectRatio, near, far);
 }
 
-ray_t screenToWorldRay(glm::vec2& screenCoords, glm::mat4& proj, glm::mat4& view, glm::mat4& model) {
+/*
+ray_t screenToLocalRay(glm::vec2& screenCoords, glm::mat4& proj, glm::mat4& view, glm::mat4& model) {
 	float xNdc = ((float)(screenCoords.x - (width / 2.0f))) / (width / 2.0f);
 	float yNdc = -1.0f * ((float)(screenCoords.y - (height / 2.0f))) / (height / 2.0f);
 	glm::vec4 nearNdc(xNdc, yNdc, -1.0f, 1.0f);
@@ -48,3 +49,4 @@ ray_t screenToWorldRay(glm::vec2& screenCoords, glm::mat4& proj, glm::mat4& view
 
 	return ray;
 }
+*/

@@ -1,27 +1,30 @@
 #include "arrow.h"
 
 static float vertices[] = {
-	-0.1f, 0.0f,
-	0.1f, 0.0f,
-	0.1f, 0.7f,
+	-0.1f, -0.5f,
+	0.1f, -0.5f,
+	0.1f, 0.2f,
 
-	-0.1f, 0.7f,
-	-0.1f, 0.0f,
-	0.1f, 0.7f,
+	-0.1f, 0.2f,
+	-0.1f, -0.5f,
+	0.1f, 0.2f,
 
-	0.3f, 0.7f,
-	0.0f, 1.0f,
-	-0.3f, 0.7f
+	0.3f, 0.2f,
+	0.0f, 0.5f,
+	-0.3f, 0.2f
 };
 
 extern mouse_click_state_t mouse_click_state;
 extern mouse_state_t mouse_state;
+extern glm::mat4 projection, view;
 
 Arrow::Arrow() {
 
 }
 
-Arrow::Arrow(glm::vec3 _color) {
+// TODO: make box collider with arrow work 
+
+Arrow::Arrow(glm::vec3 _color, DIR _dir) {
 	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
 
 	vao.bind();
@@ -31,28 +34,27 @@ Arrow::Arrow(glm::vec3 _color) {
 	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.vert";
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.frag";
 	arrowShader = ShaderProgram(vertexFilePath, fragmentFilePath);
-	scale = glm::vec3(0.3f, 0.5f, 0.5f);
+
+	colliderDim = glm::vec3(0.4f, 1.0f, 0.1f);
+	scale = glm::vec3(0.5f, 0.5f, 0.5f);
+
 	color = _color;
 	highlightColor = _color * 1.1f;
 	highlightColor = glm::vec3(0.5f, 0.5f, 0.5f);
-	pos = glm::vec3(0.0f, 0.0f, 0.0f);
+	pos = glm::vec3(0.0f, 0.5f, 0.0f);
 	rot = glm::vec3(0.0f, 0.0f, 0.0f);
 	arrowShader.setVec3("color", glm::value_ptr(color));
 
-	boxCollider = BoxCollider(glm::vec3(0.6f, 1.0f, 0.1f), scale, pos + glm::vec3(0.0f, 0.5f, 0.0f));
+	boxCollider = BoxCollider(pos, scale * colliderDim, rot);
 }
 
-void Arrow::update(glm::mat4& projection, glm::mat4& view) {
-	// if (mouse_click_state.left) {
-	boxCollider.transform = pos + glm::vec3(0.0f, 0.5f, 0.0f);
+void Arrow::update() {
+	boxCollider.transform = pos;
+	boxCollider.rot = rot;
+	// boxCollider.scale = scale * colliderDim;
 	glm::vec2 screenCoords(mouse_state.x, mouse_state.y);
 
-	glm::mat4 translationMat = getTranslationMatrix(pos.x, pos.y, pos.z);
-	glm::mat4 rotMat = getRotMatrix(rot.x, rot.y, rot.z);
-	glm::mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z);
-	glm::mat4 model = translationMat * rotMat * scaleMat;
-
-	ray_t ray = screenToWorldRay(screenCoords, projection, view, model);
+	ray_t ray = boxCollider.screenToLocalRay(screenCoords);
 
 	if (boxCollider.ray_collide(ray)) {
 		arrowShader.setVec3("color", glm::value_ptr(highlightColor));
@@ -60,10 +62,9 @@ void Arrow::update(glm::mat4& projection, glm::mat4& view) {
 	else {
 		arrowShader.setVec3("color", glm::value_ptr(color));
 	}
-	// }
 }
 
-void Arrow::render(glm::mat4& projection, glm::mat4& view) {
+void Arrow::render() {
 
 	boxCollider.render();
 
@@ -84,7 +85,7 @@ void Arrow::render(glm::mat4& projection, glm::mat4& view) {
 	glDisable(GL_DEPTH_TEST);
 
 	vao.bind();
-	// glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (2 * sizeof(vertices[0])));
+	glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (2 * sizeof(vertices[0])));
 	vao.unbind();
 
 	arrowShader.unbind();

@@ -9,12 +9,16 @@
 #include "boxCollider.h"
 #include "input.h"
 
+enum DIR {
+	X, Y, Z
+};
+
 class Arrow {
 public:
 	Arrow();
-	Arrow(glm::vec3 color);
-	void update(glm::mat4& projection, glm::mat4& view);
-	void render(glm::mat4& projection, glm::mat4& view);
+	Arrow(glm::vec3 color, DIR dir);
+	void update();
+	void render();
 	glm::vec3 pos, rot;
 
 private:
@@ -22,8 +26,10 @@ private:
 	VBO vbo;
 	ShaderProgram arrowShader;
 	glm::vec3 scale;
+
 	glm::vec3 color;
 	glm::vec3 highlightColor;
 
 	BoxCollider boxCollider;
+	glm::vec3 colliderDim;
 };

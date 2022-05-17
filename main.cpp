@@ -79,7 +79,7 @@ int main(int argc, char* args[]) {
 	cubeEditorPtr = &cubeEditor;
 
 	Cube cubes[3];
-	cubeEditorPtr->cube = &cubes[0];
+	cubeEditorPtr->cube = &cubes[2];
 	cubes[1].pos = glm::vec3(1.0f, 0.0f, 0.0f);
 	cubes[2].pos = glm::vec3(-1.0f, 0.0f, 0.0f);
 
@@ -96,14 +96,6 @@ int main(int argc, char* args[]) {
 	Camera cam(0.0f, 0.0f, 5.0f);
 
 	CameraEditor cameraEditor(&cam);
-	Arrow xArrow(glm::vec3(1.0f, 0.0f, 0.0f));
-	Arrow yArrow(glm::vec3(0.0f, 1.0f, 0.0f));
-	Arrow zArrow(glm::vec3(0.0f, 0.0f, 1.0f));
-
-	xArrow.rot = glm::vec3(0.0f, 0.0f, 90.0f);
-	zArrow.rot = glm::vec3(90.0f, 0.0f, 0.0f);
-
-	Arrow arrows[3] = { xArrow, yArrow, zArrow };
 
 	int stencilBits;
 	glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL, GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE, &stencilBits);
@@ -121,7 +113,6 @@ int main(int argc, char* args[]) {
 
 		SDL_Event event;
 
-		// glm::mat4 view = cam.getViewMat();
 		view = cam.getViewMat();
 
 		handle_input(event);
@@ -157,7 +148,6 @@ int main(int argc, char* args[]) {
 
 		cubeEditorPtr->cube->setup_render_outline();
 		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
-			// cubes[i].render(projection, view);
 			cubes[i].render();
 		}
 

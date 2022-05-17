@@ -13,20 +13,23 @@
 class BoxCollider {
 public:
 	BoxCollider();
-	BoxCollider(glm::vec3 dim, glm::vec3 scale, glm::vec3 trans);
+	// BoxCollider(glm::vec3 dim, glm::vec3 scale, glm::vec3 trans, glm::vec3 rot);
+	BoxCollider(glm::vec3 trans, glm::vec3 scale, glm::vec3 rot);
 
-	glm::vec3 dimensions;
-	glm::vec3 scale;
+	// glm::vec3 dimensions;
+	glm::vec3 scale, rot;
 	glm::vec3 transform;
 
 	ShaderProgram colliderProgram;
 
 	bool point_collide(glm::vec3& point);
 	bool ray_collide(ray_t& point);
+	ray_t screenToLocalRay(glm::vec2& screenCoords);
 
 	VAO vao;
 	VBO vbo;
 
+	// glm::vec3 green;
 	void render();
 
 };
