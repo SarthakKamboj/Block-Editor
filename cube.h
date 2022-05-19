@@ -7,23 +7,21 @@
 #include "glm/glm.hpp"
 #include "lin_alg_helper.h"
 #include "camera.h"
+#include "transform.h"
 #include <string>
 
 class Cube {
 public:
 	Cube();
-	// void setup_render_outline(glm::mat4& projection, glm::mat4& view);
+
 	void setup_render_outline();
-	// void render(glm::mat4& projection, glm::mat4& view);
 	void render();
 	void render_outline();
 
 	void update();
 	void late_update();
 
-	glm::vec3 pos;
-	glm::vec3 scale;
-	glm::vec3 rot;
+	Transform transform;
 
 	glm::vec3 color;
 	bool outline;
@@ -31,18 +29,16 @@ public:
 	static int idx;
 	std::string name;
 
-	BoxCollider boxCollider;
+	BoxCollider box_collider;
 private:
-
-
 	VAO vao;
 	VBO vbo;
 
-	glm::vec3 outlineScale;
+	glm::vec3 outline_scale;
 
-	ShaderProgram shaderProgram;
-	ShaderProgram transparentProgram;
-	ShaderProgram outlineProgram;
+	ShaderProgram shader_program;
+	ShaderProgram transparent_program;
+	ShaderProgram outline_program;
 
 	void drawCube();
 };

@@ -7,8 +7,8 @@ SDL_Keycode keysToHandle[] = {
 	SDLK_ESCAPE, SDLK_SPACE, SDL_QUIT, SDLK_o
 };
 
-mouse_click_state_t mouse_click_state;
-mouse_state_t mouse_state;
+MouseClickState mouse_click_state;
+MouseState mouse_state;
 
 void handle_input(SDL_Event& event) {
 	for (auto const& keyEl : keyPressedMap) {
@@ -35,16 +35,6 @@ void handle_input(SDL_Event& event) {
 		else if (event.type == SDL_MOUSEBUTTONDOWN) {
 			mouse_click_state.left = (event.button.button == SDL_BUTTON_LEFT);
 			mouse_click_state.right = (event.button.button == SDL_BUTTON_RIGHT);
-
-			/*
-			if (event.button.button == SDL_BUTTON_LEFT) {
-				mouse_click_state.left = true;
-			}
-			else if (event.button.button == SDL_BUTTON_RIGHT) {
-				mouse_click_state.right = true;
-			}
-			*/
-
 		}
 	}
 }

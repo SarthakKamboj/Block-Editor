@@ -10,14 +10,14 @@
 #include "input.h"
 #include <math.h>
 
-typedef enum dir_t {
+typedef enum Dir {
 	x, y, z
-} dir_t;
+} Dir;
 
 class Arrow {
 public:
 	Arrow();
-	Arrow(glm::vec3 color, glm::vec3 rot, dir_t dir);
+	Arrow(glm::vec3 color, glm::vec3 rot, Dir dir);
 	void update();
 	void render();
 	glm::vec3 pos, rot;
@@ -28,12 +28,12 @@ public:
 private:
 	VAO vao;
 	VBO vbo;
-	ShaderProgram arrowShader;
+	ShaderProgram arrow_shader;
 	glm::vec3 scale;
 
 	glm::vec3 color;
-	glm::vec3 highlightColor;
+	glm::vec3 highlight_color;
 
-	BoxCollider boxCollider;
-	glm::vec3 colliderDim;
+	BoxCollider box_collider;
+	glm::vec3 collider_dim;
 };

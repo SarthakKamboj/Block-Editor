@@ -48,45 +48,44 @@ extern glm::mat4 projection, view;
 extern int width, height;
 
 BoxCollider::BoxCollider() {
-	scale = glm::vec3(1.0f, 1.0f, 1.0f);
-	transform = glm::vec3(0.0f, 0.0f, 0.0f);
-	rot = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\boxCollider.vert";
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.frag";
-	colliderProgram = ShaderProgram(vertexFilePath, fragmentFilePath);
-	glm::vec3 green = glm::vec3(0.0f, 1.0f, 1.0f);
-	colliderProgram.setVec3("color", glm::value_ptr(green));
+	collider_program = ShaderProgram(vertexFilePath, fragmentFilePath);
+	color = glm::vec3(0.0f, 1.0f, 1.0f);
+	collider_program.set_vec_3("color", glm::value_ptr(color));
 
 	vao.bind();
-	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
-	vao.setAttribute(vbo, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
+	vbo.set_data(vertices, sizeof(vertices), GL_STATIC_DRAW);
+	vao.set_attribute(vbo, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
 	vao.unbind();
 }
 
-BoxCollider::BoxCollider(glm::vec3 _trans, glm::vec3 _scale, glm::vec3 _rot) {
-	scale = _scale;
-	transform = _trans;
-	rot = _rot;
+BoxCollider::BoxCollider(glm::vec3 pos, glm::vec3 scale, glm::vec3 rot) {
+	transform.scale = scale;
+	transform.pos = pos;
+	transform.rot = rot;
 
 	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\boxCollider.vert";
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.frag";
-	colliderProgram = ShaderProgram(vertexFilePath, fragmentFilePath);
+	collider_program = ShaderProgram(vertexFilePath, fragmentFilePath);
 	color = glm::vec3(0.0f, 1.0f, 1.0f);
-	colliderProgram.setVec3("color", glm::value_ptr(color));
+	collider_program.set_vec_3("color", glm::value_ptr(color));
 
 	vao.bind();
-	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
-	vao.setAttribute(vbo, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
+	vbo.set_data(vertices, sizeof(vertices), GL_STATIC_DRAW);
+	vao.set_attribute(vbo, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
 	vao.unbind();
 }
 
 void BoxCollider::set_color(glm::vec3 color) {
-	colliderProgram.setVec3("color", glm::value_ptr(color));
+	collider_program.set_vec_3("color", glm::value_ptr(color));
 
 }
 
 bool BoxCollider::point_collide(glm::vec3& point) {
+	glm::vec3& scale = transform.scale;
+
 	return (
 		point.x >= (-scale.x / 2.0f) &&
 		point.x <= (scale.x / 2.0f) &&
@@ -101,32 +100,37 @@ void BoxCollider::render() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDisable(GL_DEPTH_TEST);
 
-	colliderProgram.bind();
+	collider_program.bind();
 
-	glm::mat4 translationMat = getTranslationMatrix(transform.x, transform.y, transform.z);
-	colliderProgram.setMat4("translate", GL_FALSE, mat4_get_ptr(translationMat));
+	glm::vec3& pos = transform.pos;
+	glm::mat4 translationMat = get_translation_matrix(pos.x, pos.y, pos.z);
+	collider_program.set_mat_4("translate", GL_FALSE, mat4_get_ptr(translationMat));
 
-	glm::mat4 rotMat = getRotMatrix(rot.x, rot.y, rot.z);
-	colliderProgram.setMat4("rot", GL_FALSE, mat4_get_ptr(rotMat));
+	glm::vec3& rot = transform.rot;
+	glm::mat4 rotMat = get_rotation_matrix(rot.x, rot.y, rot.z);
+	collider_program.set_mat_4("rot", GL_FALSE, mat4_get_ptr(rotMat));
 
-	glm::mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z);
-	colliderProgram.setMat4("scale", GL_FALSE, mat4_get_ptr(scaleMat));
+	glm::vec3& scale = transform.scale;
+	glm::mat4 scaleMat = get_scale_matrix(scale.x, scale.y, scale.z);
+	collider_program.set_mat_4("scale", GL_FALSE, mat4_get_ptr(scaleMat));
 
-	colliderProgram.setMat4("projection", GL_FALSE, mat4_get_ptr(projection));
+	collider_program.set_mat_4("projection", GL_FALSE, mat4_get_ptr(projection));
 
-	colliderProgram.setMat4("view", GL_FALSE, mat4_get_ptr(view));
+	collider_program.set_mat_4("view", GL_FALSE, mat4_get_ptr(view));
 
 	vao.bind();
 	glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (3 * sizeof(vertices[0])));
 	vao.unbind();
 
-	colliderProgram.unbind();
+	collider_program.unbind();
 
 	glEnable(GL_DEPTH_TEST);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
-bool BoxCollider::ray_collide(ray_t& ray) {
+bool BoxCollider::ray_collide(Ray& ray) {
+
+	glm::vec3& scale = transform.scale;
 
 	float frontZ = (scale.z / 2.0f);
 	float backZ = -(scale.z / 2.0f);
@@ -161,24 +165,17 @@ bool BoxCollider::ray_collide(ray_t& ray) {
 
 }
 
-ray_t BoxCollider::screenToLocalRay(glm::vec2& screenCoords) {
-	float xNdc = ((float)(screenCoords.x - (width / 2.0f))) / (width / 2.0f);
-	float yNdc = -1.0f * ((float)(screenCoords.y - (height / 2.0f))) / (height / 2.0f);
+Ray BoxCollider::screen_to_local_ray(glm::vec2& screen_coords) {
+	float xNdc = ((float)(screen_coords.x - (width / 2.0f))) / (width / 2.0f);
+	float yNdc = -1.0f * ((float)(screen_coords.y - (height / 2.0f))) / (height / 2.0f);
 	glm::vec4 nearNdc(xNdc, yNdc, -1.0f, 1.0f);
 	glm::vec4 farNdc(xNdc, yNdc, 1.0f, 1.0f);
 
-	/*
-	glm::mat4 translationMat = getTranslationMatrix(transform.x, transform.y, transform.z);
-	glm::mat4 rotMat = getRotMatrix(rot.x, rot.y, rot.z);
-	// glm::mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z);
-	glm::mat4 scaleMat(1.0f);
-	glm::mat4 model = translationMat * rotMat * scaleMat;
-	*/
-
 	glm::mat4 model(1.0f);
-	model = glm::translate(model, transform);
-	model = model * getRotMatrix(rot.x, rot.y, rot.z);
-	model = glm::scale(model, scale);
+	model = glm::translate(model, transform.pos);
+	glm::vec3& rot = transform.rot;
+	model = model * get_rotation_matrix(rot.x, rot.y, rot.z);
+	model = glm::scale(model, transform.scale);
 
 	glm::mat4 screenToLocalMat = glm::inverse(projection * view * model);
 	glm::vec4 nearCoord = screenToLocalMat * nearNdc;
@@ -189,7 +186,7 @@ ray_t BoxCollider::screenToLocalRay(glm::vec2& screenCoords) {
 
 	glm::vec3 nearVec3(nearCoord.x, nearCoord.y, nearCoord.z);
 	glm::vec3 farVec3(farCoord.x, farCoord.y, farCoord.z);
-	ray_t ray;
+	Ray ray;
 	ray.origin = nearVec3;
 	ray.dir = glm::normalize(farVec3 - nearVec3);
 

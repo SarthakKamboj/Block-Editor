@@ -14,8 +14,8 @@ static float vertices[] = {
 	-0.3f, 0.2f
 };
 
-extern mouse_click_state_t mouse_click_state;
-extern mouse_state_t mouse_state;
+extern MouseClickState mouse_click_state;
+extern MouseState mouse_state;
 extern glm::mat4 projection, view;
 
 Arrow::Arrow() {
@@ -24,23 +24,23 @@ Arrow::Arrow() {
 
 // TODO: make box collider with arrow work 
 
-Arrow::Arrow(glm::vec3 _color, glm::vec3 _rot, dir_t dir) {
-	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
+Arrow::Arrow(glm::vec3 _color, glm::vec3 _rot, Dir dir) {
+	vbo.set_data(vertices, sizeof(vertices), GL_STATIC_DRAW);
 
 	vao.bind();
-	vao.setAttribute(vbo, 0, 2, GL_FLOAT, 2 * sizeof(float), (void*)0);
+	vao.set_attribute(vbo, 0, 2, GL_FLOAT, 2 * sizeof(float), (void*)0);
 	vao.unbind();
 
 	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.vert";
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.frag";
-	arrowShader = ShaderProgram(vertexFilePath, fragmentFilePath);
+	arrow_shader = ShaderProgram(vertexFilePath, fragmentFilePath);
 
-	colliderDim = glm::vec3(0.4f, 1.0f, 0.1f);
+	collider_dim = glm::vec3(0.4f, 1.0f, 0.1f);
 	scale = glm::vec3(0.5f, 0.5f, 0.5f);
 
 	color = _color;
 	float highlightAdd = 0.8f;
-	highlightColor = glm::vec3(fmin(color.x + highlightAdd, 1.0f), fmin(color.y + highlightAdd, 1.0f), fmin(color.z + highlightAdd, 1.0f));
+	highlight_color = glm::vec3(fmin(color.x + highlightAdd, 1.0f), fmin(color.y + highlightAdd, 1.0f), fmin(color.z + highlightAdd, 1.0f));
 	rot = _rot;
 
 	if (dir == x) {
@@ -56,51 +56,49 @@ Arrow::Arrow(glm::vec3 _color, glm::vec3 _rot, dir_t dir) {
 	pos_offset *= scale;
 
 	set_position(glm::vec3(0.0f, 0.0f, 0.0f));
-	arrowShader.setVec3("color", glm::value_ptr(color));
+	arrow_shader.set_vec_3("color", glm::value_ptr(color));
 
-	boxCollider = BoxCollider(pos, colliderDim * scale, rot);
+	box_collider = BoxCollider(pos, collider_dim * scale, rot);
 }
 
 void Arrow::set_position(glm::vec3 _pos) {
-	// pos = _pos;
 	pos = _pos + pos_offset;
-	// boxCollider.transform = pos;
 }
 
 void Arrow::update() {
-	boxCollider.transform = pos;
+	box_collider.transform.pos = pos;
 	// boxCollider.rot = rot;
 	// boxCollider.scale = scale * colliderDim;
 
 	glm::vec2 screenCoords(mouse_state.x, mouse_state.y);
 
-	ray_t ray = boxCollider.screenToLocalRay(screenCoords);
+	Ray ray = box_collider.screen_to_local_ray(screenCoords);
 
-	if (boxCollider.ray_collide(ray)) {
-		arrowShader.setVec3("color", glm::value_ptr(highlightColor));
+	if (box_collider.ray_collide(ray)) {
+		arrow_shader.set_vec_3("color", glm::value_ptr(highlight_color));
 	}
 	else {
-		arrowShader.setVec3("color", glm::value_ptr(color));
+		arrow_shader.set_vec_3("color", glm::value_ptr(color));
 	}
 }
 
 void Arrow::render() {
 
-	boxCollider.render();
+	box_collider.render();
 
-	arrowShader.bind();
-	glm::mat4 translationMat = getTranslationMatrix(pos.x, pos.y, pos.z);
-	arrowShader.setMat4("translate", GL_FALSE, mat4_get_ptr(translationMat));
+	arrow_shader.bind();
+	glm::mat4 translationMat = get_translation_matrix(pos.x, pos.y, pos.z);
+	arrow_shader.set_mat_4("translate", GL_FALSE, mat4_get_ptr(translationMat));
 
-	glm::mat4 rotMat = getRotMatrix(rot.x, rot.y, rot.z);
-	arrowShader.setMat4("rot", GL_FALSE, mat4_get_ptr(rotMat));
+	glm::mat4 rotMat = get_rotation_matrix(rot.x, rot.y, rot.z);
+	arrow_shader.set_mat_4("rot", GL_FALSE, mat4_get_ptr(rotMat));
 
-	glm::mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z);
-	arrowShader.setMat4("scale", GL_FALSE, mat4_get_ptr(scaleMat));
+	glm::mat4 scaleMat = get_scale_matrix(scale.x, scale.y, scale.z);
+	arrow_shader.set_mat_4("scale", GL_FALSE, mat4_get_ptr(scaleMat));
 
-	arrowShader.setMat4("projection", GL_FALSE, mat4_get_ptr(projection));
+	arrow_shader.set_mat_4("projection", GL_FALSE, mat4_get_ptr(projection));
 
-	arrowShader.setMat4("view", GL_FALSE, mat4_get_ptr(view));
+	arrow_shader.set_mat_4("view", GL_FALSE, mat4_get_ptr(view));
 
 	glDisable(GL_DEPTH_TEST);
 
@@ -108,6 +106,6 @@ void Arrow::render() {
 	glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (2 * sizeof(vertices[0])));
 	vao.unbind();
 
-	arrowShader.unbind();
+	arrow_shader.unbind();
 	glEnable(GL_DEPTH_TEST);
 }

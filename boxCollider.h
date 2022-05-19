@@ -9,20 +9,20 @@
 #include "vao.h"
 #include "vbo.h"
 #include "lin_alg_helper.h"
+#include "transform.h"
 
 class BoxCollider {
 public:
 	BoxCollider();
-	BoxCollider(glm::vec3 trans, glm::vec3 scale, glm::vec3 rot);
+	BoxCollider(glm::vec3 pos, glm::vec3 scale, glm::vec3 rot);
 
-	glm::vec3 scale, rot;
-	glm::vec3 transform;
+	Transform transform;
 
-	ShaderProgram colliderProgram;
+	ShaderProgram collider_program;
 
 	bool point_collide(glm::vec3& point);
-	bool ray_collide(ray_t& point);
-	ray_t screenToLocalRay(glm::vec2& screenCoords);
+	bool ray_collide(Ray& point);
+	Ray screen_to_local_ray(glm::vec2& screen_coords);
 
 	VAO vao;
 	VBO vbo;

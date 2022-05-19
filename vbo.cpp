@@ -4,10 +4,12 @@ VBO::VBO() {
 	glGenBuffers(1, &vbo);
 }
 
-void VBO::setData(float* data, GLsizeiptr size, GLenum usage) {
+void VBO::set_data(float* data, GLsizeiptr size, GLenum usage) {
+	bind();
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, size, data, usage);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	unbind();
 }
 
 void VBO::bind() {

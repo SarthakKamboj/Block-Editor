@@ -4,7 +4,7 @@ VAO::VAO() {
 	glGenVertexArrays(1, &vao);
 }
 
-void VAO::setAttribute(VBO& vbo, GLuint index, GLuint size, GLenum type, GLsizei stride, const void* offset) {
+void VAO::set_attribute(VBO& vbo, GLuint index, GLuint size, GLenum type, GLsizei stride, const void* offset) {
 	vbo.bind();
 	glVertexAttribPointer(index, size, type, GL_FALSE, stride, offset);
 	glEnableVertexAttribArray(index);

@@ -4,7 +4,7 @@ EBO::EBO() {
 	glGenBuffers(1, &ebo);
 }
 
-void EBO::setData(unsigned int* data, GLsizeiptr size, GLenum usage) {
+void EBO::set_data(unsigned int* data, GLsizeiptr size, GLenum usage) {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, usage);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

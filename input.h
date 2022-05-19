@@ -2,14 +2,14 @@
 
 #include "SDL.h"
 
-typedef struct mouse_click_state_t {
-    bool left; 
-    bool right;
-} mouse_click_state_t;
+typedef struct MouseClickState {
+	bool left;
+	bool right;
+} MouseClickState;
 
-typedef struct mouse_state_t {
-    int x; 
-    int y;
-} mouse_state_t;
+typedef struct MouseState {
+	int x;
+	int y;
+} MouseState;
 
 void handle_input(SDL_Event& event);

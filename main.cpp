@@ -12,13 +12,13 @@
 #include "camera.h"
 #include "input.h"
 #include <map>
-#include "cube_editor.h"
+#include "cubeEditor.h"
 #include "cameraEditor.h"
 #include "arrow.h"
 
 extern std::map<SDL_Keycode, bool> keyPressedMap;
-extern mouse_click_state_t mouse_click_state;
-extern mouse_state_t mouse_state;
+extern MouseClickState mouse_click_state;
+extern MouseState mouse_state;
 
 CubeEditor* cubeEditorPtr;
 glm::mat4 projection(1.0f), view(1.0f);
@@ -67,9 +67,6 @@ int main(int argc, char* args[]) {
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-	// glEnable(GL_CULL_FACE);
-	// glCullFace(GL_BACK);
-	// glFrontFace(GL_CCW);
 
 	bool running = true;
 
@@ -79,25 +76,12 @@ int main(int argc, char* args[]) {
 	cubeEditorPtr = &cubeEditor;
 
 	Cube cubes[3];
-	// Cube cubes[1];
 	cubeEditorPtr->cube = &cubes[0];
-	cubes[1].pos = glm::vec3(3.0f, 0.0f, -3.0f);
-	cubes[2].pos = glm::vec3(-3.0f, 0.0f, -3.0f);
+	cubes[1].transform.pos = glm::vec3(3.0f, 0.0f, -3.0f);
+	cubes[2].transform.pos = glm::vec3(-3.0f, 0.0f, -3.0f);
 
 	Cube debugCube;
-	debugCube.boxCollider.set_color(glm::vec3(1.0f, 0.0f, 0.0f));
-
-	/*
-	glm::vec3 zero(0.0f, 0.0f, 0.0f);
-	glm::vec3 unit(1.0f, 1.0f, 1.0f);
-	debugCube.pos = zero;
-	debugCube.rot = zero;
-	debugCube.scale = unit;
-
-	debugCube.boxCollider.transform = zero;
-	debugCube.boxCollider.rot = zero;
-	debugCube.boxCollider.scale = unit;
-	*/
+	debugCube.box_collider.set_color(glm::vec3(1.0f, 0.0f, 0.0f));
 
 	uint32_t start = SDL_GetTicks();
 
@@ -106,7 +90,7 @@ int main(int argc, char* args[]) {
 
 	float val = 0.0f;
 
-	projection = getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
+	projection = get_projection_matrix(45.0f, 0.1f, 100.0f, ((float)width) / height);
 
 	Camera cam(0.0f, 0.0f, 5.0f);
 
@@ -128,7 +112,7 @@ int main(int argc, char* args[]) {
 
 		SDL_Event event;
 
-		view = cam.getViewMat();
+		view = cam.get_view_mat();
 
 		handle_input(event);
 
@@ -148,13 +132,10 @@ int main(int argc, char* args[]) {
 		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
 			cubes[i].update();
 		}
-		// debugCube.update();
 
 		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
 			cubes[i].late_update();
 		}
-		// debugCube.late_update();
-		// }
 
 		glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.0f);
 		glClearStencil(0);
@@ -164,14 +145,11 @@ int main(int argc, char* args[]) {
 
 		cubeEditorPtr->cube->setup_render_outline();
 		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
-			// cubes[i].render();
-			cubes[i].boxCollider.render();
+			cubes[i].render();
 		}
-		// debugCube.render();
-		debugCube.boxCollider.render();
 
 		cubeEditorPtr->cube->render_outline();
-		// cubeEditorPtr->render();
+		cubeEditorPtr->render();
 
 		ImGui::PopFont();
 		ImGui::Render();

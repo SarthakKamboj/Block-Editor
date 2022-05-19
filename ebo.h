@@ -5,7 +5,7 @@
 class EBO {
 public:
 	EBO();
-	void setData(unsigned int* data, GLsizeiptr size, GLenum usage);
+	void set_data(unsigned int* data, GLsizeiptr size, GLenum usage);
 	void bind();
 	void unbind();
 

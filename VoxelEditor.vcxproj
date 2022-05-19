@@ -159,7 +159,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cameraEditor.cpp" />
     <ClCompile Include="cube.cpp" />
-    <ClCompile Include="cube_editor.cpp" />
+    <ClCompile Include="cubeEditor.cpp" />
     <ClCompile Include="ebo.cpp" />
     <ClCompile Include="ext\glad\src\glad.c" />
     <ClCompile Include="ext\imgui\imgui.cpp" />
@@ -182,7 +182,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="cameraEditor.h" />
     <ClInclude Include="cube.h" />
-    <ClInclude Include="cube_editor.h" />
+    <ClInclude Include="cubeEditor.h" />
     <ClInclude Include="ebo.h" />
     <ClInclude Include="ext\imgui\imconfig.h" />
     <ClInclude Include="ext\imgui\imgui.h" />
@@ -198,7 +198,7 @@
     <ClInclude Include="boxCollider.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="shaderProgram.h" />
-    <ClInclude Include="translateTool.h" />
+    <ClInclude Include="transform.h" />
     <ClInclude Include="vao.h" />
     <ClInclude Include="vbo.h" />
   </ItemGroup>

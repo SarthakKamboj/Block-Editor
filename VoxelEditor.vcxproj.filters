@@ -84,7 +84,7 @@
     <ClCompile Include="lin_alg_helper.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
-    <ClCompile Include="cube_editor.cpp">
+    <ClCompile Include="cubeEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cameraEditor.cpp">
@@ -149,7 +149,7 @@
     <ClInclude Include="lin_alg_helper.h">
       <Filter>Source Files\math</Filter>
     </ClInclude>
-    <ClInclude Include="cube_editor.h">
+    <ClInclude Include="cubeEditor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="cameraEditor.h">
@@ -158,11 +158,11 @@
     <ClInclude Include="arrow.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="translateTool.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="ray.h">
       <Filter>Source Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="transform.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

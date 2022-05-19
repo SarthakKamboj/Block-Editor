@@ -5,7 +5,7 @@
 class VBO {
 public:
 	VBO();
-	void setData(float* data, GLsizeiptr size, GLenum usage);
+	void set_data(float* data, GLsizeiptr size, GLenum usage);
 	void bind();
 	void unbind();
 

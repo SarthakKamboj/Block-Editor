@@ -6,7 +6,7 @@
 class VAO {
 public:
 	VAO();
-	void setAttribute(VBO& vbo, GLuint index, GLuint size, GLenum type, GLsizei stride, const void* offset);
+	void set_attribute(VBO& vbo, GLuint index, GLuint size, GLenum type, GLsizei stride, const void* offset);
 	void bind();
 	void unbind();
 
