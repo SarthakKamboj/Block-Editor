@@ -71,7 +71,8 @@ Cube::Cube() {
 	vao.unbind();
 
 	transform.pos = glm::vec3(0.0f, 0.0f, 0.0f);
-	transform.rot = glm::vec3(20.0f, -50.0f, 43.2f);
+	// transform.rot = glm::vec3(20.0f, -50.0f, 43.2f);
+	transform.rot = glm::vec3(0.0f, 0.0f, 0.0f);
 	transform.scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
 	outline_scale = glm::vec3(1.05f, 1.05f, 1.05f);

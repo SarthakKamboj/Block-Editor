@@ -4,7 +4,7 @@
 
 std::map<SDL_Keycode, bool> key_pressed_map;
 SDL_Keycode keysToHandle[] = {
-	SDLK_ESCAPE, SDLK_SPACE, SDL_QUIT, SDLK_o
+	SDLK_ESCAPE, SDLK_SPACE, SDL_QUIT, SDLK_o, SDLK_LCTRL
 };
 
 MouseClickState mouse_click_state;
