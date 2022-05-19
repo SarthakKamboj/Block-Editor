@@ -9,6 +9,8 @@ extern int width, height;
 extern mouse_click_state_t mouse_click_state;
 extern mouse_state_t mouse_state;
 
+extern bool editorHover;
+
 int Cube::idx = 0;
 
 extern glm::mat4 projection, view;
@@ -73,8 +75,9 @@ Cube::Cube() {
 
 	pos = glm::vec3(0.0f, 0.0f, 0.0f);
 	scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	// scale *= 0.75f;
 	outlineScale = glm::vec3(1.05f, 1.05f, 1.05f);
-	rot = glm::vec3(0.0f, 0.0f, 0.0f);
+	rot = glm::vec3(20.0f, -50.0f, 43.2f);
 
 	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\vertexShader.vert";
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\fragmentShader.frag";
@@ -89,15 +92,17 @@ Cube::Cube() {
 
 	outline = false;
 
-	color = glm::vec3(1.0f, 0.0f, 1.0f);
+	color = glm::vec3(0.0f, 0.43f, 1.0f);
 
 	boxCollider = BoxCollider(pos, scale, rot);
 }
 
-void Cube::update(Camera& camera) {
+void Cube::update() {
 	boxCollider.transform = pos;
+	boxCollider.rot = rot;
+	boxCollider.scale = scale;
 
-	if (mouse_click_state.left) {
+	if (mouse_click_state.left && !editorHover) {
 		// glm::mat4 proj = getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
 		// glm::mat4 view = camera.getViewMat();
 
@@ -122,7 +127,6 @@ void Cube::late_update() {
 	outline = (cubeEditorPtr->cube == this);
 }
 
-// void Cube::setup_render_outline(glm::mat4& projection, glm::mat4& view) {
 void Cube::setup_render_outline() {
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_ALWAYS, 1, 0xFF);
@@ -151,8 +155,9 @@ void Cube::setup_render_outline() {
 
 }
 
-//void Cube::render(glm::mat4& projection, glm::mat4& view) {
 void Cube::render() {
+
+	// boxCollider.render();
 
 	shaderProgram.bind();
 
@@ -187,6 +192,7 @@ void Cube::render() {
 		outlineProgram.setMat4("view", GL_FALSE, mat4_get_ptr(view));
 		outlineProgram.unbind();
 	}
+
 }
 
 
@@ -201,6 +207,9 @@ void Cube::render_outline() {
 
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_STENCIL_TEST);
+
+
+	// boxCollider.render();
 }
 
 void Cube::drawCube() {

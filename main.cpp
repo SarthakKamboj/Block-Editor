@@ -79,9 +79,25 @@ int main(int argc, char* args[]) {
 	cubeEditorPtr = &cubeEditor;
 
 	Cube cubes[3];
-	cubeEditorPtr->cube = &cubes[2];
-	cubes[1].pos = glm::vec3(1.0f, 0.0f, 0.0f);
-	cubes[2].pos = glm::vec3(-1.0f, 0.0f, 0.0f);
+	// Cube cubes[1];
+	cubeEditorPtr->cube = &cubes[0];
+	cubes[1].pos = glm::vec3(3.0f, 0.0f, -3.0f);
+	cubes[2].pos = glm::vec3(-3.0f, 0.0f, -3.0f);
+
+	Cube debugCube;
+	debugCube.boxCollider.set_color(glm::vec3(1.0f, 0.0f, 0.0f));
+
+	/*
+	glm::vec3 zero(0.0f, 0.0f, 0.0f);
+	glm::vec3 unit(1.0f, 1.0f, 1.0f);
+	debugCube.pos = zero;
+	debugCube.rot = zero;
+	debugCube.scale = unit;
+
+	debugCube.boxCollider.transform = zero;
+	debugCube.boxCollider.rot = zero;
+	debugCube.boxCollider.scale = unit;
+	*/
 
 	uint32_t start = SDL_GetTicks();
 
@@ -90,7 +106,6 @@ int main(int argc, char* args[]) {
 
 	float val = 0.0f;
 
-	// glm::mat4 projection = getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
 	projection = getProjectionMat(45.0f, 0.1f, 100.0f, ((float)width) / height);
 
 	Camera cam(0.0f, 0.0f, 5.0f);
@@ -127,18 +142,19 @@ int main(int argc, char* args[]) {
 
 		ImGui::PushFont(robotoFont);
 
-		cubeEditor.update(projection, view);
+		cubeEditor.update();
 		cameraEditor.update();
 
-		if (!editorHover) {
-			for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
-				cubes[i].update(cam);
-			}
-
-			for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
-				cubes[i].late_update();
-			}
+		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
+			cubes[i].update();
 		}
+		// debugCube.update();
+
+		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
+			cubes[i].late_update();
+		}
+		// debugCube.late_update();
+		// }
 
 		glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.0f);
 		glClearStencil(0);
@@ -148,11 +164,14 @@ int main(int argc, char* args[]) {
 
 		cubeEditorPtr->cube->setup_render_outline();
 		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
-			cubes[i].render();
+			// cubes[i].render();
+			cubes[i].boxCollider.render();
 		}
+		// debugCube.render();
+		debugCube.boxCollider.render();
 
 		cubeEditorPtr->cube->render_outline();
-		cubeEditorPtr->render(projection, view);
+		// cubeEditorPtr->render();
 
 		ImGui::PopFont();
 		ImGui::Render();

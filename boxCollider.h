@@ -13,10 +13,8 @@
 class BoxCollider {
 public:
 	BoxCollider();
-	// BoxCollider(glm::vec3 dim, glm::vec3 scale, glm::vec3 trans, glm::vec3 rot);
 	BoxCollider(glm::vec3 trans, glm::vec3 scale, glm::vec3 rot);
 
-	// glm::vec3 dimensions;
 	glm::vec3 scale, rot;
 	glm::vec3 transform;
 
@@ -29,7 +27,8 @@ public:
 	VAO vao;
 	VBO vbo;
 
-	// glm::vec3 green;
 	void render();
+	void set_color(glm::vec3 color);
+	glm::vec3 color;
 
 };

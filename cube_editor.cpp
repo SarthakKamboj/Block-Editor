@@ -3,12 +3,9 @@
 CubeEditor::CubeEditor() {
 	cube = NULL;
 
-	Arrow xArrow(glm::vec3(1.0f, 0.0f, 0.0f), X);
-	Arrow yArrow(glm::vec3(0.0f, 1.0f, 0.0f), Y);
-	Arrow zArrow(glm::vec3(0.0f, 0.0f, 1.0f), Z);
-
-	xArrow.rot = glm::vec3(0.0f, 0.0f, -90.0f);
-	zArrow.rot = glm::vec3(90.0f, 0.0f, 0.0f);
+	Arrow xArrow(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -90.0f), dir_t::x);
+	Arrow yArrow(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), dir_t::y);
+	Arrow zArrow(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(90.0f, 0.0f, 0.0f), dir_t::z);
 
 	arrows[0] = xArrow;
 	arrows[1] = yArrow;
@@ -16,12 +13,14 @@ CubeEditor::CubeEditor() {
 }
 
 extern bool editorHover;
-void CubeEditor::update(glm::mat4& projection, glm::mat4& view) {
+void CubeEditor::update() {
 	if (cube == NULL) return;
 
 	for (int i = 0; i < sizeof(arrows) / sizeof(arrows[0]); i++) {
-		arrows[i].pos = cube->pos;
-		arrows[i].update();
+		// arrows[i].pos = cube->pos;
+		arrows[i].set_position(cube->pos);
+		// arrows[i].update();
+		// break;
 	}
 
 	ImGui::Begin("Triangle Info");
@@ -72,11 +71,13 @@ void CubeEditor::update(glm::mat4& projection, glm::mat4& view) {
 	}
 
 	ImGui::End();
+
 }
 
-void CubeEditor::render(glm::mat4& projection, glm::mat4& view) {
+void CubeEditor::render() {
 	if (cube == NULL) return;
 	for (int i = 0; i < sizeof(arrows) / sizeof(arrows[0]); i++) {
-		arrows[i].render();
+		// arrows[i].render();
+		// break;
 	}
 }

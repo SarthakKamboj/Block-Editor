@@ -24,7 +24,7 @@ Arrow::Arrow() {
 
 // TODO: make box collider with arrow work 
 
-Arrow::Arrow(glm::vec3 _color, DIR _dir) {
+Arrow::Arrow(glm::vec3 _color, glm::vec3 _rot, dir_t dir) {
 	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
 
 	vao.bind();
@@ -39,19 +39,39 @@ Arrow::Arrow(glm::vec3 _color, DIR _dir) {
 	scale = glm::vec3(0.5f, 0.5f, 0.5f);
 
 	color = _color;
-	highlightColor = _color * 1.1f;
-	highlightColor = glm::vec3(0.5f, 0.5f, 0.5f);
-	pos = glm::vec3(0.0f, 0.5f, 0.0f);
-	rot = glm::vec3(0.0f, 0.0f, 0.0f);
+	float highlightAdd = 0.8f;
+	highlightColor = glm::vec3(fmin(color.x + highlightAdd, 1.0f), fmin(color.y + highlightAdd, 1.0f), fmin(color.z + highlightAdd, 1.0f));
+	rot = _rot;
+
+	if (dir == x) {
+		pos_offset = glm::vec3(0.5f, 0.0f, 0.0f);
+	}
+	else if (dir == y) {
+		pos_offset = glm::vec3(0.0f, 0.5f, 0.0f);
+	}
+	else {
+		pos_offset = glm::vec3(0.0f, 0.0f, 0.5f);
+	}
+
+	pos_offset *= scale;
+
+	set_position(glm::vec3(0.0f, 0.0f, 0.0f));
 	arrowShader.setVec3("color", glm::value_ptr(color));
 
-	boxCollider = BoxCollider(pos, scale * colliderDim, rot);
+	boxCollider = BoxCollider(pos, colliderDim * scale, rot);
+}
+
+void Arrow::set_position(glm::vec3 _pos) {
+	// pos = _pos;
+	pos = _pos + pos_offset;
+	// boxCollider.transform = pos;
 }
 
 void Arrow::update() {
 	boxCollider.transform = pos;
-	boxCollider.rot = rot;
+	// boxCollider.rot = rot;
 	// boxCollider.scale = scale * colliderDim;
+
 	glm::vec2 screenCoords(mouse_state.x, mouse_state.y);
 
 	ray_t ray = boxCollider.screenToLocalRay(screenCoords);

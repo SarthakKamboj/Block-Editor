@@ -8,18 +8,22 @@
 #include "lin_alg_helper.h"
 #include "boxCollider.h"
 #include "input.h"
+#include <math.h>
 
-enum DIR {
-	X, Y, Z
-};
+typedef enum dir_t {
+	x, y, z
+} dir_t;
 
 class Arrow {
 public:
 	Arrow();
-	Arrow(glm::vec3 color, DIR dir);
+	Arrow(glm::vec3 color, glm::vec3 rot, dir_t dir);
 	void update();
 	void render();
 	glm::vec3 pos, rot;
+
+	void set_position(glm::vec3 _pos);
+	glm::vec3 pos_offset;
 
 private:
 	VAO vao;

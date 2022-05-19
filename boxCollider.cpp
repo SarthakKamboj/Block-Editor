@@ -72,13 +72,18 @@ BoxCollider::BoxCollider(glm::vec3 _trans, glm::vec3 _scale, glm::vec3 _rot) {
 	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\boxCollider.vert";
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.frag";
 	colliderProgram = ShaderProgram(vertexFilePath, fragmentFilePath);
-	glm::vec3 green = glm::vec3(0.0f, 1.0f, 1.0f);
-	colliderProgram.setVec3("color", glm::value_ptr(green));
+	color = glm::vec3(0.0f, 1.0f, 1.0f);
+	colliderProgram.setVec3("color", glm::value_ptr(color));
 
 	vao.bind();
 	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
 	vao.setAttribute(vbo, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
 	vao.unbind();
+}
+
+void BoxCollider::set_color(glm::vec3 color) {
+	colliderProgram.setVec3("color", glm::value_ptr(color));
+
 }
 
 bool BoxCollider::point_collide(glm::vec3& point) {
@@ -126,8 +131,8 @@ bool BoxCollider::ray_collide(ray_t& ray) {
 	float frontZ = (scale.z / 2.0f);
 	float backZ = -(scale.z / 2.0f);
 
-	float leftX = (scale.x / 2.0f);
-	float rightX = -(scale.x / 2.0f);
+	float leftX = -(scale.x / 2.0f);
+	float rightX = (scale.x / 2.0f);
 
 	float topY = (scale.y / 2.0f);
 	float bottomY = -(scale.y / 2.0f);
@@ -162,14 +167,22 @@ ray_t BoxCollider::screenToLocalRay(glm::vec2& screenCoords) {
 	glm::vec4 nearNdc(xNdc, yNdc, -1.0f, 1.0f);
 	glm::vec4 farNdc(xNdc, yNdc, 1.0f, 1.0f);
 
+	/*
 	glm::mat4 translationMat = getTranslationMatrix(transform.x, transform.y, transform.z);
 	glm::mat4 rotMat = getRotMatrix(rot.x, rot.y, rot.z);
-	glm::mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z);
+	// glm::mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z);
+	glm::mat4 scaleMat(1.0f);
 	glm::mat4 model = translationMat * rotMat * scaleMat;
+	*/
 
-	glm::mat4 screenToWorldMat = glm::inverse(projection * view * model);
-	glm::vec4 nearCoord = screenToWorldMat * nearNdc;
-	glm::vec4 farCoord = screenToWorldMat * farNdc;
+	glm::mat4 model(1.0f);
+	model = glm::translate(model, transform);
+	model = model * getRotMatrix(rot.x, rot.y, rot.z);
+	model = glm::scale(model, scale);
+
+	glm::mat4 screenToLocalMat = glm::inverse(projection * view * model);
+	glm::vec4 nearCoord = screenToLocalMat * nearNdc;
+	glm::vec4 farCoord = screenToLocalMat * farNdc;
 
 	nearCoord /= nearCoord.w;
 	farCoord /= farCoord.w;

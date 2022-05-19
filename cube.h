@@ -18,7 +18,7 @@ public:
 	void render();
 	void render_outline();
 
-	void update(Camera& camera);
+	void update();
 	void late_update();
 
 	glm::vec3 pos;
@@ -30,6 +30,8 @@ public:
 
 	static int idx;
 	std::string name;
+
+	BoxCollider boxCollider;
 private:
 
 
@@ -37,8 +39,6 @@ private:
 	VBO vbo;
 
 	glm::vec3 outlineScale;
-
-	BoxCollider boxCollider;
 
 	ShaderProgram shaderProgram;
 	ShaderProgram transparentProgram;

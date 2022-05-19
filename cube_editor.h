@@ -8,8 +8,8 @@
 class CubeEditor {
 public:
 	CubeEditor();
-	void update(glm::mat4& projection, glm::mat4& view);
-	void render(glm::mat4& projection, glm::mat4& view);
+	void update();
+	void render();
 
 	Cube* cube;
 	Arrow arrows[3];
