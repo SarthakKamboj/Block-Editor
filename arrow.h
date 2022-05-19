@@ -11,12 +11,6 @@
 #include <math.h>
 #include "transform.h"
 
-/*
-typedef enum Dir {
-	x, y, z
-} Dir;
-*/
-
 class Arrow {
 public:
 	Arrow();

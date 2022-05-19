@@ -3,12 +3,6 @@
 CubeEditor::CubeEditor() {
 	cube = NULL;
 
-	/*
-	Arrow x_arrow(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -90.0f), Dir::x);
-	Arrow y_arrow(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), Dir::y);
-	Arrow z_arrow(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(90.0f, 0.0f, 0.0f), Dir::z);
-	*/
-
 	glm::vec3 pos(0.0f, 0.0f, 0.0f);
 	glm::vec3 scale(0.5f, 0.5f, 0.5f);
 
@@ -29,7 +23,7 @@ extern bool editor_hover;
 void CubeEditor::update() {
 	if (cube == NULL) return;
 
-	glm::vec3& pos = transform.pos;
+	glm::vec3& pos = cube->transform.pos;
 	glm::vec3& scale = transform.scale;
 
 	x_arrow.transform.pos = pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale);
@@ -42,7 +36,7 @@ void CubeEditor::update() {
 
 	ImGui::Begin("Triangle Info");
 
-	editor_hover |= ImGui::IsWindowHovered() | ImGui::IsAnyItemHovered();
+	editor_hover |= ImGui::IsAnyItemHovered();
 
 	ImGui::Text(cube->name.c_str());
 
