@@ -3,29 +3,46 @@
 CubeEditor::CubeEditor() {
 	cube = NULL;
 
-	Arrow xArrow(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -90.0f), Dir::x);
-	Arrow yArrow(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), Dir::y);
-	Arrow zArrow(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(90.0f, 0.0f, 0.0f), Dir::z);
+	/*
+	Arrow x_arrow(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -90.0f), Dir::x);
+	Arrow y_arrow(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), Dir::y);
+	Arrow z_arrow(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(90.0f, 0.0f, 0.0f), Dir::z);
+	*/
 
-	arrows[0] = xArrow;
-	arrows[1] = yArrow;
-	arrows[2] = zArrow;
+	glm::vec3 pos(0.0f, 0.0f, 0.0f);
+	glm::vec3 scale(0.5f, 0.5f, 0.5f);
+
+	transform.pos = pos;
+	transform.rot = glm::vec3(0.0f, 0.0f, 0.0f);
+	transform.scale = scale;
+
+	x_arrow = Arrow(pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, -90.0f), scale, glm::vec3(1.0f, 0.0f, 0.0f));
+	y_arrow = Arrow(pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 1.0f, 0.0f));
+	z_arrow = Arrow(pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale), glm::vec3(90.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 0.0f, 1.0f));
+
+	arrows[0] = x_arrow;
+	arrows[1] = y_arrow;
+	arrows[2] = z_arrow;
 }
 
-extern bool editorHover;
+extern bool editor_hover;
 void CubeEditor::update() {
 	if (cube == NULL) return;
 
-	for (int i = 0; i < sizeof(arrows) / sizeof(arrows[0]); i++) {
-		// arrows[i].pos = cube->pos;
-		arrows[i].set_position(cube->transform.pos);
-		// arrows[i].update();
-		// break;
-	}
+	glm::vec3& pos = transform.pos;
+	glm::vec3& scale = transform.scale;
+
+	x_arrow.transform.pos = pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale);
+	y_arrow.transform.pos = pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale);
+	z_arrow.transform.pos = pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale);
+
+	x_arrow.update();
+	y_arrow.update();
+	z_arrow.update();
 
 	ImGui::Begin("Triangle Info");
 
-	editorHover |= ImGui::IsWindowHovered() | ImGui::IsAnyItemHovered();
+	editor_hover |= ImGui::IsWindowHovered() | ImGui::IsAnyItemHovered();
 
 	ImGui::Text(cube->name.c_str());
 
@@ -76,8 +93,8 @@ void CubeEditor::update() {
 
 void CubeEditor::render() {
 	if (cube == NULL) return;
-	for (int i = 0; i < sizeof(arrows) / sizeof(arrows[0]); i++) {
-		// arrows[i].render();
-		// break;
-	}
+
+	x_arrow.render();
+	y_arrow.render();
+	z_arrow.render();
 }

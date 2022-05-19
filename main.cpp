@@ -16,15 +16,15 @@
 #include "cameraEditor.h"
 #include "arrow.h"
 
-extern std::map<SDL_Keycode, bool> keyPressedMap;
+extern std::map<SDL_Keycode, bool> key_pressed_map;
 extern MouseClickState mouse_click_state;
 extern MouseState mouse_state;
 
-CubeEditor* cubeEditorPtr;
+CubeEditor* cube_editor_ptr;
 glm::mat4 projection(1.0f), view(1.0f);
 
 int width = 800, height = 800;
-bool editorHover;
+bool editor_hover;
 
 int main(int argc, char* args[]) {
 
@@ -40,7 +40,7 @@ int main(int argc, char* args[]) {
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-	editorHover = false;
+	editor_hover = false;
 
 	SDL_Window* window = SDL_CreateWindow("window",
 		SDL_WINDOWPOS_CENTERED,
@@ -72,11 +72,11 @@ int main(int argc, char* args[]) {
 
 	glm::vec3 clearColor(0.0f, 0.0f, 0.0f);
 
-	CubeEditor cubeEditor;
-	cubeEditorPtr = &cubeEditor;
+	CubeEditor cube_editor;
+	cube_editor_ptr = &cube_editor;
 
 	Cube cubes[3];
-	cubeEditorPtr->cube = &cubes[0];
+	cube_editor_ptr->cube = &cubes[0];
 	cubes[1].transform.pos = glm::vec3(3.0f, 0.0f, -3.0f);
 	cubes[2].transform.pos = glm::vec3(-3.0f, 0.0f, -3.0f);
 
@@ -94,7 +94,7 @@ int main(int argc, char* args[]) {
 
 	Camera cam(0.0f, 0.0f, 5.0f);
 
-	CameraEditor cameraEditor(&cam);
+	CameraEditor camera_editor(&cam);
 
 	int stencilBits;
 	glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL, GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE, &stencilBits);
@@ -104,7 +104,7 @@ int main(int argc, char* args[]) {
 
 	while (running) {
 
-		editorHover = false;
+		editor_hover = false;
 
 		uint32_t cur = SDL_GetTicks();
 		uint32_t diff = cur - start;
@@ -116,7 +116,7 @@ int main(int argc, char* args[]) {
 
 		handle_input(event);
 
-		if (keyPressedMap[SDL_QUIT] || keyPressedMap[SDLK_ESCAPE]) {
+		if (key_pressed_map[SDL_QUIT] || key_pressed_map[SDLK_ESCAPE]) {
 			running = false;
 		}
 
@@ -126,8 +126,8 @@ int main(int argc, char* args[]) {
 
 		ImGui::PushFont(robotoFont);
 
-		cubeEditor.update();
-		cameraEditor.update();
+		cube_editor.update();
+		camera_editor.update();
 
 		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
 			cubes[i].update();
@@ -143,13 +143,13 @@ int main(int argc, char* args[]) {
 
 		glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
-		cubeEditorPtr->cube->setup_render_outline();
+		cube_editor_ptr->cube->setup_render_outline();
 		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
 			cubes[i].render();
 		}
 
-		cubeEditorPtr->cube->render_outline();
-		cubeEditorPtr->render();
+		cube_editor_ptr->cube->render_outline();
+		cube_editor_ptr->render();
 
 		ImGui::PopFont();
 		ImGui::Render();

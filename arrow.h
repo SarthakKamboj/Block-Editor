@@ -9,27 +9,27 @@
 #include "boxCollider.h"
 #include "input.h"
 #include <math.h>
+#include "transform.h"
 
+/*
 typedef enum Dir {
 	x, y, z
 } Dir;
+*/
 
 class Arrow {
 public:
 	Arrow();
-	Arrow(glm::vec3 color, glm::vec3 rot, Dir dir);
+	Arrow(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, glm::vec3 color);
 	void update();
 	void render();
-	glm::vec3 pos, rot;
 
-	void set_position(glm::vec3 _pos);
-	glm::vec3 pos_offset;
+	Transform transform;
 
 private:
 	VAO vao;
 	VBO vbo;
 	ShaderProgram arrow_shader;
-	glm::vec3 scale;
 
 	glm::vec3 color;
 	glm::vec3 highlight_color;

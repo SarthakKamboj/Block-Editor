@@ -18,13 +18,11 @@ extern MouseClickState mouse_click_state;
 extern MouseState mouse_state;
 extern glm::mat4 projection, view;
 
-Arrow::Arrow() {
-
-}
+Arrow::Arrow() {}
 
 // TODO: make box collider with arrow work 
 
-Arrow::Arrow(glm::vec3 _color, glm::vec3 _rot, Dir dir) {
+Arrow::Arrow(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, glm::vec3 _color) {
 	vbo.set_data(vertices, sizeof(vertices), GL_STATIC_DRAW);
 
 	vao.bind();
@@ -36,39 +34,23 @@ Arrow::Arrow(glm::vec3 _color, glm::vec3 _rot, Dir dir) {
 	arrow_shader = ShaderProgram(vertexFilePath, fragmentFilePath);
 
 	collider_dim = glm::vec3(0.4f, 1.0f, 0.1f);
-	scale = glm::vec3(0.5f, 0.5f, 0.5f);
+	// collider_dim = glm::vec3(1.0f, 1.0f, 1.0f);
+
+	transform = Transform(pos, rot, scale);
 
 	color = _color;
 	float highlightAdd = 0.8f;
 	highlight_color = glm::vec3(fmin(color.x + highlightAdd, 1.0f), fmin(color.y + highlightAdd, 1.0f), fmin(color.z + highlightAdd, 1.0f));
-	rot = _rot;
 
-	if (dir == x) {
-		pos_offset = glm::vec3(0.5f, 0.0f, 0.0f);
-	}
-	else if (dir == y) {
-		pos_offset = glm::vec3(0.0f, 0.5f, 0.0f);
-	}
-	else {
-		pos_offset = glm::vec3(0.0f, 0.0f, 0.5f);
-	}
-
-	pos_offset *= scale;
-
-	set_position(glm::vec3(0.0f, 0.0f, 0.0f));
 	arrow_shader.set_vec_3("color", glm::value_ptr(color));
 
-	box_collider = BoxCollider(pos, collider_dim * scale, rot);
-}
+	box_collider = BoxCollider(pos, collider_dim * transform.scale, rot);
 
-void Arrow::set_position(glm::vec3 _pos) {
-	pos = _pos + pos_offset;
 }
 
 void Arrow::update() {
-	box_collider.transform.pos = pos;
-	// boxCollider.rot = rot;
-	// boxCollider.scale = scale * colliderDim;
+	box_collider.transform = transform;
+	box_collider.transform.scale = transform.scale * collider_dim;
 
 	glm::vec2 screenCoords(mouse_state.x, mouse_state.y);
 
@@ -87,12 +69,15 @@ void Arrow::render() {
 	box_collider.render();
 
 	arrow_shader.bind();
+	glm::vec3& pos = transform.pos;
 	glm::mat4 translationMat = get_translation_matrix(pos.x, pos.y, pos.z);
 	arrow_shader.set_mat_4("translate", GL_FALSE, mat4_get_ptr(translationMat));
 
+	glm::vec3& rot = transform.rot;
 	glm::mat4 rotMat = get_rotation_matrix(rot.x, rot.y, rot.z);
 	arrow_shader.set_mat_4("rot", GL_FALSE, mat4_get_ptr(rotMat));
 
+	glm::vec3& scale = transform.scale;
 	glm::mat4 scaleMat = get_scale_matrix(scale.x, scale.y, scale.z);
 	arrow_shader.set_mat_4("scale", GL_FALSE, mat4_get_ptr(scaleMat));
 

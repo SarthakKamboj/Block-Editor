@@ -2,13 +2,13 @@
 #include "input.h"
 #include "cubeEditor.h"
 
-extern CubeEditor* cubeEditorPtr;
+extern CubeEditor* cube_editor_ptr;
 
 extern int width, height;
 extern MouseClickState mouse_click_state;
 extern MouseState mouse_state;
 
-extern bool editorHover;
+extern bool editor_hover;
 
 int Cube::idx = 0;
 
@@ -97,19 +97,19 @@ Cube::Cube() {
 void Cube::update() {
 	box_collider.transform = transform;
 
-	if (mouse_click_state.left && !editorHover) {
+	if (mouse_click_state.left && !editor_hover) {
 		glm::vec2 screenCoords(mouse_state.x, mouse_state.y);
 		Ray ray = box_collider.screen_to_local_ray(screenCoords);
 
 		if (box_collider.ray_collide(ray)) {
-			cubeEditorPtr->cube = this;
+			cube_editor_ptr->cube = this;
 		}
 	}
 }
 
 
 void Cube::late_update() {
-	outline = (cubeEditorPtr->cube == this);
+	outline = (cube_editor_ptr->cube == this);
 }
 
 void Cube::setup_render_outline() {
