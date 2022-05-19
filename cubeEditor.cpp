@@ -36,8 +36,6 @@ void CubeEditor::update() {
 
 	ImGui::Begin("Triangle Info");
 
-	editor_hover |= ImGui::IsAnyItemHovered();
-
 	ImGui::Text(cube->name.c_str());
 
 	if (ImGui::CollapsingHeader("transform")) {
@@ -88,7 +86,13 @@ void CubeEditor::update() {
 void CubeEditor::render() {
 	if (cube == NULL) return;
 
+	cube->render_outline();
 	x_arrow.render();
 	y_arrow.render();
 	z_arrow.render();
+}
+
+void CubeEditor::setup_outline() {
+	if (cube == NULL) return;
+	cube->setup_render_outline();
 }

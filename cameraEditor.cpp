@@ -8,8 +8,6 @@ extern bool editor_hover;
 void CameraEditor::update() {
 	ImGui::Begin("Camera Info");
 
-	editor_hover |= ImGui::IsWindowHovered();
-
 	if (ImGui::CollapsingHeader("transform")) {
 		if (ImGui::TreeNode("position")) {
 			ImGui::SliderFloat("x", &cam->transform.pos.x, -10.0f, 10.0f);

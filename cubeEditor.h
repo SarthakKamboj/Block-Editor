@@ -8,6 +8,7 @@
 class CubeEditor {
 public:
 	CubeEditor();
+	void setup_outline();
 	void update();
 	void render();
 

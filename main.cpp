@@ -77,8 +77,8 @@ int main(int argc, char* args[]) {
 
 	Cube cubes[3];
 	cube_editor_ptr->cube = &cubes[0];
-	cubes[1].transform.pos = glm::vec3(3.0f, 0.0f, -3.0f);
-	cubes[2].transform.pos = glm::vec3(-3.0f, 0.0f, -3.0f);
+	cubes[1].transform.pos = glm::vec3(1.0f, 0.0f, 0.0f);
+	cubes[2].transform.pos = glm::vec3(-1.0f, 0.0f, 0.0f);
 
 	Cube debugCube;
 	debugCube.box_collider.set_color(glm::vec3(1.0f, 0.0f, 0.0f));
@@ -92,7 +92,7 @@ int main(int argc, char* args[]) {
 
 	projection = get_projection_matrix(45.0f, 0.1f, 100.0f, ((float)width) / height);
 
-	Camera cam(0.0f, 0.0f, 5.0f);
+	Camera cam(0.0f, 0.0f, 10.0f);
 
 	CameraEditor camera_editor(&cam);
 
@@ -126,8 +126,15 @@ int main(int argc, char* args[]) {
 
 		ImGui::PushFont(robotoFont);
 
-		cube_editor.update();
-		camera_editor.update();
+		editor_hover = ImGui::IsAnyItemHovered();
+
+		if (mouse_click_state.left && !editor_hover && !key_pressed_map[SDLK_LCTRL]) {
+			cube_editor.cube = NULL;
+		}
+
+		if (editor_hover) {
+			std::cout << "editor hovering" << std::endl;
+		}
 
 		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
 			cubes[i].update();
@@ -137,18 +144,20 @@ int main(int argc, char* args[]) {
 			cubes[i].late_update();
 		}
 
+		camera_editor.update();
+		cube_editor.update();
+
 		glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.0f);
 		glClearStencil(0);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
-		cube_editor_ptr->cube->setup_render_outline();
+		cube_editor_ptr->setup_outline();
 		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
 			cubes[i].render();
 		}
 
-		cube_editor_ptr->cube->render_outline();
 		cube_editor_ptr->render();
 
 		ImGui::PopFont();
