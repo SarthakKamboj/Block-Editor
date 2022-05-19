@@ -21,7 +21,12 @@ CubeEditor::CubeEditor() {
 
 extern bool editor_hover;
 void CubeEditor::update() {
-	if (cube == NULL) return;
+	if (cube == NULL) {
+		ImGui::Begin("triangle info");
+		ImGui::Text("select a cube");
+		ImGui::End();
+		return;
+	}
 
 	glm::vec3& pos = cube->transform.pos;
 	glm::vec3& scale = transform.scale;
@@ -34,7 +39,7 @@ void CubeEditor::update() {
 	y_arrow.update();
 	z_arrow.update();
 
-	ImGui::Begin("Triangle Info");
+	ImGui::Begin("triangle info");
 
 	ImGui::Text(cube->name.c_str());
 

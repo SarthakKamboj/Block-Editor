@@ -132,10 +132,6 @@ int main(int argc, char* args[]) {
 			cube_editor.cube = NULL;
 		}
 
-		if (editor_hover) {
-			std::cout << "editor hovering" << std::endl;
-		}
-
 		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
 			cubes[i].update();
 		}
