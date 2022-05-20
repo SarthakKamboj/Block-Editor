@@ -19,4 +19,7 @@ public:
 private:
 	GLuint program_id;
 	GLuint create_shader(const char* filePath, GLenum shaderType);
+	const char* shaderPath;
+
+	GLint get_variable_location(const GLchar* varName);
 };

@@ -30,9 +30,6 @@ Grid::Grid() {
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\grid.frag";
 	shader_program = ShaderProgram(vertexFilePath, fragmentFilePath);
 
-	glm::vec3 color(0.5f, 0.5f, 0.5f);
-	shader_program.set_vec_3("color", glm::value_ptr(color));
-
 	textureUnit = 0;
 
 	const char* file_path = "images\\grid.png";

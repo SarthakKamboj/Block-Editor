@@ -82,7 +82,7 @@ int main(int argc, char* args[]) {
 	cubes[1].transform.pos = glm::vec3(1.0f, 0.0f, 0.0f);
 	cubes[2].transform.pos = glm::vec3(-1.0f, 0.0f, 0.0f);
 
-	Grid cube_area;
+	Grid grid;
 
 	Cube debugCube;
 	debugCube.box_collider.set_color(glm::vec3(1.0f, 0.0f, 0.0f));
@@ -159,7 +159,7 @@ int main(int argc, char* args[]) {
 		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
 			cubes[i].render();
 		}
-		cube_area.render();
+		grid.render();
 
 		cube_editor_ptr->render();
 
