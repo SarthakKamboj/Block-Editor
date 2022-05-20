@@ -2,6 +2,7 @@
 
 #include "vao.h"
 #include "vbo.h"
+#include "ebo.h"
 #include "boxCollider.h"
 #include "shaderProgram.h"
 #include "glm/glm.hpp"
@@ -11,7 +12,6 @@
 #include <string>
 #include "texture.h"
 #include "glm/gtc/type_ptr.hpp"
-#include "ebo.h"
 
 class Cube {
 public:

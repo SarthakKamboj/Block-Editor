@@ -7,10 +7,11 @@ static float vertices[] = {
 	0.5f, 0.5f, scale, scale,
 	-0.5f, -0.5f, 0.0f, 0.0f,
 	-0.5f, 0.5f, 0.0f, scale,
-
-	0.5f, 0.5f, scale, scale,
-	-0.5f, -0.5f, 0.0f, 0.0f,
 	0.5f, -0.5f, scale, 0.0f
+};
+
+static unsigned int indicies[] = {
+	0,2,1,3,1,0
 };
 
 extern glm::mat4 projection, view;
@@ -20,11 +21,15 @@ Grid::Grid() {
 	glm::vec3 unit(1.0f, 1.0f, 1.0f);
 	transform = Transform(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(90.0f, 0.0f, 0.0f), unit * scale);
 
+	ebo.set_data(indicies, sizeof(indicies), GL_STATIC_DRAW);
 	vbo.set_data(vertices, sizeof(vertices), GL_STATIC_DRAW);
+
 	vao.bind();
+	ebo.bind();
 	vao.set_attribute(vbo, 0, 2, GL_FLOAT, 4 * sizeof(float), (void*)0);
 	vao.set_attribute(vbo, 1, 2, GL_FLOAT, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 	vao.unbind();
+	ebo.unbind();
 
 	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\grid.vert";
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\grid.frag";
@@ -57,7 +62,7 @@ void Grid::render() {
 
 	texture.bind();
 	vao.bind();
-	glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (4 * sizeof(vertices[0])));
+	glDrawElements(GL_TRIANGLES, sizeof(indicies) / sizeof(indicies[0]), GL_UNSIGNED_INT, (void*)0);
 	vao.unbind();
 	shader_program.unbind();
 	texture.unbind();

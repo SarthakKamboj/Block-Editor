@@ -2,6 +2,7 @@
 
 #include "vao.h"
 #include "vbo.h"
+#include "ebo.h"
 #include "transform.h"
 #include "shaderProgram.h"
 #include "lin_alg_helper.h"
@@ -16,13 +17,11 @@ public:
 
 	VAO vao;
 	VBO vbo;
+	EBO ebo;
 
 	Transform transform;
 	ShaderProgram shader_program;
 	Texture texture;
 
 	int textureUnit;
-
-	// unsigned int texture;
-	// unsigned char* data;
 };
