@@ -40,7 +40,6 @@ void handle_input(SDL_Event& event) {
 			mouse_click_state.right = (event.button.button == SDL_BUTTON_RIGHT);
 		}
 		else if (event.type == SDL_MOUSEWHEEL) {
-			std::cout << event.wheel.y << std::endl;
 			mouse_wheel.y = event.wheel.y;
 		}
 	}
