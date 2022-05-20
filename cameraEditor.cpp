@@ -10,9 +10,10 @@ void CameraEditor::update() {
 
 	if (ImGui::CollapsingHeader("transform")) {
 		if (ImGui::TreeNode("position")) {
-			ImGui::SliderFloat("x", &cam->transform.pos.x, -10.0f, 10.0f);
-			ImGui::SliderFloat("y", &cam->transform.pos.y, -10.0f, 10.0f);
-			ImGui::SliderFloat("z", &cam->transform.pos.z, -10.0f, 10.0f);
+			float max = 40.0f;
+			ImGui::SliderFloat("x", &cam->transform.pos.x, -max, max);
+			ImGui::SliderFloat("y", &cam->transform.pos.y, -max, max);
+			ImGui::SliderFloat("z", &cam->transform.pos.z, -max, max);
 
 			if (ImGui::Button("reset")) {
 				cam->transform.pos = glm::vec3(0.0f, 0.0f, 5.0f);

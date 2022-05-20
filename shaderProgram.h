@@ -12,6 +12,7 @@ public:
 	void bind();
 	void unbind();
 	void set_float(const GLchar* varName, float value);
+	void set_int(const GLchar* varName, int value);
 	void set_vec_3(const GLchar* varName, const GLfloat* vec3);
 	void set_mat_4(const GLchar* varName, GLboolean transpose, const GLfloat* mat);
 
