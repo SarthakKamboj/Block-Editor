@@ -22,10 +22,12 @@ void handle_input(SDL_Event& event) {
 	while (SDL_PollEvent(&event)) {
 		ImGui_ImplSDL2_ProcessEvent(&event);
 
-		if (event.type == SDL_QUIT) {
+		switch (event.type) {
+		case SDL_QUIT: {
 			key_pressed_map[SDL_QUIT] = true;
 		}
-		else if (event.type == SDL_KEYDOWN) {
+					 break;
+		case SDL_KEYDOWN: {
 			SDL_Keycode keyDown = event.key.keysym.sym;
 			for (int i = 0; i < sizeof(keysToHandle) / sizeof(keysToHandle[0]); i++) {
 				if (keysToHandle[i] == keyDown) {
@@ -33,14 +35,18 @@ void handle_input(SDL_Event& event) {
 					break;
 				}
 			}
-
 		}
-		else if (event.type == SDL_MOUSEBUTTONDOWN) {
+						break;
+		case SDL_MOUSEBUTTONDOWN: {
 			mouse_click_state.left = (event.button.button == SDL_BUTTON_LEFT);
 			mouse_click_state.right = (event.button.button == SDL_BUTTON_RIGHT);
 		}
-		else if (event.type == SDL_MOUSEWHEEL) {
+								break;
+		case SDL_MOUSEWHEEL: {
 			mouse_wheel.y = event.wheel.y;
+		}
+						   break;
+
 		}
 	}
 }
