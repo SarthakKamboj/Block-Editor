@@ -55,6 +55,24 @@ GLuint ShaderProgram::create_shader(const char* filePath, GLenum shaderType) {
 	return id;
 }
 
+void ShaderProgram::set_int(const GLchar* varName, int value) {
+	if (program_id == -1) return;
+	GLint cur_program_id;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &cur_program_id);
+	if (cur_program_id != program_id) {
+		bind();
+	}
+	GLint location = glGetUniformLocation(program_id, varName);
+	if (location == -1) {
+		std::cout << "uniform with name " << varName << " does not exist in this shader program" << std::endl;
+	}
+	else {
+		glUniform1i(location, value);
+	}
+	if (cur_program_id != program_id) {
+		unbind();
+	}
+}
 
 void ShaderProgram::set_float(const GLchar* varName, float value) {
 	if (program_id == -1) return;

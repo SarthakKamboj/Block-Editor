@@ -2,12 +2,14 @@
 
 Camera::Camera() {
 	transform.pos = glm::vec3(0.0f, 0.0f, 0.0f);
-	transform.rot = glm::vec3(0.0f, 0.0f, 0.0f);
+	// transform.rot = glm::vec3(0.0f, 0.0f, 0.0f);
+	transform.rot = glm::vec3(0.0f, 50.0f, 20.0f);
 }
 
 Camera::Camera(float xPos, float yPos, float zPos) {
 	transform.pos = glm::vec3(xPos, yPos, zPos);
-	transform.rot = glm::vec3(0.0f, 0.0f, 0.0f);
+	// transform.rot = glm::vec3(0.0f, 0.0f, 0.0f);
+	transform.rot = glm::vec3(0.0f, 50.0f, 20.0f);
 }
 
 glm::mat4 Camera::get_view_mat() {

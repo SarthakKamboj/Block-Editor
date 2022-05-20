@@ -202,10 +202,10 @@
     <None Include="boxCollider.vert">
       <Filter>Source Files\shaders</Filter>
     </None>
-    <None Include="cubeArea.vert">
+    <None Include="grid.vert">
       <Filter>Source Files\shaders</Filter>
     </None>
-    <None Include="cubeArea.frag">
+    <None Include="grid.frag">
       <Filter>Source Files\shaders</Filter>
     </None>
   </ItemGroup>
