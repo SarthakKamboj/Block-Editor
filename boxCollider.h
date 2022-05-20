@@ -11,6 +11,7 @@
 #include "ebo.h"
 #include "lin_alg_helper.h"
 #include "transform.h"
+#include <vector>
 
 class BoxCollider {
 public:
@@ -24,6 +25,7 @@ public:
 	bool point_collide(glm::vec3& point);
 	bool ray_collide(Ray& point);
 	Ray screen_to_local_ray(glm::vec2& screen_coords);
+	glm::vec3 local_to_world(glm::vec3 point);
 
 	VAO vao;
 	VBO vbo;
@@ -32,5 +34,14 @@ public:
 	void render();
 	void set_color(glm::vec3 color);
 	glm::vec3 color;
+
+	glm::vec3 front_col_point;
+	glm::vec3 back_col_point;
+	glm::vec3 right_col_point;
+	glm::vec3 left_col_point;
+	glm::vec3 top_col_point;
+	glm::vec3 bottom_col_point;
+
+	std::vector<glm::vec3> local_col_points;
 
 };

@@ -114,6 +114,8 @@ void BoxCollider::render() {
 
 bool BoxCollider::ray_collide(Ray& ray) {
 
+	local_col_points.clear();
+
 	glm::vec3& scale = transform.scale;
 
 	float frontZ = (scale.z / 2.0f);
@@ -134,18 +136,37 @@ bool BoxCollider::ray_collide(Ray& ray) {
 	float units_to_top_plane = (topY - ray.origin.y) / ray.dir.y;
 	float units_to_bottom_plane = (bottomY - ray.origin.y) / ray.dir.y;
 
-	glm::vec3 frontColPoint = ray.origin + (ray.dir * units_to_front_plane);
-	glm::vec3 backColPoint = ray.origin + (ray.dir * units_to_back_plane);
+	front_col_point = ray.origin + (ray.dir * units_to_front_plane);
+	back_col_point = ray.origin + (ray.dir * units_to_back_plane);
 
-	glm::vec3 rightColPoint = ray.origin + (ray.dir * units_to_right_plane);
-	glm::vec3 leftColPoint = ray.origin + (ray.dir * units_to_left_plane);
+	right_col_point = ray.origin + (ray.dir * units_to_right_plane);
+	left_col_point = ray.origin + (ray.dir * units_to_left_plane);
 
-	glm::vec3 topColPoint = ray.origin + (ray.dir * units_to_top_plane);
-	glm::vec3 bottomColPoint = ray.origin + (ray.dir * units_to_bottom_plane);
+	top_col_point = ray.origin + (ray.dir * units_to_top_plane);
+	bottom_col_point = ray.origin + (ray.dir * units_to_bottom_plane);
 
-	return point_collide(frontColPoint) || point_collide(backColPoint) ||
-		point_collide(rightColPoint) || point_collide(leftColPoint) ||
-		point_collide(topColPoint) || point_collide(bottomColPoint);
+	if (point_collide(front_col_point)) {
+		local_col_points.push_back(front_col_point);
+	}
+	if (point_collide(back_col_point)) {
+		local_col_points.push_back(back_col_point);
+	}
+	if (point_collide(right_col_point)) {
+		local_col_points.push_back(right_col_point);
+	}
+	if (point_collide(left_col_point)) {
+		local_col_points.push_back(left_col_point);
+	}
+	if (point_collide(top_col_point)) {
+		local_col_points.push_back(top_col_point);
+	}
+	if (point_collide(bottom_col_point)) {
+		local_col_points.push_back(bottom_col_point);
+	}
+
+	return point_collide(front_col_point) || point_collide(back_col_point) ||
+		point_collide(right_col_point) || point_collide(left_col_point) ||
+		point_collide(top_col_point) || point_collide(bottom_col_point);
 
 }
 
@@ -175,4 +196,14 @@ Ray BoxCollider::screen_to_local_ray(glm::vec2& screen_coords) {
 	ray.dir = glm::normalize(farVec3 - nearVec3);
 
 	return ray;
+}
+
+glm::vec3 BoxCollider::local_to_world(glm::vec3 point) {
+	glm::mat4 model(1.0f);
+	model = glm::translate(model, transform.pos);
+	glm::vec3& rot = transform.rot;
+	model = model * get_rotation_matrix(rot.x, rot.y, rot.z);
+	model = glm::scale(model, transform.scale);
+
+	return model * glm::vec4(point, 1.0f);
 }

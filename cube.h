@@ -12,6 +12,8 @@
 #include <string>
 #include "texture.h"
 #include "glm/gtc/type_ptr.hpp"
+#include "debugCube.h"
+#include <math.h>
 
 class Cube {
 public:
@@ -44,6 +46,8 @@ private:
 	ShaderProgram transparent_program;
 	ShaderProgram outline_program;
 	Texture texture;
+
+	DebugCube debug_cubes[6];
 
 	void drawCube();
 };

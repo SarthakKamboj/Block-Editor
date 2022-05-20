@@ -9,6 +9,7 @@ extern MouseClickState mouse_click_state;
 extern MouseState mouse_state;
 
 extern bool editor_hover;
+extern Camera* cam_ptr;
 
 int Cube::idx = 0;
 
@@ -85,12 +86,39 @@ Cube::Cube() {
 void Cube::update() {
 	box_collider.transform = transform;
 
+	/*
 	if (mouse_click_state.left && !editor_hover) {
 		glm::vec2 screenCoords(mouse_state.x, mouse_state.y);
 		Ray ray = box_collider.screen_to_local_ray(screenCoords);
 
 		if (box_collider.ray_collide(ray)) {
 			cube_editor_ptr->cube = this;
+			debug_cube.transform.pos = box_collider.front_col_point;
+		}
+	}
+	*/
+
+	glm::vec2 screenCoords(mouse_state.x, mouse_state.y);
+	Ray ray = box_collider.screen_to_local_ray(screenCoords);
+
+	if (box_collider.ray_collide(ray)) {
+		if (mouse_click_state.left && !editor_hover) {
+			bool closer_to_cam = true;
+			float dist = 0;
+			if (cube_editor_ptr->cube) {
+				float cur_dist_to_cam = pow(transform.pos.x - cam_ptr->transform.pos.x, 2) + pow(transform.pos.y - cam_ptr->transform.pos.y, 2) + pow(transform.pos.z - cam_ptr->transform.pos.z, 2);
+				Transform selected_cube_transform = cube_editor_ptr->cube->transform;
+				float selected_cube_dist_to_cam = pow(selected_cube_transform.pos.x - cam_ptr->transform.pos.x, 2) + pow(selected_cube_transform.pos.y - cam_ptr->transform.pos.y, 2) + pow(selected_cube_transform.pos.z - cam_ptr->transform.pos.z, 2);
+				closer_to_cam = (cur_dist_to_cam <= selected_cube_dist_to_cam);
+			}
+			if (closer_to_cam) {
+				cube_editor_ptr->cube = this;
+			}
+		}
+		// debug_cube.transform.pos = box_collider.front_col_point;
+		// debug_cube.transform.pos = box_collider.top_col_point;
+		for (int i = 0; i < box_collider.local_col_points.size(); i++) {
+			debug_cubes[i].transform.pos = box_collider.local_to_world(box_collider.local_col_points[i]);
 		}
 	}
 }
@@ -130,6 +158,9 @@ void Cube::setup_render_outline() {
 
 	glDisable(GL_STENCIL_TEST);
 
+	for (int i = 0; i < box_collider.local_col_points.size(); i++) {
+		debug_cubes[i].render();
+	}
 }
 
 void Cube::render() {
