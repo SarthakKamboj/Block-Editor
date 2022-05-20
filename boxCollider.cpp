@@ -1,51 +1,5 @@
 #include "boxCollider.h"
 
-/*
-static float vertices[] = {
-		-0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f,
-		 0.5f,  0.5f, -0.5f,
-		 0.5f,  0.5f, -0.5f,
-		-0.5f,  0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-
-		-0.5f, -0.5f,  0.5f,
-		 0.5f, -0.5f,  0.5f,
-		 0.5f,  0.5f,  0.5f,
-		 0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-		-0.5f, -0.5f,  0.5f,
-
-		-0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-
-		 0.5f,  0.5f,  0.5f,
-		 0.5f,  0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f,  0.5f,
-		 0.5f,  0.5f,  0.5f,
-
-		-0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f,  0.5f,
-		 0.5f, -0.5f,  0.5f,
-		-0.5f, -0.5f,  0.5f,
-		-0.5f, -0.5f, -0.5f,
-
-		-0.5f,  0.5f, -0.5f,
-		 0.5f,  0.5f, -0.5f,
-		 0.5f,  0.5f,  0.5f,
-		 0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f, -0.5f
-};
-*/
-
 static float vertices[] = {
 	0.5f, 0.5f, 0.5f,
 	0.5f, 0.5f, -0.5f,
@@ -71,9 +25,9 @@ extern int width, height;
 
 BoxCollider::BoxCollider() {
 
-	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\boxCollider.vert";
-	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.frag";
-	collider_program = ShaderProgram(vertexFilePath, fragmentFilePath);
+	const char* vertex_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\boxCollider.vert";
+	const char* fragment_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.frag";
+	collider_program = ShaderProgram(vertex_file_path, fragment_file_path);
 	color = glm::vec3(0.0f, 1.0f, 1.0f);
 	collider_program.set_vec_3("color", glm::value_ptr(color));
 
@@ -92,9 +46,9 @@ BoxCollider::BoxCollider(glm::vec3 pos, glm::vec3 scale, glm::vec3 rot) {
 	transform.pos = pos;
 	transform.rot = rot;
 
-	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\boxCollider.vert";
-	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.frag";
-	collider_program = ShaderProgram(vertexFilePath, fragmentFilePath);
+	const char* vertex_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\boxCollider.vert";
+	const char* fragment_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.frag";
+	collider_program = ShaderProgram(vertex_file_path, fragment_file_path);
 	color = glm::vec3(0.0f, 1.0f, 1.0f);
 	collider_program.set_vec_3("color", glm::value_ptr(color));
 
@@ -133,23 +87,22 @@ void BoxCollider::render() {
 	collider_program.bind();
 
 	glm::vec3& pos = transform.pos;
-	glm::mat4 translationMat = get_translation_matrix(pos.x, pos.y, pos.z);
-	collider_program.set_mat_4("translate", GL_FALSE, mat4_get_ptr(translationMat));
+	glm::mat4 translation_mat = get_translation_matrix(pos.x, pos.y, pos.z);
+	collider_program.set_mat_4("translate", GL_FALSE, mat4_get_ptr(translation_mat));
 
 	glm::vec3& rot = transform.rot;
-	glm::mat4 rotMat = get_rotation_matrix(rot.x, rot.y, rot.z);
-	collider_program.set_mat_4("rot", GL_FALSE, mat4_get_ptr(rotMat));
+	glm::mat4 rot_mat = get_rotation_matrix(rot.x, rot.y, rot.z);
+	collider_program.set_mat_4("rot", GL_FALSE, mat4_get_ptr(rot_mat));
 
 	glm::vec3& scale = transform.scale;
-	glm::mat4 scaleMat = get_scale_matrix(scale.x, scale.y, scale.z);
-	collider_program.set_mat_4("scale", GL_FALSE, mat4_get_ptr(scaleMat));
+	glm::mat4 scale_mat = get_scale_matrix(scale.x, scale.y, scale.z);
+	collider_program.set_mat_4("scale", GL_FALSE, mat4_get_ptr(scale_mat));
 
 	collider_program.set_mat_4("projection", GL_FALSE, mat4_get_ptr(projection));
 
 	collider_program.set_mat_4("view", GL_FALSE, mat4_get_ptr(view));
 
 	vao.bind();
-	// glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (3 * sizeof(vertices[0])));
 	glDrawElements(GL_TRIANGLES, sizeof(indicies) / sizeof(indicies[0]), GL_UNSIGNED_INT, (void*)0);
 	vao.unbind();
 
@@ -172,23 +125,23 @@ bool BoxCollider::ray_collide(Ray& ray) {
 	float topY = (scale.y / 2.0f);
 	float bottomY = -(scale.y / 2.0f);
 
-	float unitsToFrontPlane = (frontZ - ray.origin.z) / ray.dir.z;
-	float unitsToBackPlane = (backZ - ray.origin.z) / ray.dir.z;
+	float units_to_front_plane = (frontZ - ray.origin.z) / ray.dir.z;
+	float units_to_back_plane = (backZ - ray.origin.z) / ray.dir.z;
 
-	float unitsToRightPlane = (rightX - ray.origin.x) / ray.dir.x;
-	float unitsToLeftPlane = (leftX - ray.origin.x) / ray.dir.x;
+	float units_to_right_plane = (rightX - ray.origin.x) / ray.dir.x;
+	float units_to_left_plane = (leftX - ray.origin.x) / ray.dir.x;
 
-	float unitsToTopPlane = (topY - ray.origin.y) / ray.dir.y;
-	float unitsToBottomPlane = (bottomY - ray.origin.y) / ray.dir.y;
+	float units_to_top_plane = (topY - ray.origin.y) / ray.dir.y;
+	float units_to_bottom_plane = (bottomY - ray.origin.y) / ray.dir.y;
 
-	glm::vec3 frontColPoint = ray.origin + (ray.dir * unitsToFrontPlane);
-	glm::vec3 backColPoint = ray.origin + (ray.dir * unitsToBackPlane);
+	glm::vec3 frontColPoint = ray.origin + (ray.dir * units_to_front_plane);
+	glm::vec3 backColPoint = ray.origin + (ray.dir * units_to_back_plane);
 
-	glm::vec3 rightColPoint = ray.origin + (ray.dir * unitsToRightPlane);
-	glm::vec3 leftColPoint = ray.origin + (ray.dir * unitsToLeftPlane);
+	glm::vec3 rightColPoint = ray.origin + (ray.dir * units_to_right_plane);
+	glm::vec3 leftColPoint = ray.origin + (ray.dir * units_to_left_plane);
 
-	glm::vec3 topColPoint = ray.origin + (ray.dir * unitsToTopPlane);
-	glm::vec3 bottomColPoint = ray.origin + (ray.dir * unitsToBottomPlane);
+	glm::vec3 topColPoint = ray.origin + (ray.dir * units_to_top_plane);
+	glm::vec3 bottomColPoint = ray.origin + (ray.dir * units_to_bottom_plane);
 
 	return point_collide(frontColPoint) || point_collide(backColPoint) ||
 		point_collide(rightColPoint) || point_collide(leftColPoint) ||

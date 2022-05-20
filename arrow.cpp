@@ -29,9 +29,9 @@ Arrow::Arrow(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, glm::vec3 _color) {
 	vao.set_attribute(vbo, 0, 2, GL_FLOAT, 2 * sizeof(float), (void*)0);
 	vao.unbind();
 
-	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.vert";
-	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.frag";
-	arrow_shader = ShaderProgram(vertexFilePath, fragmentFilePath);
+	const char* vertex_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.vert";
+	const char* fragment_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.frag";
+	arrow_shader = ShaderProgram(vertex_file_path, fragment_file_path);
 
 	collider_dim = glm::vec3(0.4f, 1.0f, 0.1f);
 	// collider_dim = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -39,8 +39,8 @@ Arrow::Arrow(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, glm::vec3 _color) {
 	transform = Transform(pos, rot, scale);
 
 	color = _color;
-	float highlightAdd = 0.8f;
-	highlight_color = glm::vec3(fmin(color.x + highlightAdd, 1.0f), fmin(color.y + highlightAdd, 1.0f), fmin(color.z + highlightAdd, 1.0f));
+	float highlight_add = 0.8f;
+	highlight_color = glm::vec3(fmin(color.x + highlight_add, 1.0f), fmin(color.y + highlight_add, 1.0f), fmin(color.z + highlight_add, 1.0f));
 
 	arrow_shader.set_vec_3("color", glm::value_ptr(color));
 
@@ -52,9 +52,9 @@ void Arrow::update() {
 	box_collider.transform = transform;
 	box_collider.transform.scale = transform.scale * collider_dim;
 
-	glm::vec2 screenCoords(mouse_state.x, mouse_state.y);
+	glm::vec2 screen_coords(mouse_state.x, mouse_state.y);
 
-	Ray ray = box_collider.screen_to_local_ray(screenCoords);
+	Ray ray = box_collider.screen_to_local_ray(screen_coords);
 
 	if (box_collider.ray_collide(ray)) {
 		arrow_shader.set_vec_3("color", glm::value_ptr(highlight_color));
@@ -70,16 +70,16 @@ void Arrow::render() {
 
 	arrow_shader.bind();
 	glm::vec3& pos = transform.pos;
-	glm::mat4 translationMat = get_translation_matrix(pos.x, pos.y, pos.z);
-	arrow_shader.set_mat_4("translate", GL_FALSE, mat4_get_ptr(translationMat));
+	glm::mat4 translation_mat = get_translation_matrix(pos.x, pos.y, pos.z);
+	arrow_shader.set_mat_4("translate", GL_FALSE, mat4_get_ptr(translation_mat));
 
 	glm::vec3& rot = transform.rot;
-	glm::mat4 rotMat = get_rotation_matrix(rot.x, rot.y, rot.z);
-	arrow_shader.set_mat_4("rot", GL_FALSE, mat4_get_ptr(rotMat));
+	glm::mat4 rot_mat = get_rotation_matrix(rot.x, rot.y, rot.z);
+	arrow_shader.set_mat_4("rot", GL_FALSE, mat4_get_ptr(rot_mat));
 
 	glm::vec3& scale = transform.scale;
-	glm::mat4 scaleMat = get_scale_matrix(scale.x, scale.y, scale.z);
-	arrow_shader.set_mat_4("scale", GL_FALSE, mat4_get_ptr(scaleMat));
+	glm::mat4 scale_mat = get_scale_matrix(scale.x, scale.y, scale.z);
+	arrow_shader.set_mat_4("scale", GL_FALSE, mat4_get_ptr(scale_mat));
 
 	arrow_shader.set_mat_4("projection", GL_FALSE, mat4_get_ptr(projection));
 
