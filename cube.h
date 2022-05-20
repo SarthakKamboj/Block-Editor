@@ -11,6 +11,7 @@
 #include <string>
 #include "texture.h"
 #include "glm/gtc/type_ptr.hpp"
+#include "ebo.h"
 
 class Cube {
 public:
@@ -35,6 +36,7 @@ public:
 private:
 	VAO vao;
 	VBO vbo;
+	EBO ebo;
 
 	glm::vec3 outline_scale;
 

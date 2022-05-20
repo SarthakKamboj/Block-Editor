@@ -14,94 +14,29 @@ int Cube::idx = 0;
 
 extern glm::mat4 projection, view;
 
-/*
 static float vertices[] = {
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
+	0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+	0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+	0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+	0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+	-0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
+	-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+	-0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
 
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
-
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
-
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
-
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
-
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f
+	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+	0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+	-0.5f, -0.5f, 0.5f, 0.0f, 1.0f,
+	0.5f, -0.5f, 0.5f, 1.0f, 1.0
 };
-*/
 
-static float vertices[] = {
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+static unsigned int indicies[] = {
+	0,5,1,0,4,5,
+	4,5,6,5,6,7,
+	1,0,3,3,2,0,
+	7,2,6,7,3,2,
+	5,9,8,5,9,1,
+	4,11,0,4,11,10
 };
 
 Cube::Cube() {
@@ -110,12 +45,14 @@ Cube::Cube() {
 	Cube::idx += 1;
 
 	vbo.set_data(vertices, sizeof(vertices), GL_STATIC_DRAW);
+	ebo.set_data(indicies, sizeof(indicies), GL_STATIC_DRAW);
 
 	vao.bind();
+	ebo.bind();
 	vao.set_attribute(vbo, 0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
-	// vao.set_attribute(vbo, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	vao.set_attribute(vbo, 1, 2, GL_FLOAT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	vao.unbind();
+	ebo.unbind();
 
 	transform.pos = glm::vec3(0.0f, 0.0f, 0.0f);
 	transform.rot = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -164,36 +101,6 @@ void Cube::late_update() {
 }
 
 void Cube::setup_render_outline() {
-
-	/*
-	glEnable(GL_STENCIL_TEST);
-	glStencilFunc(GL_ALWAYS, 1, 0xFF);
-
-	transparent_program.bind();
-
-	glm::vec3& pos = transform.pos;
-	glm::mat4 translationMat = get_translation_matrix(pos.x, pos.y, pos.z);
-	transparent_program.set_mat_4("translate", GL_FALSE, mat4_get_ptr(translationMat));
-
-	glm::vec3& rot = transform.rot;
-	glm::mat4 rotMat = get_rotation_matrix(rot.x, rot.y, rot.z);
-	transparent_program.set_mat_4("rot", GL_FALSE, mat4_get_ptr(rotMat));
-
-	glm::vec3& scale = transform.scale;
-	glm::mat4 scaleMat = get_scale_matrix(scale.x, scale.y, scale.z);
-	transparent_program.set_mat_4("scale", GL_FALSE, mat4_get_ptr(scaleMat));
-
-	transparent_program.set_mat_4("projection", GL_FALSE, mat4_get_ptr(projection));
-
-	transparent_program.set_mat_4("view", GL_FALSE, mat4_get_ptr(view));
-	// transparent_program.set_vec_3("inColor", glm::value_ptr(color));
-
-	drawCube();
-	transparent_program.unbind();
-
-	glDisable(GL_STENCIL_TEST);
-	*/
-
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_ALWAYS, 1, 0xFF);
 
@@ -285,6 +192,6 @@ void Cube::render_outline() {
 
 void Cube::drawCube() {
 	vao.bind();
-	glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (6 * sizeof(vertices[0])));
+	glDrawElements(GL_TRIANGLES, sizeof(indicies) / sizeof(indicies[0]), GL_UNSIGNED_INT, (void*)0);
 	vao.unbind();
 }
