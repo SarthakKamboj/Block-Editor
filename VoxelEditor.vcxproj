@@ -159,6 +159,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cameraEditor.cpp" />
     <ClCompile Include="cube.cpp" />
+    <ClCompile Include="cubeArea.cpp" />
     <ClCompile Include="cubeEditor.cpp" />
     <ClCompile Include="ebo.cpp" />
     <ClCompile Include="ext\glad\src\glad.c" />
@@ -174,6 +175,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="boxCollider.cpp" />
     <ClCompile Include="shaderProgram.cpp" />
+    <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="vao.cpp" />
     <ClCompile Include="vbo.cpp" />
   </ItemGroup>
@@ -182,6 +184,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="cameraEditor.h" />
     <ClInclude Include="cube.h" />
+    <ClInclude Include="cubeArea.h" />
     <ClInclude Include="cubeEditor.h" />
     <ClInclude Include="ebo.h" />
     <ClInclude Include="ext\imgui\imconfig.h" />
@@ -198,6 +201,7 @@
     <ClInclude Include="boxCollider.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="shaderProgram.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="vao.h" />
     <ClInclude Include="vbo.h" />
@@ -206,6 +210,8 @@
     <None Include="arrow.frag" />
     <None Include="arrow.vert" />
     <None Include="boxCollider.vert" />
+    <None Include="cubeArea.frag" />
+    <None Include="cubeArea.vert" />
     <None Include="fragmentShader.frag" />
     <None Include="outline.frag" />
     <None Include="outline.vert" />
