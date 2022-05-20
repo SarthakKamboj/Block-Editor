@@ -33,27 +33,8 @@ Grid::Grid() {
 	glm::vec3 color(0.5f, 0.5f, 0.5f);
 	shader_program.set_vec_3("color", glm::value_ptr(color));
 
-	int width, height, nrChannels;
-	// data = stbi_load("images\\wall.jpg", &width, &height, &nrChannels, 0);
-	data = stbi_load("images\\grid.png", &width, &height, &nrChannels, 0);
-
-	glGenTextures(1, &texture);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-	stbi_image_free(data);
+	const char* file_path = "images\\grid.png";
+	texture = Texture(file_path, 0);
 }
 
 void Grid::render() {
@@ -75,13 +56,10 @@ void Grid::render() {
 	shader_program.set_int("texUnit", 0);
 	shader_program.bind();
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
+	texture.bind();
 	vao.bind();
 	glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (4 * sizeof(vertices[0])));
 	vao.unbind();
 	shader_program.unbind();
-
-	glBindTexture(GL_TEXTURE_2D, 0);
+	texture.unbind();
 }

@@ -176,6 +176,7 @@
     <ClCompile Include="boxCollider.cpp" />
     <ClCompile Include="shaderProgram.cpp" />
     <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="texture.cpp" />
     <ClCompile Include="vao.cpp" />
     <ClCompile Include="vbo.cpp" />
   </ItemGroup>
@@ -202,6 +203,7 @@
     <ClInclude Include="ray.h" />
     <ClInclude Include="shaderProgram.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="texture.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="vao.h" />
     <ClInclude Include="vbo.h" />

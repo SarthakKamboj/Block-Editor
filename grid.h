@@ -7,6 +7,7 @@
 #include "lin_alg_helper.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "texture.h"
 
 class Grid {
 public:
@@ -18,7 +19,8 @@ public:
 
 	Transform transform;
 	ShaderProgram shader_program;
+	Texture texture;
 
-	unsigned int texture;
-	unsigned char* data;
+	// unsigned int texture;
+	// unsigned char* data;
 };
