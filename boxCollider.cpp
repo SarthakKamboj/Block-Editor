@@ -82,7 +82,7 @@ bool BoxCollider::point_collide(glm::vec3& point) {
 
 void BoxCollider::render() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glDisable(GL_DEPTH_TEST);
+	// glDisable(GL_DEPTH_TEST);
 
 	collider_program.bind();
 
@@ -108,7 +108,7 @@ void BoxCollider::render() {
 
 	collider_program.unbind();
 
-	glEnable(GL_DEPTH_TEST);
+	// glEnable(GL_DEPTH_TEST);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 

@@ -124,6 +124,7 @@ void ShaderProgram::set_mat_4(const GLchar* varName, GLboolean transpose, const 
 }
 
 GLint ShaderProgram::get_variable_location(const GLchar* varName) {
+	if (program_id == -1) return -1;
 	GLint location = glGetUniformLocation(program_id, varName);
 	if (location == -1) {
 		std::cout << "uniform with name " << varName << " does not exist in this shader program" << std::endl;

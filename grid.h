@@ -9,10 +9,14 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "texture.h"
+#include "boxCollider.h"
+#include "debugCube.h"
+#include <math.h>
 
 class Grid {
 public:
 	Grid();
+	void update();
 	void render();
 
 	VAO vao;
@@ -22,6 +26,8 @@ public:
 	Transform transform;
 	ShaderProgram shader_program;
 	Texture texture;
+	BoxCollider box_collider;
+	DebugCube debug_cubes[6];
 
 	int textureUnit;
 };
