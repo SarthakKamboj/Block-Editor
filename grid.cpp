@@ -1,4 +1,4 @@
-#include "cubeArea.h"
+#include "grid.h"
 #include "stb_image.h"
 
 static float vertices[] = {
@@ -13,7 +13,7 @@ static float vertices[] = {
 
 extern glm::mat4 projection, view;
 
-CubeArea::CubeArea() {
+Grid::Grid() {
 
 	float scale = 20.0f;
 	glm::vec3 unit(1.0f, 1.0f, 1.0f);
@@ -43,7 +43,7 @@ CubeArea::CubeArea() {
 	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
-void CubeArea::render() {
+void Grid::render() {
 	glm::vec3& pos = transform.pos;
 	glm::mat4 translationMat = get_translation_matrix(pos.x, pos.y, pos.z);
 	shader_program.set_mat_4("translate", GL_FALSE, mat4_get_ptr(translationMat));

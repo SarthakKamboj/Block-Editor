@@ -15,7 +15,7 @@
 #include "cubeEditor.h"
 #include "cameraEditor.h"
 #include "arrow.h"
-#include "cubeArea.h"
+#include "grid.h"
 
 extern std::map<SDL_Keycode, bool> key_pressed_map;
 extern MouseClickState mouse_click_state;
@@ -81,7 +81,7 @@ int main(int argc, char* args[]) {
 	cubes[1].transform.pos = glm::vec3(1.0f, 0.0f, 0.0f);
 	cubes[2].transform.pos = glm::vec3(-1.0f, 0.0f, 0.0f);
 
-	CubeArea cube_area;
+	Grid cube_area;
 
 	Cube debugCube;
 	debugCube.box_collider.set_color(glm::vec3(1.0f, 0.0f, 0.0f));

@@ -8,9 +8,9 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-class CubeArea {
+class Grid {
 public:
-	CubeArea();
+	Grid();
 	void render();
 
 	VAO vao;
