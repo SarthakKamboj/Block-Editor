@@ -16,17 +16,30 @@
 #include "cameraEditor.h"
 #include "arrow.h"
 #include "grid.h"
+#include "debugCube.h"
+#include <fstream>
+#include <chrono>
+#include <string>
+#include <ctime>
+#include <cstdlib>
 
 extern std::map<SDL_Keycode, bool> key_pressed_map;
 extern MouseClickState mouse_click_state;
 extern MouseState mouse_state;
 
+Camera* cam_ptr;
 CubeEditor* cube_editor_ptr;
 glm::mat4 projection(1.0f), view(1.0f);
 float pov = 45.0f;
 
 int width = 800, height = 800;
 bool editor_hover;
+
+void print_transform_to_file(std::ofstream& file, Transform transform) {
+	file << "pos: " << transform.pos.x << ", " << transform.pos.y << ", " << transform.pos.z << "\n";
+	file << "scale: " << transform.scale.x << ", " << transform.scale.y << ", " << transform.scale.z << "\n";
+	file << "rot: " << transform.rot.x << ", " << transform.rot.y << ", " << transform.rot.z << "\n";
+}
 
 int main(int argc, char* args[]) {
 
@@ -77,10 +90,13 @@ int main(int argc, char* args[]) {
 	CubeEditor cube_editor;
 	cube_editor_ptr = &cube_editor;
 
+	// Cube cubes[1];
 	Cube cubes[3];
 	cube_editor_ptr->cube = &cubes[0];
 	cubes[1].transform.pos = glm::vec3(1.0f, 0.0f, 0.0f);
 	cubes[2].transform.pos = glm::vec3(-1.0f, 0.0f, 0.0f);
+
+	DebugCube debug_cube;
 
 	Grid grid;
 
@@ -97,6 +113,7 @@ int main(int argc, char* args[]) {
 	projection = get_projection_matrix(pov, 0.1f, 100.0f, ((float)width) / height);
 
 	Camera cam(0.0f, 0.0f, 10.0f);
+	cam_ptr = &cam;
 
 	CameraEditor camera_editor(&cam);
 
@@ -146,7 +163,6 @@ int main(int argc, char* args[]) {
 
 		camera_editor.update();
 		cube_editor.update();
-
 		cam.update();
 
 		glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.0f);
@@ -160,8 +176,26 @@ int main(int argc, char* args[]) {
 			cubes[i].render();
 		}
 		grid.render();
+		debug_cube.render();
 
 		cube_editor_ptr->render();
+
+		ImGui::Begin("issue window");
+		if (ImGui::Button("log transforms")) {
+			std::ofstream issue_file;
+			issue_file.open("issues\\" + std::to_string(rand()) + ".txt");
+			// issue_file << "Writing this to a file.\n";
+			issue_file << "camera\n";
+			issue_file << "------\n";
+			print_transform_to_file(issue_file, cam.transform);
+			for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
+				issue_file << "\ncube " << i << "\n";
+				print_transform_to_file(issue_file, cubes[i].transform);
+			}
+			issue_file.close();
+
+		}
+		ImGui::End();
 
 		ImGui::PopFont();
 		ImGui::Render();

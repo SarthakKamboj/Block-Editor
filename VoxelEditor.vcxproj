@@ -159,6 +159,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cameraEditor.cpp" />
     <ClCompile Include="cube.cpp" />
+    <ClCompile Include="debugCube.cpp" />
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="cubeEditor.cpp" />
     <ClCompile Include="ebo.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="cameraEditor.h" />
     <ClInclude Include="cube.h" />
+    <ClInclude Include="debugCube.h" />
     <ClInclude Include="grid.h" />
     <ClInclude Include="cubeEditor.h" />
     <ClInclude Include="ebo.h" />
