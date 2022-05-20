@@ -23,6 +23,7 @@ extern MouseState mouse_state;
 
 CubeEditor* cube_editor_ptr;
 glm::mat4 projection(1.0f), view(1.0f);
+float pov = 45.0f;
 
 int width = 800, height = 800;
 bool editor_hover;
@@ -93,7 +94,7 @@ int main(int argc, char* args[]) {
 
 	float val = 0.0f;
 
-	projection = get_projection_matrix(45.0f, 0.1f, 100.0f, ((float)width) / height);
+	projection = get_projection_matrix(pov, 0.1f, 100.0f, ((float)width) / height);
 
 	Camera cam(0.0f, 0.0f, 10.0f);
 
@@ -145,6 +146,8 @@ int main(int argc, char* args[]) {
 
 		camera_editor.update();
 		cube_editor.update();
+
+		cam.update();
 
 		glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.0f);
 		glClearStencil(0);
