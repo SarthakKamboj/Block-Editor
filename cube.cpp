@@ -61,47 +61,47 @@ static float vertices[] = {
 */
 
 static float vertices[] = {
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
 
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
 
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 };
 
 Cube::Cube() {
@@ -112,8 +112,9 @@ Cube::Cube() {
 	vbo.set_data(vertices, sizeof(vertices), GL_STATIC_DRAW);
 
 	vao.bind();
-	vao.set_attribute(vbo, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
-	vao.set_attribute(vbo, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	vao.set_attribute(vbo, 0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
+	// vao.set_attribute(vbo, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	vao.set_attribute(vbo, 1, 2, GL_FLOAT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	vao.unbind();
 
 	transform.pos = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -122,16 +123,17 @@ Cube::Cube() {
 
 	outline_scale = glm::vec3(1.05f, 1.05f, 1.05f);
 
-	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\vertexShader.vert";
-	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\fragmentShader.frag";
+	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\cube.vert";
+	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\cube.frag";
 	shader_program = ShaderProgram(vertexFilePath, fragmentFilePath);
 
 	const char* outlineVert = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.vert";
 	const char* outlineFrag = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.frag";
 	outline_program = ShaderProgram(outlineVert, outlineFrag);
 
+	const char* transparentVert = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\transparent.vert";
 	const char* transparentFrag = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\transparent.frag";
-	transparent_program = ShaderProgram(vertexFilePath, transparentFrag);
+	transparent_program = ShaderProgram(transparentVert, transparentFrag);
 
 	outline = false;
 
@@ -162,6 +164,8 @@ void Cube::late_update() {
 }
 
 void Cube::setup_render_outline() {
+
+	/*
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_ALWAYS, 1, 0xFF);
 
@@ -182,20 +186,20 @@ void Cube::setup_render_outline() {
 	transparent_program.set_mat_4("projection", GL_FALSE, mat4_get_ptr(projection));
 
 	transparent_program.set_mat_4("view", GL_FALSE, mat4_get_ptr(view));
-	transparent_program.set_vec_3("inColor", glm::value_ptr(color));
+	// transparent_program.set_vec_3("inColor", glm::value_ptr(color));
 
 	drawCube();
 	transparent_program.unbind();
 
 	glDisable(GL_STENCIL_TEST);
+	*/
 
+	glEnable(GL_STENCIL_TEST);
+	glStencilFunc(GL_ALWAYS, 1, 0xFF);
 
-}
-
-void Cube::render() {
-
-	shader_program.bind();
 	texture.bind();
+	shader_program.set_int("texUnit", 0);
+	shader_program.bind();
 
 	glm::vec3& pos = transform.pos;
 	glm::mat4 translationMat = get_translation_matrix(pos.x, pos.y, pos.z);
@@ -210,7 +214,6 @@ void Cube::render() {
 	shader_program.set_mat_4("scale", GL_FALSE, mat4_get_ptr(scaleMat));
 
 	shader_program.set_mat_4("projection", GL_FALSE, mat4_get_ptr(projection));
-
 	shader_program.set_mat_4("view", GL_FALSE, mat4_get_ptr(view));
 	shader_program.set_vec_3("inColor", glm::value_ptr(color));
 
@@ -218,10 +221,41 @@ void Cube::render() {
 	shader_program.unbind();
 	texture.unbind();
 
-	if (outline) {
+	glDisable(GL_STENCIL_TEST);
+
+}
+
+void Cube::render() {
+
+
+	glm::vec3& pos = transform.pos;
+	glm::mat4 translationMat = get_translation_matrix(pos.x, pos.y, pos.z);
+
+	glm::vec3& rot = transform.rot;
+	glm::mat4 rotMat = get_rotation_matrix(rot.x, rot.y, rot.z);
+
+	glm::vec3& scale = transform.scale;
+	glm::mat4 scaleMat = get_scale_matrix(scale.x, scale.y, scale.z);
+
+
+	if (!outline) {
+		shader_program.set_mat_4("translate", GL_FALSE, mat4_get_ptr(translationMat));
+		shader_program.set_mat_4("rot", GL_FALSE, mat4_get_ptr(rotMat));
+		shader_program.set_mat_4("scale", GL_FALSE, mat4_get_ptr(scaleMat));
+		shader_program.set_mat_4("projection", GL_FALSE, mat4_get_ptr(projection));
+		shader_program.set_mat_4("view", GL_FALSE, mat4_get_ptr(view));
+		shader_program.set_vec_3("inColor", glm::value_ptr(color));
+		shader_program.set_int("texUnit", 0);
+
+		texture.bind();
+		shader_program.bind();
+		drawCube();
+		shader_program.unbind();
+		texture.unbind();
+	}
+	else {
 		outline_program.bind();
 		outline_program.set_mat_4("translate", GL_FALSE, mat4_get_ptr(translationMat));
-
 		outline_program.set_mat_4("rot", GL_FALSE, mat4_get_ptr(rotMat));
 
 		glm::mat4 outlineScaleMat = get_scale_matrix(outline_scale.x * scale.x, outline_scale.y * scale.y, outline_scale.z * scale.z);
@@ -245,8 +279,8 @@ void Cube::render_outline() {
 	drawCube();
 	outline_program.unbind();
 
-	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_STENCIL_TEST);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Cube::drawCube() {

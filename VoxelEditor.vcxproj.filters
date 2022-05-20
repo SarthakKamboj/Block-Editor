@@ -184,7 +184,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragmentShader.frag">
+    <None Include="cube.frag">
       <Filter>Source Files\shaders</Filter>
     </None>
     <None Include="outline.vert">
@@ -193,7 +193,7 @@
     <None Include="outline.frag">
       <Filter>Source Files\shaders</Filter>
     </None>
-    <None Include="vertexShader.vert">
+    <None Include="cube.vert">
       <Filter>Source Files\shaders</Filter>
     </None>
     <None Include="transparent.frag">
@@ -212,6 +212,9 @@
       <Filter>Source Files\shaders</Filter>
     </None>
     <None Include="grid.frag">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="transparent.vert">
       <Filter>Source Files\shaders</Filter>
     </None>
   </ItemGroup>

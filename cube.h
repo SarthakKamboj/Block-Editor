@@ -10,6 +10,7 @@
 #include "transform.h"
 #include <string>
 #include "texture.h"
+#include "glm/gtc/type_ptr.hpp"
 
 class Cube {
 public:
