@@ -22,6 +22,7 @@
 #include <string>
 #include <ctime>
 #include <cstdlib>
+#include <vector>
 
 extern std::map<SDL_Keycode, bool> key_pressed_map;
 extern MouseClickState mouse_click_state;
@@ -34,6 +35,8 @@ float pov = 45.0f;
 
 int width = 800, height = 800;
 bool editor_hover;
+
+std::vector<Cube> cubes;
 
 void print_transform_to_file(std::ofstream& file, Transform transform) {
 	file << "pos: " << transform.pos.x << ", " << transform.pos.y << ", " << transform.pos.z << "\n";
@@ -91,7 +94,13 @@ int main(int argc, char* args[]) {
 	cube_editor_ptr = &cube_editor;
 
 	// Cube cubes[1];
-	Cube cubes[3];
+	// Cube cubes[3];
+
+	Cube cube0, cube1, cube2;
+	cubes.push_back(cube0);
+	cubes.push_back(cube1);
+	cubes.push_back(cube2);
+
 	cube_editor_ptr->cube = &cubes[0];
 	cubes[1].transform.pos = glm::vec3(1.0f, 0.0f, 0.0f);
 	cubes[2].transform.pos = glm::vec3(-1.0f, 0.0f, 0.0f);
@@ -153,17 +162,20 @@ int main(int argc, char* args[]) {
 			cube_editor.cube = NULL;
 		}
 
-		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
+		// for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
+		for (int i = 0; i < cubes.size(); i++) {
 			cubes[i].update();
 		}
 
-		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
+		// for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
+		for (int i = 0; i < cubes.size(); i++) {
 			cubes[i].late_update();
 		}
 
 		camera_editor.update();
 		cube_editor.update();
 		cam.update();
+		grid.update();
 
 		glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.0f);
 		glClearStencil(0);
@@ -172,19 +184,18 @@ int main(int argc, char* args[]) {
 		glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
 		cube_editor_ptr->setup_outline();
-		for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
+		// for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
+		for (int i = 0; i < cubes.size(); i++) {
 			cubes[i].render();
 		}
 		grid.render();
 		debug_cube.render();
-
 		cube_editor_ptr->render();
 
 		ImGui::Begin("issue window");
 		if (ImGui::Button("log transforms")) {
 			std::ofstream issue_file;
 			issue_file.open("issues\\" + std::to_string(rand()) + ".txt");
-			// issue_file << "Writing this to a file.\n";
 			issue_file << "camera\n";
 			issue_file << "------\n";
 			print_transform_to_file(issue_file, cam.transform);

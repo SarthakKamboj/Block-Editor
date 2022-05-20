@@ -1,7 +1,15 @@
 #include "grid.h"
 #include "stb_image.h"
+#include "input.h"
+#include "cube.h"
 
 static float scale = 20.0f;
+
+extern MouseClickState mouse_click_state;
+extern MouseState mouse_state;
+extern bool editor_hover;
+extern std::vector<Cube> cubes;
+extern Camera* cam_ptr;
 
 static float vertices[] = {
 	0.5f, 0.5f, scale, scale,
@@ -39,6 +47,40 @@ Grid::Grid() {
 
 	const char* file_path = "images\\grid.png";
 	texture = Texture(file_path, textureUnit);
+
+	box_collider = BoxCollider(transform.pos, glm::vec3(scale, scale, 0.1f), transform.rot);
+}
+
+void Grid::update() {
+	glm::vec2 screenCoords(mouse_state.x, mouse_state.y);
+	Ray ray = box_collider.screen_to_local_ray(screenCoords);
+
+	if (!editor_hover && box_collider.ray_collide(ray)) {
+		for (int i = 0; i < box_collider.local_col_points.size(); i++) {
+			debug_cubes[i].transform.pos = box_collider.local_to_world(box_collider.local_col_points[i]);
+		}
+		if (mouse_click_state.left) {
+			Cube newCube;
+			glm::vec3 pos;
+			float closestDist = -1;
+			for (int i = 0; i < box_collider.local_col_points.size(); i++) {
+				glm::vec3 col_world_pos = box_collider.local_to_world(box_collider.local_col_points[0]);
+				glm::vec3 camWorldPos = cam_ptr->transform.pos;
+				float dist = pow(camWorldPos.x - col_world_pos.x, 2) + pow(camWorldPos.y - col_world_pos.y, 2) + pow(camWorldPos.z - col_world_pos.z, 2);
+				if (closestDist == -1) {
+					closestDist = dist;
+					pos = col_world_pos;
+				}
+				else if (dist < closestDist) {
+					closestDist = dist;
+					pos = col_world_pos;
+				}
+			}
+			pos += glm::vec3(0.0f, 0.5f, 0.0f);
+			newCube.transform.pos = glm::vec3(round(pos.x), round(pos.y), round(pos.z));
+			cubes.push_back(newCube);
+		}
+	}
 }
 
 void Grid::render() {
@@ -66,4 +108,9 @@ void Grid::render() {
 	vao.unbind();
 	shader_program.unbind();
 	texture.unbind();
+
+	box_collider.render();
+	for (int i = 0; i < box_collider.local_col_points.size(); i++) {
+		debug_cubes[i].render();
+	}
 }
