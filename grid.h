@@ -21,6 +21,8 @@ public:
 	ShaderProgram shader_program;
 	Texture texture;
 
+	int textureUnit;
+
 	// unsigned int texture;
 	// unsigned char* data;
 };

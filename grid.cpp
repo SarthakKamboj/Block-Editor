@@ -33,8 +33,10 @@ Grid::Grid() {
 	glm::vec3 color(0.5f, 0.5f, 0.5f);
 	shader_program.set_vec_3("color", glm::value_ptr(color));
 
+	textureUnit = 0;
+
 	const char* file_path = "images\\grid.png";
-	texture = Texture(file_path, 0);
+	texture = Texture(file_path, textureUnit);
 }
 
 void Grid::render() {
@@ -53,7 +55,7 @@ void Grid::render() {
 	shader_program.set_mat_4("projection", GL_FALSE, mat4_get_ptr(projection));
 	shader_program.set_mat_4("view", GL_FALSE, mat4_get_ptr(view));
 
-	shader_program.set_int("texUnit", 0);
+	shader_program.set_int("texUnit", textureUnit);
 	shader_program.bind();
 
 	texture.bind();

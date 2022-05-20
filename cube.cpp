@@ -14,6 +14,52 @@ int Cube::idx = 0;
 
 extern glm::mat4 projection, view;
 
+/*
+static float vertices[] = {
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
+
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
+
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f
+};
+*/
+
 static float vertices[] = {
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
 		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f,
@@ -71,7 +117,6 @@ Cube::Cube() {
 	vao.unbind();
 
 	transform.pos = glm::vec3(0.0f, 0.0f, 0.0f);
-	// transform.rot = glm::vec3(20.0f, -50.0f, 43.2f);
 	transform.rot = glm::vec3(0.0f, 0.0f, 0.0f);
 	transform.scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
@@ -93,6 +138,9 @@ Cube::Cube() {
 	color = glm::vec3(0.0f, 0.43f, 1.0f);
 
 	box_collider = BoxCollider(transform.pos, transform.scale, transform.rot);
+
+	const char* texture_file_path = "images\\cube_wall.png";
+	texture = Texture(texture_file_path, 0);
 }
 
 void Cube::update() {
@@ -147,6 +195,7 @@ void Cube::setup_render_outline() {
 void Cube::render() {
 
 	shader_program.bind();
+	texture.bind();
 
 	glm::vec3& pos = transform.pos;
 	glm::mat4 translationMat = get_translation_matrix(pos.x, pos.y, pos.z);
@@ -167,6 +216,7 @@ void Cube::render() {
 
 	drawCube();
 	shader_program.unbind();
+	texture.unbind();
 
 	if (outline) {
 		outline_program.bind();

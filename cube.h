@@ -9,6 +9,7 @@
 #include "camera.h"
 #include "transform.h"
 #include <string>
+#include "texture.h"
 
 class Cube {
 public:
@@ -39,6 +40,7 @@ private:
 	ShaderProgram shader_program;
 	ShaderProgram transparent_program;
 	ShaderProgram outline_program;
+	Texture texture;
 
 	void drawCube();
 };
