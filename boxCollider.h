@@ -8,6 +8,7 @@
 #include "shaderProgram.h"
 #include "vao.h"
 #include "vbo.h"
+#include "ebo.h"
 #include "lin_alg_helper.h"
 #include "transform.h"
 
@@ -26,6 +27,7 @@ public:
 
 	VAO vao;
 	VBO vbo;
+	EBO ebo;
 
 	void render();
 	void set_color(glm::vec3 color);

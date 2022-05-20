@@ -1,5 +1,6 @@
 #include "boxCollider.h"
 
+/*
 static float vertices[] = {
 		-0.5f, -0.5f, -0.5f,
 		 0.5f, -0.5f, -0.5f,
@@ -43,6 +44,27 @@ static float vertices[] = {
 		-0.5f,  0.5f,  0.5f,
 		-0.5f,  0.5f, -0.5f
 };
+*/
+
+static float vertices[] = {
+	0.5f, 0.5f, 0.5f,
+	0.5f, 0.5f, -0.5f,
+	0.5f, -0.5f, 0.5f,
+	0.5f, -0.5f, -0.5f,
+	-0.5f, 0.5f, 0.5f,
+	-0.5f, 0.5f, -0.5f,
+	-0.5f, -0.5f, 0.5f,
+	-0.5f, -0.5f, -0.5f,
+};
+
+static unsigned int indicies[] = {
+	0,5,1,0,4,5,
+	4,5,6,5,6,7,
+	1,0,3,3,2,0,
+	7,2,6,7,3,2,
+	5,6,7,5,6,1,
+	4,3,0,4,3,6
+};
 
 extern glm::mat4 projection, view;
 extern int width, height;
@@ -55,10 +77,14 @@ BoxCollider::BoxCollider() {
 	color = glm::vec3(0.0f, 1.0f, 1.0f);
 	collider_program.set_vec_3("color", glm::value_ptr(color));
 
-	vao.bind();
+	ebo.set_data(indicies, sizeof(indicies), GL_STATIC_DRAW);
 	vbo.set_data(vertices, sizeof(vertices), GL_STATIC_DRAW);
+
+	vao.bind();
+	ebo.bind();
 	vao.set_attribute(vbo, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
 	vao.unbind();
+	ebo.unbind();
 }
 
 BoxCollider::BoxCollider(glm::vec3 pos, glm::vec3 scale, glm::vec3 rot) {
@@ -72,10 +98,14 @@ BoxCollider::BoxCollider(glm::vec3 pos, glm::vec3 scale, glm::vec3 rot) {
 	color = glm::vec3(0.0f, 1.0f, 1.0f);
 	collider_program.set_vec_3("color", glm::value_ptr(color));
 
-	vao.bind();
+	ebo.set_data(indicies, sizeof(indicies), GL_STATIC_DRAW);
 	vbo.set_data(vertices, sizeof(vertices), GL_STATIC_DRAW);
+
+	vao.bind();
+	ebo.bind();
 	vao.set_attribute(vbo, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
 	vao.unbind();
+	ebo.unbind();
 }
 
 void BoxCollider::set_color(glm::vec3 color) {
@@ -119,7 +149,8 @@ void BoxCollider::render() {
 	collider_program.set_mat_4("view", GL_FALSE, mat4_get_ptr(view));
 
 	vao.bind();
-	glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (3 * sizeof(vertices[0])));
+	// glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (3 * sizeof(vertices[0])));
+	glDrawElements(GL_TRIANGLES, sizeof(indicies) / sizeof(indicies[0]), GL_UNSIGNED_INT, (void*)0);
 	vao.unbind();
 
 	collider_program.unbind();
