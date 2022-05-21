@@ -17,4 +17,6 @@ typedef struct MouseWheel {
 	int y;
 } MouseWheel;
 
-void handleInput(SDL_Event& event);
+namespace Input {
+	void handleInput();
+}

@@ -20,7 +20,7 @@ public:
 
 	Transform transform;
 
-	ShaderProgram collider_program;
+	ShaderProgram colliderProgram;
 
 	bool pointCollide(glm::vec3& point);
 	bool rayCollide(Ray& point);
@@ -32,7 +32,7 @@ public:
 	EBO ebo;
 
 	void render();
-	void set_color(glm::vec3 color);
+	void setColor(glm::vec3 color);
 	glm::vec3 color;
 
 	glm::vec3 frontColPoint;

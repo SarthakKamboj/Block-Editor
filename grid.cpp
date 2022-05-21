@@ -3,6 +3,7 @@
 #include "input/input.h"
 #include "cube.h"
 #include "modeManager.h"
+#include "renderer/renderer.h"
 
 static float scale = 20.0f;
 
@@ -12,6 +13,7 @@ extern bool editorHover;
 extern std::vector<Cube> cubes;
 extern Camera* camPtr;
 extern ModeManager* modeManagerPtr;
+extern Renderer* rendererPtr;
 
 static float vertices[] = {
 	0.5f, 0.5f, scale, scale,
@@ -24,7 +26,7 @@ static unsigned int indicies[] = {
 	0,2,1,3,1,0
 };
 
-extern glm::mat4 projection, view;
+// extern glm::mat4 projection, view;
 
 Grid::Grid() {
 
@@ -101,6 +103,7 @@ void Grid::update() {
 }
 
 void Grid::render() {
+	/*
 	glm::vec3& pos = transform.pos;
 	glm::mat4 translationMat = getTranslationMatrix(pos.x, pos.y, pos.z);
 	shaderProgram.setMat4("translate", GL_FALSE, mat4GetPtr(translationMat));
@@ -115,6 +118,9 @@ void Grid::render() {
 
 	shaderProgram.setMat4("projection", GL_FALSE, mat4GetPtr(projection));
 	shaderProgram.setMat4("view", GL_FALSE, mat4GetPtr(view));
+	*/
+
+	rendererPtr->submitShader(shaderProgram, transform);
 
 	shaderProgram.setInt("texUnit", textureUnit);
 	shaderProgram.bind();

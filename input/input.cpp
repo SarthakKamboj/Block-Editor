@@ -12,7 +12,8 @@ MouseClickState mouseClickState;
 MouseState mouseState;
 MouseWheel mouseWheel;
 
-void handleInput(SDL_Event& event) {
+void Input::handleInput() {
+	SDL_Event event;
 	for (auto const& keyEl : keyPressedMap) {
 		keyPressedMap[keyEl.first] = false;
 	}

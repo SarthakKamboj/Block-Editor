@@ -1,4 +1,5 @@
 #include "arrow.h"
+#include "renderer/renderer.h"
 
 static float vertices[] = {
 	-0.1f, -0.5f,
@@ -16,7 +17,8 @@ static float vertices[] = {
 
 extern MouseClickState mouseClickState;
 extern MouseState mouseState;
-extern glm::mat4 projection, view;
+extern Renderer* rendererPtr;
+// extern glm::mat4 projection, view;
 
 Arrow::Arrow() {}
 
@@ -68,7 +70,9 @@ void Arrow::render() {
 
 	boxCollider.render();
 
-	arrowShader.bind();
+	rendererPtr->submitShader(arrowShader, transform);
+
+	/*
 	glm::vec3& pos = transform.pos;
 	glm::mat4 translationMat = getTranslationMatrix(pos.x, pos.y, pos.z);
 	arrowShader.setMat4("translate", GL_FALSE, mat4GetPtr(translationMat));
@@ -84,9 +88,11 @@ void Arrow::render() {
 	arrowShader.setMat4("projection", GL_FALSE, mat4GetPtr(projection));
 
 	arrowShader.setMat4("view", GL_FALSE, mat4GetPtr(view));
+	*/
 
 	glDisable(GL_DEPTH_TEST);
 
+	arrowShader.bind();
 	vao.bind();
 	glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (2 * sizeof(vertices[0])));
 	vao.unbind();

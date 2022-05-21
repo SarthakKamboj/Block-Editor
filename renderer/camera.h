@@ -12,7 +12,7 @@ class Camera {
 public:
 	Camera();
 	Camera(float xPos, float yPos, float zPos);
-	glm::mat4 get_view_mat();
+	glm::mat4 getViewMat();
 	Transform transform;
 
 	void update();

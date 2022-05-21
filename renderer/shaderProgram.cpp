@@ -22,7 +22,11 @@ ShaderProgram::ShaderProgram(const char* vertexFilePath, const char* fragmentFil
 
 void ShaderProgram::bind() {
 	if (programId == -1) return;
-	glUseProgram(programId);
+	GLint curProgramId;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &curProgramId);
+	if (curProgramId != programId) {
+		glUseProgram(programId);
+	}
 }
 
 void ShaderProgram::unbind() {
@@ -60,68 +64,43 @@ GLuint ShaderProgram::createShader(const char* filePath, GLenum shaderType) {
 
 void ShaderProgram::setInt(const GLchar* varName, int value) {
 	if (programId == -1) return;
-	GLint cur_program_id;
-	glGetIntegerv(GL_CURRENT_PROGRAM, &cur_program_id);
-	if (cur_program_id != programId) {
-		bind();
-	}
+	bind();
 	GLint location = getVariableLocation(varName);
 	if (location == -1) {
 		glUniform1i(location, value);
 	}
-	if (cur_program_id != programId) {
-		unbind();
-	}
+	unbind();
 }
 
 void ShaderProgram::setFloat(const GLchar* varName, float value) {
 	if (programId == -1) return;
-	GLint curProgramId;
-	glGetIntegerv(GL_CURRENT_PROGRAM, &curProgramId);
-	if (curProgramId != programId) {
-		bind();
-	}
+	bind();
 	GLint location = getVariableLocation(varName);
 	if (location != -1) {
 		glUniform1f(location, value);
 	}
-	if (curProgramId != programId) {
-		unbind();
-	}
+	unbind();
 }
 
 void ShaderProgram::setVec3(const GLchar* varName, const GLfloat* vec3) {
 	if (programId == -1) return;
-	GLint curProgramId;
-	glGetIntegerv(GL_CURRENT_PROGRAM, &curProgramId);
-	if (curProgramId != programId) {
-		bind();
-	}
+	bind();
 	GLint location = getVariableLocation(varName);
 	if (location != -1) {
 		glUniform3fv(location, 1, vec3);
 	}
-	if (curProgramId != programId) {
-		unbind();
-	}
+	unbind();
 }
 
 
 void ShaderProgram::setMat4(const GLchar* varName, GLboolean transpose, const GLfloat* mat) {
 	if (programId == -1) return;
-	GLint curProgramId = 0;
-	glGetIntegerv(GL_CURRENT_PROGRAM, &curProgramId);
-	if (curProgramId != programId) {
-		bind();
-	}
-
+	bind();
 	GLint location = getVariableLocation(varName);
 	if (location != -1) {
 		glUniformMatrix4fv(location, 1, transpose, mat);
 	}
-	if (curProgramId != programId) {
-		unbind();
-	}
+	unbind();
 }
 
 // TODO: figure out why location shaderPath printing causing error
