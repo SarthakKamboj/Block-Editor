@@ -37,8 +37,8 @@ DebugCube::DebugCube() {
 	transform.rot = glm::vec3(0.0f, 0.0f, 0.0f);
 	transform.scale = glm::vec3(0.2f, 0.2f, 0.2f);
 
-	const char* vertex_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\boxCollider.vert";
-	const char* fragment_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.frag";
+	const char* vertex_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\boxCollider.vert";
+	const char* fragment_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\arrow.frag";
 	shader_program = ShaderProgram(vertex_file_path, fragment_file_path);
 
 	shader_program.set_vec_3("color", glm::value_ptr(glm::vec3(1.0f, 0.0f, 0.0f)));

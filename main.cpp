@@ -23,6 +23,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <vector>
+#include "modeManager.h"
 
 extern std::map<SDL_Keycode, bool> key_pressed_map;
 extern MouseClickState mouse_click_state;
@@ -30,6 +31,7 @@ extern MouseState mouse_state;
 
 Camera* cam_ptr;
 CubeEditor* cube_editor_ptr;
+ModeManager* modeManagerPtr;
 glm::mat4 projection(1.0f), view(1.0f);
 float pov = 45.0f;
 
@@ -106,6 +108,8 @@ int main(int argc, char* args[]) {
 	cubes[2].transform.pos = glm::vec3(-1.0f, 0.0f, 0.0f);
 
 	DebugCube debug_cube;
+	ModeManager modeManager;
+	modeManagerPtr = &modeManager;
 
 	Grid grid;
 
@@ -158,20 +162,19 @@ int main(int argc, char* args[]) {
 
 		editor_hover = ImGui::IsAnyItemHovered();
 
-		if (mouse_click_state.left && !editor_hover && !key_pressed_map[SDLK_LCTRL]) {
+		if ((mouse_click_state.left && !editor_hover && !key_pressed_map[SDLK_LCTRL]) || (modeManager.mode != Mode::SELECT)) {
 			cube_editor.cube = NULL;
 		}
 
-		// for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
 		for (int i = 0; i < cubes.size(); i++) {
 			cubes[i].update();
 		}
 
-		// for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
 		for (int i = 0; i < cubes.size(); i++) {
 			cubes[i].late_update();
 		}
 
+		modeManager.update();
 		camera_editor.update();
 		cube_editor.update();
 		cam.update();
@@ -184,7 +187,6 @@ int main(int argc, char* args[]) {
 		glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
 		cube_editor_ptr->setup_outline();
-		// for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
 		for (int i = 0; i < cubes.size(); i++) {
 			cubes[i].render();
 		}

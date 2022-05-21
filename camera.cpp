@@ -5,6 +5,7 @@ extern glm::mat4 projection;
 extern int width, height;
 extern float pov;
 extern std::map<SDL_Keycode, bool> key_pressed_map;
+extern bool editor_hover;
 
 Camera::Camera() {
 	transform.pos = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -19,6 +20,9 @@ Camera::Camera(float xPos, float yPos, float zPos) {
 }
 
 void Camera::update() {
+	if (editor_hover) {
+		return;
+	}
 	float sensitivity = 5.0f;
 	pov -= mouse_wheel.y * sensitivity;
 	pov = fmax(fmin(pov, 60.0f), 45.0f);

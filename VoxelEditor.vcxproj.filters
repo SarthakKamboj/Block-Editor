@@ -81,9 +81,6 @@
     <ClCompile Include="boxCollider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="lin_alg_helper.cpp">
-      <Filter>Source Files\math</Filter>
-    </ClCompile>
     <ClCompile Include="cubeEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -104,6 +101,12 @@
     </ClCompile>
     <ClCompile Include="debugCube.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="modeManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="math\lin_alg_helper.cpp">
+      <Filter>Source Files\math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -158,9 +161,6 @@
     <ClInclude Include="boxCollider.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="lin_alg_helper.h">
-      <Filter>Source Files\math</Filter>
-    </ClInclude>
     <ClInclude Include="cubeEditor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -169,9 +169,6 @@
     </ClInclude>
     <ClInclude Include="arrow.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ray.h">
-      <Filter>Source Files\math</Filter>
     </ClInclude>
     <ClInclude Include="transform.h">
       <Filter>Source Files</Filter>
@@ -188,39 +185,48 @@
     <ClInclude Include="debugCube.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="modeManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="math\lin_alg_helper.h">
+      <Filter>Source Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\ray.h">
+      <Filter>Source Files\math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cube.frag">
+    <None Include="shaders\arrow.frag">
       <Filter>Source Files\shaders</Filter>
     </None>
-    <None Include="outline.vert">
+    <None Include="shaders\arrow.vert">
       <Filter>Source Files\shaders</Filter>
     </None>
-    <None Include="outline.frag">
+    <None Include="shaders\boxCollider.vert">
       <Filter>Source Files\shaders</Filter>
     </None>
-    <None Include="cube.vert">
+    <None Include="shaders\cube.frag">
       <Filter>Source Files\shaders</Filter>
     </None>
-    <None Include="transparent.frag">
+    <None Include="shaders\cube.vert">
       <Filter>Source Files\shaders</Filter>
     </None>
-    <None Include="arrow.vert">
+    <None Include="shaders\grid.frag">
       <Filter>Source Files\shaders</Filter>
     </None>
-    <None Include="arrow.frag">
+    <None Include="shaders\grid.vert">
       <Filter>Source Files\shaders</Filter>
     </None>
-    <None Include="boxCollider.vert">
+    <None Include="shaders\outline.frag">
       <Filter>Source Files\shaders</Filter>
     </None>
-    <None Include="grid.vert">
+    <None Include="shaders\outline.vert">
       <Filter>Source Files\shaders</Filter>
     </None>
-    <None Include="grid.frag">
+    <None Include="shaders\transparent.frag">
       <Filter>Source Files\shaders</Filter>
     </None>
-    <None Include="transparent.vert">
+    <None Include="shaders\transparent.vert">
       <Filter>Source Files\shaders</Filter>
     </None>
   </ItemGroup>

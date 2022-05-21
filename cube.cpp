@@ -1,8 +1,10 @@
 #include "cube.h"
 #include "input.h"
 #include "cubeEditor.h"
+#include "modeManager.h"
 
 extern CubeEditor* cube_editor_ptr;
+extern ModeManager* modeManagerPtr;
 
 extern int width, height;
 extern MouseClickState mouse_click_state;
@@ -61,16 +63,16 @@ Cube::Cube() {
 
 	outline_scale = glm::vec3(1.05f, 1.05f, 1.05f);
 
-	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\cube.vert";
-	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\cube.frag";
+	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\cube.vert";
+	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\cube.frag";
 	shader_program = ShaderProgram(vertexFilePath, fragmentFilePath);
 
-	const char* outlineVert = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.vert";
-	const char* outlineFrag = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\outline.frag";
+	const char* outlineVert = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\outline.vert";
+	const char* outlineFrag = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\outline.frag";
 	outline_program = ShaderProgram(outlineVert, outlineFrag);
 
-	const char* transparentVert = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\transparent.vert";
-	const char* transparentFrag = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\transparent.frag";
+	const char* transparentVert = "C:\\Sarthak\\voxel_editor\\VoxelEdito\\shaders\\transparent.vert";
+	const char* transparentFrag = "C:\\Sarthak\\voxel_editor\\VoxelEdito\\shaders\\transparent.frag";
 	transparent_program = ShaderProgram(transparentVert, transparentFrag);
 
 	outline = false;
@@ -97,6 +99,10 @@ void Cube::update() {
 		}
 	}
 	*/
+
+	if (modeManagerPtr->mode != Mode::SELECT) {
+		return;
+	}
 
 	glm::vec2 screenCoords(mouse_state.x, mouse_state.y);
 	Ray ray = box_collider.screen_to_local_ray(screenCoords);

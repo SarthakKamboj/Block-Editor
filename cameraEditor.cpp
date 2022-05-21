@@ -4,7 +4,6 @@ CameraEditor::CameraEditor(Camera* _camera) {
 	cam = _camera;
 }
 
-extern bool editor_hover;
 void CameraEditor::update() {
 	ImGui::Begin("Camera Info");
 

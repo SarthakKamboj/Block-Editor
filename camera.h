@@ -1,7 +1,7 @@
 #pragma once
 
 #include "glm/glm.hpp"
-#include "lin_alg_helper.h"
+#include "math/lin_alg_helper.h"
 #include "transform.h"
 #include "input.h"
 #include <math.h>

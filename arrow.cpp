@@ -29,8 +29,8 @@ Arrow::Arrow(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, glm::vec3 _color) {
 	vao.set_attribute(vbo, 0, 2, GL_FLOAT, 2 * sizeof(float), (void*)0);
 	vao.unbind();
 
-	const char* vertex_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.vert";
-	const char* fragment_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.frag";
+	const char* vertex_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\arrow.vert";
+	const char* fragment_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\arrow.frag";
 	arrow_shader = ShaderProgram(vertex_file_path, fragment_file_path);
 
 	collider_dim = glm::vec3(0.4f, 1.0f, 0.1f);

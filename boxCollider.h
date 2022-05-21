@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ray.h"
+#include "math/ray.h"
 #include <iostream>
 #include "glad/glad.h"
 #include "glm/glm.hpp"
@@ -9,7 +9,7 @@
 #include "vao.h"
 #include "vbo.h"
 #include "ebo.h"
-#include "lin_alg_helper.h"
+#include "math/lin_alg_helper.h"
 #include "transform.h"
 #include <vector>
 

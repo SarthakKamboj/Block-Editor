@@ -25,8 +25,8 @@ extern int width, height;
 
 BoxCollider::BoxCollider() {
 
-	const char* vertex_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\boxCollider.vert";
-	const char* fragment_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.frag";
+	const char* vertex_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\boxCollider.vert";
+	const char* fragment_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\arrow.frag";
 	collider_program = ShaderProgram(vertex_file_path, fragment_file_path);
 	color = glm::vec3(0.0f, 1.0f, 1.0f);
 	collider_program.set_vec_3("color", glm::value_ptr(color));
@@ -46,8 +46,8 @@ BoxCollider::BoxCollider(glm::vec3 pos, glm::vec3 scale, glm::vec3 rot) {
 	transform.pos = pos;
 	transform.rot = rot;
 
-	const char* vertex_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\boxCollider.vert";
-	const char* fragment_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\arrow.frag";
+	const char* vertex_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\boxCollider.vert";
+	const char* fragment_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\arrow.frag";
 	collider_program = ShaderProgram(vertex_file_path, fragment_file_path);
 	color = glm::vec3(0.0f, 1.0f, 1.0f);
 	collider_program.set_vec_3("color", glm::value_ptr(color));

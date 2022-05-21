@@ -3,6 +3,7 @@
 
 ShaderProgram::ShaderProgram() {
 	program_id = -1;
+	shaderPath = "no shader path provided";
 }
 
 ShaderProgram::ShaderProgram(const char* vertexFilePath, const char* fragmentFilePath) {
@@ -123,6 +124,7 @@ void ShaderProgram::set_mat_4(const GLchar* varName, GLboolean transpose, const 
 	}
 }
 
+// TODO: figure out why location shaderPath printing causing error
 GLint ShaderProgram::get_variable_location(const GLchar* varName) {
 	if (program_id == -1) return -1;
 	GLint location = glGetUniformLocation(program_id, varName);

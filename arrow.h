@@ -5,7 +5,7 @@
 #include "shaderProgram.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
-#include "lin_alg_helper.h"
+#include "math/lin_alg_helper.h"
 #include "boxCollider.h"
 #include "input.h"
 #include <math.h>

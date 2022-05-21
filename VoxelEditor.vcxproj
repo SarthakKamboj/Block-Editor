@@ -172,9 +172,10 @@
     <ClCompile Include="ext\imgui\imgui_tables.cpp" />
     <ClCompile Include="ext\imgui\imgui_widgets.cpp" />
     <ClCompile Include="input.cpp" />
-    <ClCompile Include="lin_alg_helper.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="boxCollider.cpp" />
+    <ClCompile Include="math\lin_alg_helper.cpp" />
+    <ClCompile Include="modeManager.cpp" />
     <ClCompile Include="shaderProgram.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="texture.cpp" />
@@ -200,9 +201,10 @@
     <ClInclude Include="ext\imgui\imstb_textedit.h" />
     <ClInclude Include="ext\imgui\imstb_truetype.h" />
     <ClInclude Include="input.h" />
-    <ClInclude Include="lin_alg_helper.h" />
     <ClInclude Include="boxCollider.h" />
-    <ClInclude Include="ray.h" />
+    <ClInclude Include="math\lin_alg_helper.h" />
+    <ClInclude Include="math\ray.h" />
+    <ClInclude Include="modeManager.h" />
     <ClInclude Include="shaderProgram.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="texture.h" />
@@ -211,17 +213,17 @@
     <ClInclude Include="vbo.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="arrow.frag" />
-    <None Include="arrow.vert" />
-    <None Include="boxCollider.vert" />
-    <None Include="grid.frag" />
-    <None Include="grid.vert" />
-    <None Include="cube.frag" />
-    <None Include="outline.frag" />
-    <None Include="outline.vert" />
-    <None Include="transparent.frag" />
-    <None Include="cube.vert" />
-    <None Include="transparent.vert" />
+    <None Include="shaders\arrow.frag" />
+    <None Include="shaders\arrow.vert" />
+    <None Include="shaders\boxCollider.vert" />
+    <None Include="shaders\cube.frag" />
+    <None Include="shaders\cube.vert" />
+    <None Include="shaders\grid.frag" />
+    <None Include="shaders\grid.vert" />
+    <None Include="shaders\outline.frag" />
+    <None Include="shaders\outline.vert" />
+    <None Include="shaders\transparent.frag" />
+    <None Include="shaders\transparent.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,7 +5,7 @@
 #include "ebo.h"
 #include "transform.h"
 #include "shaderProgram.h"
-#include "lin_alg_helper.h"
+#include "math/lin_alg_helper.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "texture.h"

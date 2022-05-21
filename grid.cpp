@@ -2,6 +2,7 @@
 #include "stb_image.h"
 #include "input.h"
 #include "cube.h"
+#include "modeManager.h"
 
 static float scale = 20.0f;
 
@@ -10,6 +11,7 @@ extern MouseState mouse_state;
 extern bool editor_hover;
 extern std::vector<Cube> cubes;
 extern Camera* cam_ptr;
+extern ModeManager* modeManagerPtr;
 
 static float vertices[] = {
 	0.5f, 0.5f, scale, scale,
@@ -39,8 +41,8 @@ Grid::Grid() {
 	vao.unbind();
 	ebo.unbind();
 
-	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\grid.vert";
-	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\grid.frag";
+	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\grid.vert";
+	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\grid.frag";
 	shader_program = ShaderProgram(vertexFilePath, fragmentFilePath);
 
 	textureUnit = 0;
@@ -52,6 +54,11 @@ Grid::Grid() {
 }
 
 void Grid::update() {
+
+	if (modeManagerPtr->mode != Mode::ADD) {
+		return;
+	}
+
 	glm::vec2 screenCoords(mouse_state.x, mouse_state.y);
 	Ray ray = box_collider.screen_to_local_ray(screenCoords);
 
@@ -77,8 +84,18 @@ void Grid::update() {
 				}
 			}
 			pos += glm::vec3(0.0f, 0.5f, 0.0f);
-			newCube.transform.pos = glm::vec3(round(pos.x), round(pos.y), round(pos.z));
-			cubes.push_back(newCube);
+			pos = glm::vec3(round(pos.x), round(pos.y), round(pos.z));
+			bool create = true;
+			for (int i = 0; i < cubes.size(); i++) {
+				glm::vec3& cubePos = cubes[i].transform.pos;
+				if (cubePos.x == pos.x && cubePos.y == pos.y && cubePos.z == pos.z) {
+					create = false;
+				}
+			}
+			if (create) {
+				newCube.transform.pos = pos;
+				cubes.push_back(newCube);
+			}
 		}
 	}
 }
@@ -110,6 +127,7 @@ void Grid::render() {
 	texture.unbind();
 
 	box_collider.render();
+
 	for (int i = 0; i < box_collider.local_col_points.size(); i++) {
 		debug_cubes[i].render();
 	}
