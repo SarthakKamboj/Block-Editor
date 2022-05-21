@@ -48,7 +48,7 @@ void Camera::update() {
 	}
 }
 
-glm::mat4 Camera::get_view_mat() {
+glm::mat4 Camera::getViewMat() {
 	glm::vec3& pos = transform.pos;
 	glm::mat4 posMat = getTranslationMatrix(-pos.x, -pos.y, -pos.z);
 	glm::vec3& rot = transform.rot;

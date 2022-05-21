@@ -2,6 +2,7 @@
 #include "input/input.h"
 #include "cubeEditor.h"
 #include "modeManager.h"
+#include "renderer/renderer.h"
 
 extern CubeEditor* cubeEditorPtr;
 extern ModeManager* modeManagerPtr;
@@ -12,10 +13,11 @@ extern MouseState mouseState;
 
 extern bool editorHover;
 extern Camera* camPtr;
+extern Renderer* rendererPtr;
 
 int Cube::idx = 0;
 
-extern glm::mat4 projection, view;
+// extern glm::mat4 projection, view;
 
 static float vertices[] = {
 	0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
@@ -138,10 +140,7 @@ void Cube::setupRenderOutline() {
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_ALWAYS, 1, 0xFF);
 
-	texture.bind();
-	shaderProgram.setInt("texUnit", 0);
-	shaderProgram.bind();
-
+	/*
 	glm::vec3& pos = transform.pos;
 	glm::mat4 translationMat = getTranslationMatrix(pos.x, pos.y, pos.z);
 	shaderProgram.setMat4("translate", GL_FALSE, mat4GetPtr(translationMat));
@@ -156,8 +155,14 @@ void Cube::setupRenderOutline() {
 
 	shaderProgram.setMat4("projection", GL_FALSE, mat4GetPtr(projection));
 	shaderProgram.setMat4("view", GL_FALSE, mat4GetPtr(view));
+	*/
+
+	texture.bind();
+	rendererPtr->submitShader(shaderProgram, transform);
+	shaderProgram.setInt("texUnit", 0);
 	shaderProgram.setVec3("inColor", glm::value_ptr(color));
 
+	shaderProgram.bind();
 	drawCube();
 	shaderProgram.unbind();
 	texture.unbind();
@@ -171,7 +176,7 @@ void Cube::setupRenderOutline() {
 
 void Cube::render() {
 
-
+	/*
 	glm::vec3& pos = transform.pos;
 	glm::mat4 translationMat = getTranslationMatrix(pos.x, pos.y, pos.z);
 
@@ -180,14 +185,20 @@ void Cube::render() {
 
 	glm::vec3& scale = transform.scale;
 	glm::mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z);
+	*/
 
 
 	if (!outline) {
+		/*
 		shaderProgram.setMat4("translate", GL_FALSE, mat4GetPtr(translationMat));
 		shaderProgram.setMat4("rot", GL_FALSE, mat4GetPtr(rotMat));
 		shaderProgram.setMat4("scale", GL_FALSE, mat4GetPtr(scaleMat));
 		shaderProgram.setMat4("projection", GL_FALSE, mat4GetPtr(projection));
 		shaderProgram.setMat4("view", GL_FALSE, mat4GetPtr(view));
+		*/
+
+		rendererPtr->submitShader(shaderProgram, transform);
+
 		shaderProgram.setVec3("inColor", glm::value_ptr(color));
 		shaderProgram.setInt("texUnit", 0);
 
@@ -199,6 +210,12 @@ void Cube::render() {
 	}
 	else {
 		outlineProgram.bind();
+
+		Transform outlineTransform = transform;
+		outlineTransform.scale = outlineScale * transform.scale;
+		rendererPtr->submitShader(outlineProgram, outlineTransform);
+
+		/*
 		outlineProgram.setMat4("translate", GL_FALSE, mat4GetPtr(translationMat));
 		outlineProgram.setMat4("rot", GL_FALSE, mat4GetPtr(rotMat));
 
@@ -208,6 +225,7 @@ void Cube::render() {
 		outlineProgram.setMat4("projection", GL_FALSE, mat4GetPtr(projection));
 
 		outlineProgram.setMat4("view", GL_FALSE, mat4GetPtr(view));
+		*/
 		outlineProgram.unbind();
 	}
 

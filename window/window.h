@@ -9,4 +9,13 @@
 class Window {
 public:
 	Window();
+
+	bool running;
+	SDL_Window* window;
+	SDL_GLContext context;
+	ImGuiIO* ioPtr;
+
+	void swap();
+	void updateDimension();
+	void close();
 };

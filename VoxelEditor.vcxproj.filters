@@ -132,6 +132,12 @@
     <ClCompile Include="window\window.cpp">
       <Filter>Source Files\window</Filter>
     </ClCompile>
+    <ClCompile Include="application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="issuesEditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ext\imgui\imconfig.h">
@@ -223,6 +229,12 @@
     </ClInclude>
     <ClInclude Include="window\window.h">
       <Filter>Source Files\window</Filter>
+    </ClInclude>
+    <ClInclude Include="application.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="issuesEditor.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
 #include "boxCollider.h"
+#include "renderer/renderer.h"
 
 static float vertices[] = {
 	0.5f, 0.5f, 0.5f,
@@ -22,14 +23,15 @@ static unsigned int indicies[] = {
 
 extern glm::mat4 projection, view;
 extern int width, height;
+extern Renderer* rendererPtr;
 
 BoxCollider::BoxCollider() {
 
 	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\boxCollider.vert";
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\arrow.frag";
-	collider_program = ShaderProgram(vertexFilePath, fragmentFilePath);
+	colliderProgram = ShaderProgram(vertexFilePath, fragmentFilePath);
 	color = glm::vec3(0.0f, 1.0f, 1.0f);
-	collider_program.setVec3("color", glm::value_ptr(color));
+	colliderProgram.setVec3("color", glm::value_ptr(color));
 
 	ebo.setData(indicies, sizeof(indicies), GL_STATIC_DRAW);
 	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
@@ -48,9 +50,9 @@ BoxCollider::BoxCollider(glm::vec3 pos, glm::vec3 scale, glm::vec3 rot) {
 
 	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\boxCollider.vert";
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\arrow.frag";
-	collider_program = ShaderProgram(vertexFilePath, fragmentFilePath);
+	colliderProgram = ShaderProgram(vertexFilePath, fragmentFilePath);
 	color = glm::vec3(0.0f, 1.0f, 1.0f);
-	collider_program.setVec3("color", glm::value_ptr(color));
+	colliderProgram.setVec3("color", glm::value_ptr(color));
 
 	ebo.setData(indicies, sizeof(indicies), GL_STATIC_DRAW);
 	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
@@ -62,8 +64,8 @@ BoxCollider::BoxCollider(glm::vec3 pos, glm::vec3 scale, glm::vec3 rot) {
 	ebo.unbind();
 }
 
-void BoxCollider::set_color(glm::vec3 color) {
-	collider_program.setVec3("color", glm::value_ptr(color));
+void BoxCollider::setColor(glm::vec3 color) {
+	colliderProgram.setVec3("color", glm::value_ptr(color));
 
 }
 
@@ -82,33 +84,14 @@ bool BoxCollider::pointCollide(glm::vec3& point) {
 
 void BoxCollider::render() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	// glDisable(GL_DEPTH_TEST);
+	rendererPtr->submitShader(colliderProgram, transform);
 
-	collider_program.bind();
-
-	glm::vec3& pos = transform.pos;
-	glm::mat4 translateMat = getTranslationMatrix(pos.x, pos.y, pos.z);
-	collider_program.setMat4("translate", GL_FALSE, mat4GetPtr(translateMat));
-
-	glm::vec3& rot = transform.rot;
-	glm::mat4 rotMat = getRotationMatrix(rot.x, rot.y, rot.z);
-	collider_program.setMat4("rot", GL_FALSE, mat4GetPtr(rotMat));
-
-	glm::vec3& scale = transform.scale;
-	glm::mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z);
-	collider_program.setMat4("scale", GL_FALSE, mat4GetPtr(scaleMat));
-
-	collider_program.setMat4("projection", GL_FALSE, mat4GetPtr(projection));
-
-	collider_program.setMat4("view", GL_FALSE, mat4GetPtr(view));
-
+	colliderProgram.bind();
 	vao.bind();
 	glDrawElements(GL_TRIANGLES, sizeof(indicies) / sizeof(indicies[0]), GL_UNSIGNED_INT, (void*)0);
 	vao.unbind();
+	colliderProgram.unbind();
 
-	collider_program.unbind();
-
-	// glEnable(GL_DEPTH_TEST);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 

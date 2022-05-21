@@ -9,7 +9,7 @@ class Renderer {
 public:
 	Renderer();
 	void submitShader(ShaderProgram& shaderProgram, Transform transform);
+	void frameSetup();
+	void clear();
 
-	glm::mat4 projection;
-	Camera camera;
 };

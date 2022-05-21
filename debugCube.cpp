@@ -1,6 +1,8 @@
 #include "debugCube.h"
+#include "renderer/renderer.h"
 
-extern glm::mat4 projection, view;
+// extern glm::mat4 projection, view;
+extern Renderer* rendererPtr;
 
 static float vertices[] = {
 	0.5f, 0.5f, 0.5f,
@@ -46,6 +48,8 @@ DebugCube::DebugCube() {
 
 void DebugCube::render() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	/*
 	glm::vec3& pos = transform.pos;
 	glm::mat4 translationMat = getTranslationMatrix(pos.x, pos.y, pos.z);
 
@@ -60,6 +64,9 @@ void DebugCube::render() {
 	shaderProgram.setMat4("scale", GL_FALSE, mat4GetPtr(scaleMat));
 	shaderProgram.setMat4("projection", GL_FALSE, mat4GetPtr(projection));
 	shaderProgram.setMat4("view", GL_FALSE, mat4GetPtr(view));
+	*/
+
+	rendererPtr->submitShader(shaderProgram, transform);
 
 	shaderProgram.bind();
 	drawCube();
