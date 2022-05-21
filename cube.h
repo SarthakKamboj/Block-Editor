@@ -1,16 +1,16 @@
 #pragma once
 
-#include "vao.h"
-#include "vbo.h"
-#include "ebo.h"
-#include "boxCollider.h"
-#include "shaderProgram.h"
+#include "renderer/vao.h"
+#include "renderer/vbo.h"
+#include "renderer/ebo.h"
+#include "physics/boxCollider.h"
+#include "renderer/shaderProgram.h"
 #include "glm/glm.hpp"
-#include "math/lin_alg_helper.h"
-#include "camera.h"
+#include "math/linAlgHelper.h"
+#include "renderer/camera.h"
 #include "transform.h"
 #include <string>
-#include "texture.h"
+#include "renderer/texture.h"
 #include "glm/gtc/type_ptr.hpp"
 #include "debugCube.h"
 #include <math.h>
@@ -19,12 +19,12 @@ class Cube {
 public:
 	Cube();
 
-	void setup_render_outline();
+	void setupRenderOutline();
 	void render();
-	void render_outline();
+	void renderOutline();
 
 	void update();
-	void late_update();
+	void lateUpdate();
 
 	Transform transform;
 
@@ -34,20 +34,20 @@ public:
 	static int idx;
 	std::string name;
 
-	BoxCollider box_collider;
+	BoxCollider boxCollider;
 private:
 	VAO vao;
 	VBO vbo;
 	EBO ebo;
 
-	glm::vec3 outline_scale;
+	glm::vec3 outlineScale;
 
-	ShaderProgram shader_program;
-	ShaderProgram transparent_program;
-	ShaderProgram outline_program;
+	ShaderProgram shaderProgram;
+	ShaderProgram transparentProgram;
+	ShaderProgram outlineProgram;
 	Texture texture;
 
-	DebugCube debug_cubes[6];
+	DebugCube debugCubes[6];
 
 	void drawCube();
 };

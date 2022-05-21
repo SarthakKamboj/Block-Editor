@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)ext\glad\include;$(ProjectDir)ext\glm;$(ProjectDir)ext\imgui;$(ProjectDir)ext\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ext\glad\include;$(ProjectDir)ext\glm;$(ProjectDir)ext\imgui;$(ProjectDir)ext\SDL2\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -106,7 +106,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)ext\glad\include;$(ProjectDir)ext\glm;$(ProjectDir)ext\imgui;$(ProjectDir)ext\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ext\glad\include;$(ProjectDir)ext\glm;$(ProjectDir)ext\imgui;$(ProjectDir)ext\SDL2\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -124,7 +124,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)ext\glad\include;$(ProjectDir)ext\glm;$(ProjectDir)ext\imgui;$(ProjectDir)ext\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ext\glad\include;$(ProjectDir)ext\glm;$(ProjectDir)ext\imgui;$(ProjectDir)ext\SDL2\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -142,7 +142,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)ext\glad\include;$(ProjectDir)ext\glm;$(ProjectDir)ext\imgui;$(ProjectDir)ext\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ext\glad\include;$(ProjectDir)ext\glm;$(ProjectDir)ext\imgui;$(ProjectDir)ext\SDL2\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -156,13 +156,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="arrow.cpp" />
-    <ClCompile Include="camera.cpp" />
     <ClCompile Include="cameraEditor.cpp" />
     <ClCompile Include="cube.cpp" />
     <ClCompile Include="debugCube.cpp" />
+    <ClCompile Include="ext\stb\stb_image.cpp" />
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="cubeEditor.cpp" />
-    <ClCompile Include="ebo.cpp" />
     <ClCompile Include="ext\glad\src\glad.c" />
     <ClCompile Include="ext\imgui\imgui.cpp" />
     <ClCompile Include="ext\imgui\imgui_demo.cpp" />
@@ -171,26 +170,28 @@
     <ClCompile Include="ext\imgui\imgui_impl_sdl.cpp" />
     <ClCompile Include="ext\imgui\imgui_tables.cpp" />
     <ClCompile Include="ext\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="input.cpp" />
+    <ClCompile Include="input\input.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="boxCollider.cpp" />
-    <ClCompile Include="math\lin_alg_helper.cpp" />
+    <ClCompile Include="math\linAlgHelper.cpp" />
     <ClCompile Include="modeManager.cpp" />
-    <ClCompile Include="shaderProgram.cpp" />
-    <ClCompile Include="stb_image.cpp" />
-    <ClCompile Include="texture.cpp" />
-    <ClCompile Include="vao.cpp" />
-    <ClCompile Include="vbo.cpp" />
+    <ClCompile Include="physics\boxCollider.cpp" />
+    <ClCompile Include="renderer\camera.cpp" />
+    <ClCompile Include="renderer\ebo.cpp" />
+    <ClCompile Include="renderer\renderer.cpp" />
+    <ClCompile Include="renderer\shaderProgram.cpp" />
+    <ClCompile Include="renderer\texture.cpp" />
+    <ClCompile Include="renderer\vao.cpp" />
+    <ClCompile Include="renderer\vbo.cpp" />
+    <ClCompile Include="window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arrow.h" />
-    <ClInclude Include="camera.h" />
     <ClInclude Include="cameraEditor.h" />
     <ClInclude Include="cube.h" />
     <ClInclude Include="debugCube.h" />
+    <ClInclude Include="ext\stb\stb_image.h" />
     <ClInclude Include="grid.h" />
     <ClInclude Include="cubeEditor.h" />
-    <ClInclude Include="ebo.h" />
     <ClInclude Include="ext\imgui\imconfig.h" />
     <ClInclude Include="ext\imgui\imgui.h" />
     <ClInclude Include="ext\imgui\imgui_impl_opengl3.h" />
@@ -200,17 +201,20 @@
     <ClInclude Include="ext\imgui\imstb_rectpack.h" />
     <ClInclude Include="ext\imgui\imstb_textedit.h" />
     <ClInclude Include="ext\imgui\imstb_truetype.h" />
-    <ClInclude Include="input.h" />
-    <ClInclude Include="boxCollider.h" />
-    <ClInclude Include="math\lin_alg_helper.h" />
+    <ClInclude Include="input\input.h" />
+    <ClInclude Include="math\linAlgHelper.h" />
     <ClInclude Include="math\ray.h" />
     <ClInclude Include="modeManager.h" />
-    <ClInclude Include="shaderProgram.h" />
-    <ClInclude Include="stb_image.h" />
-    <ClInclude Include="texture.h" />
+    <ClInclude Include="physics\boxCollider.h" />
+    <ClInclude Include="renderer\camera.h" />
+    <ClInclude Include="renderer\ebo.h" />
+    <ClInclude Include="renderer\renderer.h" />
+    <ClInclude Include="renderer\shaderProgram.h" />
+    <ClInclude Include="renderer\texture.h" />
+    <ClInclude Include="renderer\vao.h" />
+    <ClInclude Include="renderer\vbo.h" />
     <ClInclude Include="transform.h" />
-    <ClInclude Include="vao.h" />
-    <ClInclude Include="vbo.h" />
+    <ClInclude Include="window\window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\arrow.frag" />

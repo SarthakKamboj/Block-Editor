@@ -1,17 +1,17 @@
 #include "cube.h"
-#include "input.h"
+#include "input/input.h"
 #include "cubeEditor.h"
 #include "modeManager.h"
 
-extern CubeEditor* cube_editor_ptr;
+extern CubeEditor* cubeEditorPtr;
 extern ModeManager* modeManagerPtr;
 
 extern int width, height;
-extern MouseClickState mouse_click_state;
-extern MouseState mouse_state;
+extern MouseClickState mouseClickState;
+extern MouseState mouseState;
 
-extern bool editor_hover;
-extern Camera* cam_ptr;
+extern bool editorHover;
+extern Camera* camPtr;
 
 int Cube::idx = 0;
 
@@ -47,13 +47,13 @@ Cube::Cube() {
 	name = "Cube " + std::to_string(Cube::idx);
 	Cube::idx += 1;
 
-	vbo.set_data(vertices, sizeof(vertices), GL_STATIC_DRAW);
-	ebo.set_data(indicies, sizeof(indicies), GL_STATIC_DRAW);
+	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
+	ebo.setData(indicies, sizeof(indicies), GL_STATIC_DRAW);
 
 	vao.bind();
 	ebo.bind();
-	vao.set_attribute(vbo, 0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
-	vao.set_attribute(vbo, 1, 2, GL_FLOAT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	vao.setAttribute(vbo, 0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
+	vao.setAttribute(vbo, 1, 2, GL_FLOAT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	vao.unbind();
 	ebo.unbind();
 
@@ -61,41 +61,41 @@ Cube::Cube() {
 	transform.rot = glm::vec3(0.0f, 0.0f, 0.0f);
 	transform.scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
-	outline_scale = glm::vec3(1.05f, 1.05f, 1.05f);
+	outlineScale = glm::vec3(1.05f, 1.05f, 1.05f);
 
 	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\cube.vert";
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\cube.frag";
-	shader_program = ShaderProgram(vertexFilePath, fragmentFilePath);
+	shaderProgram = ShaderProgram(vertexFilePath, fragmentFilePath);
 
 	const char* outlineVert = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\outline.vert";
 	const char* outlineFrag = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\outline.frag";
-	outline_program = ShaderProgram(outlineVert, outlineFrag);
+	outlineProgram = ShaderProgram(outlineVert, outlineFrag);
 
 	const char* transparentVert = "C:\\Sarthak\\voxel_editor\\VoxelEdito\\shaders\\transparent.vert";
 	const char* transparentFrag = "C:\\Sarthak\\voxel_editor\\VoxelEdito\\shaders\\transparent.frag";
-	transparent_program = ShaderProgram(transparentVert, transparentFrag);
+	transparentProgram = ShaderProgram(transparentVert, transparentFrag);
 
 	outline = false;
 
 	color = glm::vec3(0.0f, 0.43f, 1.0f);
 
-	box_collider = BoxCollider(transform.pos, transform.scale, transform.rot);
+	boxCollider = BoxCollider(transform.pos, transform.scale, transform.rot);
 
 	const char* texture_file_path = "images\\cube_wall.png";
 	texture = Texture(texture_file_path, 0);
 }
 
 void Cube::update() {
-	box_collider.transform = transform;
+	boxCollider.transform = transform;
 
 	/*
-	if (mouse_click_state.left && !editor_hover) {
-		glm::vec2 screenCoords(mouse_state.x, mouse_state.y);
-		Ray ray = box_collider.screen_to_local_ray(screenCoords);
+	if (mouseClickState.left && !editorHover) {
+		glm::vec2 screenCoords(mouseState.x, mouseState.y);
+		Ray ray = boxCollider.screenToLocalRay(screenCoords);
 
-		if (box_collider.ray_collide(ray)) {
-			cube_editor_ptr->cube = this;
-			debug_cube.transform.pos = box_collider.front_col_point;
+		if (boxCollider.rayCollide(ray)) {
+			cubeEditorPtr->cube = this;
+			debug_cube.transform.pos = boxCollider.frontColPoint;
 		}
 	}
 	*/
@@ -104,68 +104,68 @@ void Cube::update() {
 		return;
 	}
 
-	glm::vec2 screenCoords(mouse_state.x, mouse_state.y);
-	Ray ray = box_collider.screen_to_local_ray(screenCoords);
+	glm::vec2 screenCoords(mouseState.x, mouseState.y);
+	Ray ray = boxCollider.screenToLocalRay(screenCoords);
 
-	if (box_collider.ray_collide(ray)) {
-		if (mouse_click_state.left && !editor_hover) {
-			bool closer_to_cam = true;
+	if (boxCollider.rayCollide(ray)) {
+		if (mouseClickState.left && !editorHover) {
+			bool closerToCam = true;
 			float dist = 0;
-			if (cube_editor_ptr->cube) {
-				float cur_dist_to_cam = pow(transform.pos.x - cam_ptr->transform.pos.x, 2) + pow(transform.pos.y - cam_ptr->transform.pos.y, 2) + pow(transform.pos.z - cam_ptr->transform.pos.z, 2);
-				Transform selected_cube_transform = cube_editor_ptr->cube->transform;
-				float selected_cube_dist_to_cam = pow(selected_cube_transform.pos.x - cam_ptr->transform.pos.x, 2) + pow(selected_cube_transform.pos.y - cam_ptr->transform.pos.y, 2) + pow(selected_cube_transform.pos.z - cam_ptr->transform.pos.z, 2);
-				closer_to_cam = (cur_dist_to_cam <= selected_cube_dist_to_cam);
+			if (cubeEditorPtr->cube) {
+				float curDistToCam = pow(transform.pos.x - camPtr->transform.pos.x, 2) + pow(transform.pos.y - camPtr->transform.pos.y, 2) + pow(transform.pos.z - camPtr->transform.pos.z, 2);
+				Transform selectedCubeTransform = cubeEditorPtr->cube->transform;
+				float selectedCubeDistToCam = pow(selectedCubeTransform.pos.x - camPtr->transform.pos.x, 2) + pow(selectedCubeTransform.pos.y - camPtr->transform.pos.y, 2) + pow(selectedCubeTransform.pos.z - camPtr->transform.pos.z, 2);
+				closerToCam = (curDistToCam <= selectedCubeDistToCam);
 			}
-			if (closer_to_cam) {
-				cube_editor_ptr->cube = this;
+			if (closerToCam) {
+				cubeEditorPtr->cube = this;
 			}
 		}
-		// debug_cube.transform.pos = box_collider.front_col_point;
-		// debug_cube.transform.pos = box_collider.top_col_point;
-		for (int i = 0; i < box_collider.local_col_points.size(); i++) {
-			debug_cubes[i].transform.pos = box_collider.local_to_world(box_collider.local_col_points[i]);
+		// debug_cube.transform.pos = boxCollider.frontColPoint;
+		// debug_cube.transform.pos = boxCollider.top_col_point;
+		for (int i = 0; i < boxCollider.localColPoints.size(); i++) {
+			debugCubes[i].transform.pos = boxCollider.localToWorld(boxCollider.localColPoints[i]);
 		}
 	}
 }
 
 
-void Cube::late_update() {
-	outline = (cube_editor_ptr->cube == this);
+void Cube::lateUpdate() {
+	outline = (cubeEditorPtr->cube == this);
 }
 
-void Cube::setup_render_outline() {
+void Cube::setupRenderOutline() {
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_ALWAYS, 1, 0xFF);
 
 	texture.bind();
-	shader_program.set_int("texUnit", 0);
-	shader_program.bind();
+	shaderProgram.setInt("texUnit", 0);
+	shaderProgram.bind();
 
 	glm::vec3& pos = transform.pos;
-	glm::mat4 translationMat = get_translation_matrix(pos.x, pos.y, pos.z);
-	shader_program.set_mat_4("translate", GL_FALSE, mat4_get_ptr(translationMat));
+	glm::mat4 translationMat = getTranslationMatrix(pos.x, pos.y, pos.z);
+	shaderProgram.setMat4("translate", GL_FALSE, mat4GetPtr(translationMat));
 
 	glm::vec3& rot = transform.rot;
-	glm::mat4 rotMat = get_rotation_matrix(rot.x, rot.y, rot.z);
-	shader_program.set_mat_4("rot", GL_FALSE, mat4_get_ptr(rotMat));
+	glm::mat4 rotMat = getRotationMatrix(rot.x, rot.y, rot.z);
+	shaderProgram.setMat4("rot", GL_FALSE, mat4GetPtr(rotMat));
 
 	glm::vec3& scale = transform.scale;
-	glm::mat4 scaleMat = get_scale_matrix(scale.x, scale.y, scale.z);
-	shader_program.set_mat_4("scale", GL_FALSE, mat4_get_ptr(scaleMat));
+	glm::mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z);
+	shaderProgram.setMat4("scale", GL_FALSE, mat4GetPtr(scaleMat));
 
-	shader_program.set_mat_4("projection", GL_FALSE, mat4_get_ptr(projection));
-	shader_program.set_mat_4("view", GL_FALSE, mat4_get_ptr(view));
-	shader_program.set_vec_3("inColor", glm::value_ptr(color));
+	shaderProgram.setMat4("projection", GL_FALSE, mat4GetPtr(projection));
+	shaderProgram.setMat4("view", GL_FALSE, mat4GetPtr(view));
+	shaderProgram.setVec3("inColor", glm::value_ptr(color));
 
 	drawCube();
-	shader_program.unbind();
+	shaderProgram.unbind();
 	texture.unbind();
 
 	glDisable(GL_STENCIL_TEST);
 
-	for (int i = 0; i < box_collider.local_col_points.size(); i++) {
-		debug_cubes[i].render();
+	for (int i = 0; i < boxCollider.localColPoints.size(); i++) {
+		debugCubes[i].render();
 	}
 }
 
@@ -173,55 +173,55 @@ void Cube::render() {
 
 
 	glm::vec3& pos = transform.pos;
-	glm::mat4 translationMat = get_translation_matrix(pos.x, pos.y, pos.z);
+	glm::mat4 translationMat = getTranslationMatrix(pos.x, pos.y, pos.z);
 
 	glm::vec3& rot = transform.rot;
-	glm::mat4 rotMat = get_rotation_matrix(rot.x, rot.y, rot.z);
+	glm::mat4 rotMat = getRotationMatrix(rot.x, rot.y, rot.z);
 
 	glm::vec3& scale = transform.scale;
-	glm::mat4 scaleMat = get_scale_matrix(scale.x, scale.y, scale.z);
+	glm::mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z);
 
 
 	if (!outline) {
-		shader_program.set_mat_4("translate", GL_FALSE, mat4_get_ptr(translationMat));
-		shader_program.set_mat_4("rot", GL_FALSE, mat4_get_ptr(rotMat));
-		shader_program.set_mat_4("scale", GL_FALSE, mat4_get_ptr(scaleMat));
-		shader_program.set_mat_4("projection", GL_FALSE, mat4_get_ptr(projection));
-		shader_program.set_mat_4("view", GL_FALSE, mat4_get_ptr(view));
-		shader_program.set_vec_3("inColor", glm::value_ptr(color));
-		shader_program.set_int("texUnit", 0);
+		shaderProgram.setMat4("translate", GL_FALSE, mat4GetPtr(translationMat));
+		shaderProgram.setMat4("rot", GL_FALSE, mat4GetPtr(rotMat));
+		shaderProgram.setMat4("scale", GL_FALSE, mat4GetPtr(scaleMat));
+		shaderProgram.setMat4("projection", GL_FALSE, mat4GetPtr(projection));
+		shaderProgram.setMat4("view", GL_FALSE, mat4GetPtr(view));
+		shaderProgram.setVec3("inColor", glm::value_ptr(color));
+		shaderProgram.setInt("texUnit", 0);
 
 		texture.bind();
-		shader_program.bind();
+		shaderProgram.bind();
 		drawCube();
-		shader_program.unbind();
+		shaderProgram.unbind();
 		texture.unbind();
 	}
 	else {
-		outline_program.bind();
-		outline_program.set_mat_4("translate", GL_FALSE, mat4_get_ptr(translationMat));
-		outline_program.set_mat_4("rot", GL_FALSE, mat4_get_ptr(rotMat));
+		outlineProgram.bind();
+		outlineProgram.setMat4("translate", GL_FALSE, mat4GetPtr(translationMat));
+		outlineProgram.setMat4("rot", GL_FALSE, mat4GetPtr(rotMat));
 
-		glm::mat4 outlineScaleMat = get_scale_matrix(outline_scale.x * scale.x, outline_scale.y * scale.y, outline_scale.z * scale.z);
-		outline_program.set_mat_4("scale", GL_FALSE, mat4_get_ptr(outlineScaleMat));
+		glm::mat4 outlineScaleMat = getScaleMatrix(outlineScale.x * scale.x, outlineScale.y * scale.y, outlineScale.z * scale.z);
+		outlineProgram.setMat4("scale", GL_FALSE, mat4GetPtr(outlineScaleMat));
 
-		outline_program.set_mat_4("projection", GL_FALSE, mat4_get_ptr(projection));
+		outlineProgram.setMat4("projection", GL_FALSE, mat4GetPtr(projection));
 
-		outline_program.set_mat_4("view", GL_FALSE, mat4_get_ptr(view));
-		outline_program.unbind();
+		outlineProgram.setMat4("view", GL_FALSE, mat4GetPtr(view));
+		outlineProgram.unbind();
 	}
 
 }
 
 
-void Cube::render_outline() {
+void Cube::renderOutline() {
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 
-	outline_program.bind();
+	outlineProgram.bind();
 	drawCube();
-	outline_program.unbind();
+	outlineProgram.unbind();
 
 	glDisable(GL_STENCIL_TEST);
 	glEnable(GL_DEPTH_TEST);

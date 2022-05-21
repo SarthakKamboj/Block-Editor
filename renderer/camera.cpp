@@ -1,11 +1,11 @@
 #include "camera.h"
 
-extern MouseWheel mouse_wheel;
+extern MouseWheel mouseWheel;
 extern glm::mat4 projection;
 extern int width, height;
 extern float pov;
-extern std::map<SDL_Keycode, bool> key_pressed_map;
-extern bool editor_hover;
+extern std::map<SDL_Keycode, bool> keyPressedMap;
+extern bool editorHover;
 
 Camera::Camera() {
 	transform.pos = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -20,38 +20,38 @@ Camera::Camera(float xPos, float yPos, float zPos) {
 }
 
 void Camera::update() {
-	if (editor_hover) {
+	if (editorHover) {
 		return;
 	}
 	float sensitivity = 5.0f;
-	pov -= mouse_wheel.y * sensitivity;
+	pov -= mouseWheel.y * sensitivity;
 	pov = fmax(fmin(pov, 60.0f), 45.0f);
-	if (mouse_wheel.y > 0) {
-		projection = get_projection_matrix(pov, 0.1f, 100.0f, ((float)width) / height);
+	if (mouseWheel.y > 0) {
+		projection = getProjectionMatrix(pov, 0.1f, 100.0f, ((float)width) / height);
 	}
-	else if (mouse_wheel.y < 0) {
-		projection = get_projection_matrix(pov, 0.1f, 100.0f, ((float)width) / height);
+	else if (mouseWheel.y < 0) {
+		projection = getProjectionMatrix(pov, 0.1f, 100.0f, ((float)width) / height);
 	}
 
 	float transformOffset = sensitivity * 0.1f;
-	if (key_pressed_map[SDLK_w]) {
+	if (keyPressedMap[SDLK_w]) {
 		transform.pos.z -= transformOffset;
 	}
-	else if (key_pressed_map[SDLK_s]) {
+	else if (keyPressedMap[SDLK_s]) {
 		transform.pos.z += transformOffset;
 	}
-	else if (key_pressed_map[SDLK_d]) {
+	else if (keyPressedMap[SDLK_d]) {
 		transform.pos.x += transformOffset;
 	}
-	else if (key_pressed_map[SDLK_a]) {
+	else if (keyPressedMap[SDLK_a]) {
 		transform.pos.x -= transformOffset;
 	}
 }
 
 glm::mat4 Camera::get_view_mat() {
 	glm::vec3& pos = transform.pos;
-	glm::mat4 posMat = get_translation_matrix(-pos.x, -pos.y, -pos.z);
+	glm::mat4 posMat = getTranslationMatrix(-pos.x, -pos.y, -pos.z);
 	glm::vec3& rot = transform.rot;
-	glm::mat4 rotMat = get_rotation_matrix(-rot.x, -rot.y, -rot.z);
+	glm::mat4 rotMat = getRotationMatrix(-rot.x, -rot.y, -rot.z);
 	return posMat * rotMat;
 }

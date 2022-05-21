@@ -1,15 +1,15 @@
 #pragma once
 
-#include "vao.h"
-#include "vbo.h"
-#include "ebo.h"
+#include "renderer/vao.h"
+#include "renderer/vbo.h"
+#include "renderer/ebo.h"
 #include "transform.h"
-#include "shaderProgram.h"
-#include "math/lin_alg_helper.h"
+#include "renderer/shaderProgram.h"
+#include "math/linAlgHelper.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
-#include "texture.h"
-#include "boxCollider.h"
+#include "renderer/texture.h"
+#include "physics/boxCollider.h"
 #include "debugCube.h"
 #include <math.h>
 
@@ -24,10 +24,10 @@ public:
 	EBO ebo;
 
 	Transform transform;
-	ShaderProgram shader_program;
+	ShaderProgram shaderProgram;
 	Texture texture;
-	BoxCollider box_collider;
-	DebugCube debug_cubes[6];
+	BoxCollider boxCollider;
+	DebugCube debugCubes[6];
 
 	int textureUnit;
 };

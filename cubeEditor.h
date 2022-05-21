@@ -9,12 +9,12 @@
 class CubeEditor {
 public:
 	CubeEditor();
-	void setup_outline();
+	void setupOutline();
 	void update();
 	void render();
 
 	Transform transform;
-	Arrow x_arrow, y_arrow, z_arrow;
+	Arrow xArrow, yArrow, zArrow;
 	Cube* cube;
 	Arrow arrows[3];
 };

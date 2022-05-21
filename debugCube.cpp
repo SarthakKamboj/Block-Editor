@@ -24,12 +24,12 @@ static unsigned int indicies[] = {
 
 DebugCube::DebugCube() {
 
-	vbo.set_data(vertices, sizeof(vertices), GL_STATIC_DRAW);
-	ebo.set_data(indicies, sizeof(indicies), GL_STATIC_DRAW);
+	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
+	ebo.setData(indicies, sizeof(indicies), GL_STATIC_DRAW);
 
 	vao.bind();
 	ebo.bind();
-	vao.set_attribute(vbo, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
+	vao.setAttribute(vbo, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
 	vao.unbind();
 	ebo.unbind();
 
@@ -39,31 +39,31 @@ DebugCube::DebugCube() {
 
 	const char* vertex_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\boxCollider.vert";
 	const char* fragment_file_path = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\arrow.frag";
-	shader_program = ShaderProgram(vertex_file_path, fragment_file_path);
+	shaderProgram = ShaderProgram(vertex_file_path, fragment_file_path);
 
-	shader_program.set_vec_3("color", glm::value_ptr(glm::vec3(1.0f, 0.0f, 0.0f)));
+	shaderProgram.setVec3("color", glm::value_ptr(glm::vec3(1.0f, 0.0f, 0.0f)));
 }
 
 void DebugCube::render() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glm::vec3& pos = transform.pos;
-	glm::mat4 translationMat = get_translation_matrix(pos.x, pos.y, pos.z);
+	glm::mat4 translationMat = getTranslationMatrix(pos.x, pos.y, pos.z);
 
 	glm::vec3& rot = transform.rot;
-	glm::mat4 rotMat = get_rotation_matrix(rot.x, rot.y, rot.z);
+	glm::mat4 rotMat = getRotationMatrix(rot.x, rot.y, rot.z);
 
 	glm::vec3& scale = transform.scale;
-	glm::mat4 scaleMat = get_scale_matrix(scale.x, scale.y, scale.z);
+	glm::mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z);
 
-	shader_program.set_mat_4("translate", GL_FALSE, mat4_get_ptr(translationMat));
-	shader_program.set_mat_4("rot", GL_FALSE, mat4_get_ptr(rotMat));
-	shader_program.set_mat_4("scale", GL_FALSE, mat4_get_ptr(scaleMat));
-	shader_program.set_mat_4("projection", GL_FALSE, mat4_get_ptr(projection));
-	shader_program.set_mat_4("view", GL_FALSE, mat4_get_ptr(view));
+	shaderProgram.setMat4("translate", GL_FALSE, mat4GetPtr(translationMat));
+	shaderProgram.setMat4("rot", GL_FALSE, mat4GetPtr(rotMat));
+	shaderProgram.setMat4("scale", GL_FALSE, mat4GetPtr(scaleMat));
+	shaderProgram.setMat4("projection", GL_FALSE, mat4GetPtr(projection));
+	shaderProgram.setMat4("view", GL_FALSE, mat4GetPtr(view));
 
-	shader_program.bind();
+	shaderProgram.bind();
 	drawCube();
-	shader_program.unbind();
+	shaderProgram.unbind();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 

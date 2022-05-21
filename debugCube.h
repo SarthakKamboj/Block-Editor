@@ -1,14 +1,14 @@
 #pragma once
 
-#include "vao.h"
-#include "vbo.h"
-#include "ebo.h"
-#include "shaderProgram.h"
+#include "renderer/vao.h"
+#include "renderer/vbo.h"
+#include "renderer/ebo.h"
+#include "renderer/shaderProgram.h"
 #include "glm/glm.hpp"
-#include "math/lin_alg_helper.h"
+#include "math/linAlgHelper.h"
 #include "transform.h"
 #include <string>
-#include "texture.h"
+#include "renderer/texture.h"
 #include "glm/gtc/type_ptr.hpp"
 
 class DebugCube {
@@ -22,7 +22,7 @@ private:
 	VBO vbo;
 	EBO ebo;
 
-	ShaderProgram shader_program;
+	ShaderProgram shaderProgram;
 
 	void drawCube();
 };

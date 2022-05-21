@@ -1,6 +1,6 @@
 #pragma once
 
-#include "camera.h"
+#include "renderer/camera.h"
 #include "imgui.h"
 
 class CameraEditor {

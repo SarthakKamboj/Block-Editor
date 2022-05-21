@@ -1,13 +1,13 @@
 #pragma once
 
-#include "vao.h"
-#include "vbo.h"
-#include "shaderProgram.h"
+#include "renderer/vao.h"
+#include "renderer/vbo.h"
+#include "renderer/shaderProgram.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
-#include "math/lin_alg_helper.h"
-#include "boxCollider.h"
-#include "input.h"
+#include "math/linAlgHelper.h"
+#include "physics/boxCollider.h"
+#include "input/input.h"
 #include <math.h>
 #include "transform.h"
 
@@ -23,11 +23,11 @@ public:
 private:
 	VAO vao;
 	VBO vbo;
-	ShaderProgram arrow_shader;
+	ShaderProgram arrowShader;
 
 	glm::vec3 color;
-	glm::vec3 highlight_color;
+	glm::vec3 highlightColor;
 
-	BoxCollider box_collider;
-	glm::vec3 collider_dim;
+	BoxCollider boxCollider;
+	glm::vec3 colliderDim;
 };

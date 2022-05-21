@@ -1,16 +1,16 @@
 #include "glad/glad.h"
 #include "SDL.h"
 #include <iostream>
-#include "vao.h"
-#include "vbo.h"
-#include "ebo.h"
-#include "shaderProgram.h"
+#include "renderer/vao.h"
+#include "renderer/vbo.h"
+#include "renderer/ebo.h"
+#include "renderer/shaderProgram.h"
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_sdl.h"
 #include "cube.h"
-#include "camera.h"
-#include "input.h"
+#include "renderer/camera.h"
+#include "input/input.h"
 #include <map>
 #include "cubeEditor.h"
 #include "cameraEditor.h"
@@ -25,22 +25,22 @@
 #include <vector>
 #include "modeManager.h"
 
-extern std::map<SDL_Keycode, bool> key_pressed_map;
-extern MouseClickState mouse_click_state;
-extern MouseState mouse_state;
+extern std::map<SDL_Keycode, bool> keyPressedMap;
+extern MouseClickState mouseClickState;
+extern MouseState mouseState;
 
-Camera* cam_ptr;
-CubeEditor* cube_editor_ptr;
+Camera* camPtr;
+CubeEditor* cubeEditorPtr;
 ModeManager* modeManagerPtr;
 glm::mat4 projection(1.0f), view(1.0f);
 float pov = 45.0f;
 
 int width = 800, height = 800;
-bool editor_hover;
+bool editorHover;
 
 std::vector<Cube> cubes;
 
-void print_transform_to_file(std::ofstream& file, Transform transform) {
+void printTransformToFile(std::ofstream& file, Transform transform) {
 	file << "pos: " << transform.pos.x << ", " << transform.pos.y << ", " << transform.pos.z << "\n";
 	file << "scale: " << transform.scale.x << ", " << transform.scale.y << ", " << transform.scale.z << "\n";
 	file << "rot: " << transform.rot.x << ", " << transform.rot.y << ", " << transform.rot.z << "\n";
@@ -60,7 +60,7 @@ int main(int argc, char* args[]) {
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-	editor_hover = false;
+	editorHover = false;
 
 	SDL_Window* window = SDL_CreateWindow("window",
 		SDL_WINDOWPOS_CENTERED,
@@ -92,8 +92,8 @@ int main(int argc, char* args[]) {
 
 	glm::vec3 clearColor(0.0f, 0.0f, 0.0f);
 
-	CubeEditor cube_editor;
-	cube_editor_ptr = &cube_editor;
+	CubeEditor cubeEditor;
+	cubeEditorPtr = &cubeEditor;
 
 	// Cube cubes[1];
 	// Cube cubes[3];
@@ -103,7 +103,7 @@ int main(int argc, char* args[]) {
 	cubes.push_back(cube1);
 	cubes.push_back(cube2);
 
-	cube_editor_ptr->cube = &cubes[0];
+	cubeEditorPtr->cube = &cubes[0];
 	cubes[1].transform.pos = glm::vec3(1.0f, 0.0f, 0.0f);
 	cubes[2].transform.pos = glm::vec3(-1.0f, 0.0f, 0.0f);
 
@@ -114,21 +114,16 @@ int main(int argc, char* args[]) {
 	Grid grid;
 
 	Cube debugCube;
-	debugCube.box_collider.set_color(glm::vec3(1.0f, 0.0f, 0.0f));
+	debugCube.boxCollider.set_color(glm::vec3(1.0f, 0.0f, 0.0f));
 
 	uint32_t start = SDL_GetTicks();
 
-	bool checked = false;
-	bool show_demo_window = true;
-
-	float val = 0.0f;
-
-	projection = get_projection_matrix(pov, 0.1f, 100.0f, ((float)width) / height);
+	projection = getProjectionMatrix(pov, 0.1f, 100.0f, ((float)width) / height);
 
 	Camera cam(0.0f, 0.0f, 10.0f);
-	cam_ptr = &cam;
+	camPtr = &cam;
 
-	CameraEditor camera_editor(&cam);
+	CameraEditor cameraEditor(&cam);
 
 	int stencilBits;
 	glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL, GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE, &stencilBits);
@@ -138,7 +133,7 @@ int main(int argc, char* args[]) {
 
 	while (running) {
 
-		editor_hover = false;
+		editorHover = false;
 
 		uint32_t cur = SDL_GetTicks();
 		uint32_t diff = cur - start;
@@ -148,9 +143,9 @@ int main(int argc, char* args[]) {
 
 		view = cam.get_view_mat();
 
-		handle_input(event);
+		handleInput(event);
 
-		if (key_pressed_map[SDL_QUIT] || key_pressed_map[SDLK_ESCAPE]) {
+		if (keyPressedMap[SDL_QUIT] || keyPressedMap[SDLK_ESCAPE]) {
 			running = false;
 		}
 
@@ -160,10 +155,10 @@ int main(int argc, char* args[]) {
 
 		ImGui::PushFont(robotoFont);
 
-		editor_hover = ImGui::IsAnyItemHovered();
+		editorHover = ImGui::IsAnyItemHovered();
 
-		if ((mouse_click_state.left && !editor_hover && !key_pressed_map[SDLK_LCTRL]) || (modeManager.mode != Mode::SELECT)) {
-			cube_editor.cube = NULL;
+		if ((mouseClickState.left && !editorHover && !keyPressedMap[SDLK_LCTRL]) || (modeManager.mode != Mode::SELECT)) {
+			cubeEditor.cube = NULL;
 		}
 
 		for (int i = 0; i < cubes.size(); i++) {
@@ -171,12 +166,12 @@ int main(int argc, char* args[]) {
 		}
 
 		for (int i = 0; i < cubes.size(); i++) {
-			cubes[i].late_update();
+			cubes[i].lateUpdate();
 		}
 
 		modeManager.update();
-		camera_editor.update();
-		cube_editor.update();
+		cameraEditor.update();
+		cubeEditor.update();
 		cam.update();
 		grid.update();
 
@@ -186,26 +181,26 @@ int main(int argc, char* args[]) {
 
 		glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 
-		cube_editor_ptr->setup_outline();
+		cubeEditorPtr->setupOutline();
 		for (int i = 0; i < cubes.size(); i++) {
 			cubes[i].render();
 		}
 		grid.render();
 		debug_cube.render();
-		cube_editor_ptr->render();
+		cubeEditorPtr->render();
 
 		ImGui::Begin("issue window");
 		if (ImGui::Button("log transforms")) {
-			std::ofstream issue_file;
-			issue_file.open("issues\\" + std::to_string(rand()) + ".txt");
-			issue_file << "camera\n";
-			issue_file << "------\n";
-			print_transform_to_file(issue_file, cam.transform);
+			std::ofstream issueFile;
+			issueFile.open("issues\\" + std::to_string(rand()) + ".txt");
+			issueFile << "camera\n";
+			issueFile << "------\n";
+			printTransformToFile(issueFile, cam.transform);
 			for (int i = 0; i < sizeof(cubes) / sizeof(cubes[0]); i++) {
-				issue_file << "\ncube " << i << "\n";
-				print_transform_to_file(issue_file, cubes[i].transform);
+				issueFile << "\ncube " << i << "\n";
+				printTransformToFile(issueFile, cubes[i].transform);
 			}
-			issue_file.close();
+			issueFile.close();
 
 		}
 		ImGui::End();

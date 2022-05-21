@@ -10,16 +10,16 @@ CubeEditor::CubeEditor() {
 	transform.rot = glm::vec3(0.0f, 0.0f, 0.0f);
 	transform.scale = scale;
 
-	x_arrow = Arrow(pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, -90.0f), scale, glm::vec3(1.0f, 0.0f, 0.0f));
-	y_arrow = Arrow(pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 1.0f, 0.0f));
-	z_arrow = Arrow(pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale), glm::vec3(90.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 0.0f, 1.0f));
+	xArrow = Arrow(pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, -90.0f), scale, glm::vec3(1.0f, 0.0f, 0.0f));
+	yArrow = Arrow(pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 1.0f, 0.0f));
+	zArrow = Arrow(pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale), glm::vec3(90.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 0.0f, 1.0f));
 
-	arrows[0] = x_arrow;
-	arrows[1] = y_arrow;
-	arrows[2] = z_arrow;
+	arrows[0] = xArrow;
+	arrows[1] = yArrow;
+	arrows[2] = zArrow;
 }
 
-extern bool editor_hover;
+extern bool editorHover;
 void CubeEditor::update() {
 	if (cube == NULL) {
 		ImGui::Begin("triangle info");
@@ -31,13 +31,13 @@ void CubeEditor::update() {
 	glm::vec3& pos = cube->transform.pos;
 	glm::vec3& scale = transform.scale;
 
-	x_arrow.transform.pos = pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale);
-	y_arrow.transform.pos = pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale);
-	z_arrow.transform.pos = pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale);
+	xArrow.transform.pos = pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale);
+	yArrow.transform.pos = pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale);
+	zArrow.transform.pos = pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale);
 
-	x_arrow.update();
-	y_arrow.update();
-	z_arrow.update();
+	xArrow.update();
+	yArrow.update();
+	zArrow.update();
 
 	ImGui::Begin("triangle info");
 
@@ -91,13 +91,13 @@ void CubeEditor::update() {
 void CubeEditor::render() {
 	if (cube == NULL) return;
 
-	cube->render_outline();
-	x_arrow.render();
-	y_arrow.render();
-	z_arrow.render();
+	cube->renderOutline();
+	xArrow.render();
+	yArrow.render();
+	zArrow.render();
 }
 
-void CubeEditor::setup_outline() {
+void CubeEditor::setupOutline() {
 	if (cube == NULL) return;
-	cube->setup_render_outline();
+	cube->setupRenderOutline();
 }
