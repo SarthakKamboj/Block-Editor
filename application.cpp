@@ -56,6 +56,8 @@ int Application::Init() {
 	editorHover = false;
 
 	Window window;
+	window.makeWindowCurrentContext();
+
 	Renderer renderer;
 	rendererPtr = &renderer;
 
@@ -87,9 +89,9 @@ int Application::Init() {
 
 	CameraEditor cameraEditor(&cam);
 
-	int stencilBits;
-	glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL, GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE, &stencilBits);
-	std::cout << "stencilBits: " << stencilBits << std::endl;
+	// int stencilBits;
+	// glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL, GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE, &stencilBits);
+	// std::cout << "stencilBits: " << stencilBits << std::endl;
 
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
@@ -152,7 +154,7 @@ int Application::Init() {
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-		window.swap();
+		window.swapBuffers();
 
 	}
 

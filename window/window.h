@@ -15,7 +15,8 @@ public:
 	SDL_GLContext context;
 	ImGuiIO* ioPtr;
 
-	void swap();
+	void swapBuffers();
+	void makeWindowCurrentContext();
 	void updateDimension();
 	void close();
 };

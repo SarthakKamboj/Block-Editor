@@ -12,9 +12,6 @@ Window::Window() {
 
 	context = SDL_GL_CreateContext(window);
 
-	SDL_GL_MakeCurrent(window, context);
-	gladLoadGLLoader(SDL_GL_GetProcAddress);
-
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -26,6 +23,7 @@ Window::Window() {
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
 	running = true;
+
 }
 
 void Window::close() {
@@ -38,7 +36,12 @@ void Window::close() {
 	SDL_Quit();
 }
 
-void Window::swap() {
+void Window::makeWindowCurrentContext() {
+	SDL_GL_MakeCurrent(window, context);
+	gladLoadGLLoader(SDL_GL_GetProcAddress);
+}
+
+void Window::swapBuffers() {
 	SDL_GL_SwapWindow(window);
 }
 
