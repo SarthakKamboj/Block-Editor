@@ -27,6 +27,10 @@ extern Renderer* rendererPtr;
 
 BoxCollider::BoxCollider() {
 
+	transform.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	transform.pos = glm::vec3(0.0f, 0.0f, 0.0f);
+	transform.rot = glm::vec3(0.0f, 0.0f, 0.0f);
+
 	const char* vertexFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\boxCollider.vert";
 	const char* fragmentFilePath = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\arrow.frag";
 	colliderProgram = ShaderProgram(vertexFilePath, fragmentFilePath);

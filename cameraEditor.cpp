@@ -20,9 +20,10 @@ void CameraEditor::update() {
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("rotation")) {
-			ImGui::SliderFloat("x", &cam->transform.rot.x, -180.0f, 180.0f);
-			ImGui::SliderFloat("y", &cam->transform.rot.y, -180.0f, 180.0f);
-			ImGui::SliderFloat("z", &cam->transform.rot.z, -180.0f, 180.0f);
+			float max = 180.0f;
+			ImGui::SliderFloat("x", &cam->transform.rot.x, -max, max);
+			ImGui::SliderFloat("y", &cam->transform.rot.y, -max, max);
+			ImGui::SliderFloat("z", &cam->transform.rot.z, -max, max);
 			if (ImGui::Button("reset")) {
 				cam->transform.rot = glm::vec3();
 			}

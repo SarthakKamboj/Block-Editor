@@ -19,4 +19,7 @@ public:
 	void makeWindowCurrentContext();
 	void updateDimension();
 	void close();
+
+	void initializeImGui();
+	void deInitializeImGui();
 };
