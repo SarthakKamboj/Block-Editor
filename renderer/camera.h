@@ -20,9 +20,6 @@ public:
 	Transform transform;
 
 	glm::vec3 lookAtPos;
-	glm::vec3 startingLookAtPos;
-	glm::vec3 startingPos;
-	glm::vec3 offset;
 	float offsetDist;
 
 	void update();
