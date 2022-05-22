@@ -26,6 +26,7 @@
 #include "renderer/renderer.h"
 #include "issuesEditor.h"
 #include "glm/glm.hpp"
+#include "renderer/line.h"
 
 extern std::map<SDL_Keycode, bool> keyPressedMap;
 extern MouseClickState mouseClickState;
@@ -43,6 +44,9 @@ bool editorHover;
 
 std::vector<Cube> cubes;
 bool debugMode;
+
+bool debuggedOnce = false;
+Transform debugCamTransform;
 
 typedef struct NearFarPoints {
 	glm::vec3 nearPoint;
@@ -100,6 +104,8 @@ int Application::Init() {
 	CubeEditor cubeEditor;
 	cubeEditorPtr = &cubeEditor;
 
+	Line collisionLine;
+
 	Cube cube0, cube1, cube2;
 	cubes.push_back(cube0);
 	cubes.push_back(cube1);
@@ -134,6 +140,12 @@ int Application::Init() {
 
 	BoxCollider camPoint;
 	camPoint.setColor(glm::vec3(1.0f, 0.0f, 0.0f));
+
+	BoxCollider lineColPoints[6];
+	for (int i = 0; i < 6; i++) {
+		lineColPoints[i].setColor(glm::vec3(0.0f, 1.0f, 0.0f));
+		lineColPoints[i].transform.scale = glm::vec3(0.2f, 0.2f, 0.2f);
+	}
 
 	BoxCollider nearPoint, farPoint;
 	nearPoint.setColor(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -190,6 +202,14 @@ int Application::Init() {
 		}
 		grid.update();
 		IssuesEditor::Update(cubes, cam);
+		if (debugMode) {
+			debugCamTransform = debugCamera.transform;
+
+			std::vector<glm::vec3>& colPoints = cubeEditorPtr->arrows[1].boxCollider.localColPoints;
+			for (int i = 0; i < colPoints.size(); i++) {
+				lineColPoints[i].transform.pos = colPoints[i];
+			}
+		}
 
 		renderer.clear();
 		window.updateDimension();
@@ -202,10 +222,18 @@ int Application::Init() {
 		cubeEditorPtr->render();
 		if (debugMode) {
 			camPoint.render();
+			std::vector<glm::vec3>& colPoints = cubeEditorPtr->arrows[1].boxCollider.localColPoints;
+			glDisable(GL_DEPTH_TEST);
+			for (int i = 0; i < colPoints.size(); i++) {
+				lineColPoints[i].render();
+			}
+			glEnable(GL_DEPTH_TEST);
 		}
+		collisionLine.render();
 		if (clicked) {
-			nearPoint.render();
-			farPoint.render();
+			// nearPoint.render();
+			// farPoint.render();
+			// collisionLine.render();
 		}
 
 		ImGui::Begin("debug mode");
@@ -217,7 +245,14 @@ int Application::Init() {
 			if (debugMode) {
 				cameraEditor.cam = &debugCamera;
 				camPoint.transform = cam.transform;
-				debugCamera.transform = cam.transform;
+				if (!debuggedOnce) {
+					debugCamera.transform = cam.transform;
+					debugCamTransform = cam.transform;
+					debuggedOnce = true;
+				}
+				else {
+					debugCamera.transform = debugCamTransform;
+				}
 				camPoint.transform.scale = glm::vec3(0.2f, 0.2f, 0.2f);
 			}
 			else {
@@ -236,6 +271,8 @@ int Application::Init() {
 			nearPoint.transform.pos = nearFarPoints.nearPoint;
 			farPoint.transform.pos = nearFarPoints.farPoint;
 			clicked = true;
+			collisionLine.setStartPos(nearPoint.transform.pos);
+			collisionLine.setEndPos(farPoint.transform.pos);
 		}
 
 		window.swapBuffers();

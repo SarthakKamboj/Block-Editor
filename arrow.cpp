@@ -18,7 +18,6 @@ static float vertices[] = {
 extern MouseClickState mouseClickState;
 extern MouseState mouseState;
 extern Renderer* rendererPtr;
-// extern glm::mat4 projection, view;
 
 Arrow::Arrow() {}
 
@@ -36,7 +35,6 @@ Arrow::Arrow(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, glm::vec3 _color) {
 	arrowShader = ShaderProgram(vertexFilePath, fragmentFilePath);
 
 	colliderDim = glm::vec3(0.4f, 1.0f, 0.1f);
-	// colliderDim = glm::vec3(1.0f, 1.0f, 1.0f);
 
 	transform = Transform(pos, rot, scale);
 
@@ -67,29 +65,9 @@ void Arrow::update() {
 }
 
 void Arrow::render() {
-
 	boxCollider.render();
 
 	rendererPtr->submitShader(arrowShader, transform);
-
-	/*
-	glm::vec3& pos = transform.pos;
-	glm::mat4 translationMat = getTranslationMatrix(pos.x, pos.y, pos.z);
-	arrowShader.setMat4("translate", GL_FALSE, mat4GetPtr(translationMat));
-
-	glm::vec3& rot = transform.rot;
-	glm::mat4 rotMat = getRotationMatrix(rot.x, rot.y, rot.z);
-	arrowShader.setMat4("rot", GL_FALSE, mat4GetPtr(rotMat));
-
-	glm::vec3& scale = transform.scale;
-	glm::mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z);
-	arrowShader.setMat4("scale", GL_FALSE, mat4GetPtr(scaleMat));
-
-	arrowShader.setMat4("projection", GL_FALSE, mat4GetPtr(projection));
-
-	arrowShader.setMat4("view", GL_FALSE, mat4GetPtr(view));
-	*/
-
 	glDisable(GL_DEPTH_TEST);
 
 	arrowShader.bind();

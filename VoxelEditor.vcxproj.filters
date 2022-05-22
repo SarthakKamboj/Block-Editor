@@ -138,6 +138,9 @@
     <ClCompile Include="issuesEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="renderer\line.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ext\imgui\imconfig.h">
@@ -236,6 +239,9 @@
     <ClInclude Include="issuesEditor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="renderer\line.h">
+      <Filter>Source Files\renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\arrow.frag">
@@ -269,6 +275,12 @@
       <Filter>Source Files\shaders</Filter>
     </None>
     <None Include="shaders\transparent.vert">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="shaders\line.frag">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="shaders\line.vert">
       <Filter>Source Files\shaders</Filter>
     </None>
   </ItemGroup>

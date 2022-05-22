@@ -1,8 +1,8 @@
 #include "modeManager.h"
 
 ModeManager::ModeManager() {
-	mode = Mode::ADD;
-	modeString = "add";
+	mode = Mode::SELECT;
+	modeString = "select";
 }
 
 void ModeManager::update() {

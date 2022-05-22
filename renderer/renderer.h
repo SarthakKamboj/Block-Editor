@@ -9,6 +9,7 @@ class Renderer {
 public:
 	Renderer();
 	void submitShader(ShaderProgram& shaderProgram, Transform transform);
+	void submitShaderWithoutTransform(ShaderProgram& shaderProgram);
 	void frameSetup();
 	void clear();
 

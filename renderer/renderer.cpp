@@ -12,12 +12,15 @@ Renderer::Renderer() {
 	pov = 45.0f;
 }
 
+
+void Renderer::submitShaderWithoutTransform(ShaderProgram& shaderProgram) {
+	shaderProgram.setMat4("projection", GL_FALSE, glm::value_ptr(projection));
+	shaderProgram.setMat4("view", GL_FALSE, glm::value_ptr(view));
+}
+
 void Renderer::submitShader(ShaderProgram& shaderProgram, Transform transform) {
 	shaderProgram.setMat4("projection", GL_FALSE, glm::value_ptr(projection));
 	shaderProgram.setMat4("view", GL_FALSE, glm::value_ptr(view));
-
-	// transform.pos -= cameraEditorPtr->cam->transform.pos;
-	// transform.rot -= cameraEditorPtr->cam->transform.rot;
 
 	glm::vec3 pos = transform.pos;
 	glm::mat4 translationMat = getTranslationMatrix(pos.x, pos.y, pos.z);

@@ -73,8 +73,8 @@ Cube::Cube() {
 	const char* outlineFrag = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\outline.frag";
 	outlineProgram = ShaderProgram(outlineVert, outlineFrag);
 
-	const char* transparentVert = "C:\\Sarthak\\voxel_editor\\VoxelEdito\\shaders\\transparent.vert";
-	const char* transparentFrag = "C:\\Sarthak\\voxel_editor\\VoxelEdito\\shaders\\transparent.frag";
+	const char* transparentVert = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\transparent.vert";
+	const char* transparentFrag = "C:\\Sarthak\\voxel_editor\\VoxelEditor\\shaders\\transparent.frag";
 	transparentProgram = ShaderProgram(transparentVert, transparentFrag);
 
 	outline = false;

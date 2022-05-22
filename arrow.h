@@ -19,6 +19,7 @@ public:
 	void render();
 
 	Transform transform;
+	BoxCollider boxCollider;
 
 private:
 	VAO vao;
@@ -28,6 +29,5 @@ private:
 	glm::vec3 color;
 	glm::vec3 highlightColor;
 
-	BoxCollider boxCollider;
 	glm::vec3 colliderDim;
 };
