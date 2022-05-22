@@ -123,8 +123,6 @@ void Cube::update() {
 				cubeEditorPtr->cube = this;
 			}
 		}
-		// debug_cube.transform.pos = boxCollider.frontColPoint;
-		// debug_cube.transform.pos = boxCollider.top_col_point;
 		for (int i = 0; i < boxCollider.localColPoints.size(); i++) {
 			debugCubes[i].transform.pos = boxCollider.localToWorld(boxCollider.localColPoints[i]);
 		}

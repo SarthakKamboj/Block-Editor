@@ -2,6 +2,7 @@
 
 int width = 800, height = 800;
 
+static bool first = true;
 Window::Window() {
 	window = SDL_CreateWindow("window",
 		SDL_WINDOWPOS_CENTERED,
@@ -18,18 +19,40 @@ Window::Window() {
 	ioPtr = &io;
 	ImGui::StyleColorsDark();
 
-	ImGui_ImplSDL2_InitForOpenGL(window, context);
-	const char* glsl_version = "#version 330";
-	ImGui_ImplOpenGL3_Init(glsl_version);
+	/*
+	if (first) {
+		ImGui_ImplSDL2_InitForOpenGL(window, context);
+		const char* glsl_version = "#version 330";
+		ImGui_ImplOpenGL3_Init(glsl_version);
+	}
+	*/
 
 	running = true;
+	first = false;
 
 }
 
-void Window::close() {
+void Window::initializeImGui() {
+	ImGui_ImplSDL2_InitForOpenGL(window, context);
+	const char* glsl_version = "#version 330";
+	ImGui_ImplOpenGL3_Init(glsl_version);
+}
+
+void Window::deInitializeImGui() {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
+}
+
+static bool firstClose = true;
+void Window::close() {
+	/*
+	if (firstClose) {
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplSDL2_Shutdown();
+		ImGui::DestroyContext();
+	}
+	*/
 
 	SDL_GL_DeleteContext(context);
 	SDL_DestroyWindow(window);
@@ -39,6 +62,10 @@ void Window::close() {
 void Window::makeWindowCurrentContext() {
 	SDL_GL_MakeCurrent(window, context);
 	gladLoadGLLoader(SDL_GL_GetProcAddress);
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 }
 
 void Window::swapBuffers() {

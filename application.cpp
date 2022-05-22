@@ -25,21 +25,56 @@
 #include "application.h"
 #include "renderer/renderer.h"
 #include "issuesEditor.h"
+#include "glm/glm.hpp"
 
 extern std::map<SDL_Keycode, bool> keyPressedMap;
 extern MouseClickState mouseClickState;
 extern MouseState mouseState;
+extern int width, height;
+extern glm::mat4 projection, view;
 
 Camera* camPtr;
 CubeEditor* cubeEditorPtr;
 ModeManager* modeManagerPtr;
 Renderer* rendererPtr;
+CameraEditor* cameraEditorPtr;
 
 bool editorHover;
 
 std::vector<Cube> cubes;
+bool debugMode;
+
+typedef struct NearFarPoints {
+	glm::vec3 nearPoint;
+	glm::vec3 farPoint;
+} NearFarPoints;
+
+NearFarPoints screenToWorld(glm::vec2 screenCoords) {
+	float xNdc = ((float)(screenCoords.x - (width / 2.0f))) / (width / 2.0f);
+	float yNdc = -1.0f * ((float)(screenCoords.y - (height / 2.0f))) / (height / 2.0f);
+	glm::vec4 nearNdc(xNdc, yNdc, -1.0f, 1.0f);
+	glm::vec4 farNdc(xNdc, yNdc, 1.0f, 1.0f);
+
+	glm::mat4 screenToWorldMat = glm::inverse(projection * view);
+	glm::vec4 nearCoord = screenToWorldMat * nearNdc;
+	glm::vec4 farCoord = screenToWorldMat * farNdc;
+
+	nearCoord /= nearCoord.w;
+	farCoord /= farCoord.w;
+
+	glm::vec3 nearVec3(nearCoord.x, nearCoord.y, nearCoord.z);
+	glm::vec3 farVec3(farCoord.x, farCoord.y, farCoord.z);
+
+	NearFarPoints nearFarPoints;
+	nearFarPoints.nearPoint = nearVec3;
+	nearFarPoints.farPoint = farVec3;
+
+	return nearFarPoints;
+}
 
 int Application::Init() {
+
+	debugMode = false;
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		std::cout << "sdl gave error" << std::endl;
@@ -57,12 +92,10 @@ int Application::Init() {
 
 	Window window;
 	window.makeWindowCurrentContext();
+	window.initializeImGui();
 
 	Renderer renderer;
 	rendererPtr = &renderer;
-
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
 
 	CubeEditor cubeEditor;
 	cubeEditorPtr = &cubeEditor;
@@ -73,8 +106,9 @@ int Application::Init() {
 	cubes.push_back(cube2);
 
 	cubeEditorPtr->cube = &cubes[0];
-	cubes[1].transform.pos = glm::vec3(1.0f, 0.0f, 0.0f);
-	cubes[2].transform.pos = glm::vec3(-1.0f, 0.0f, 0.0f);
+	cubes[0].transform.pos = glm::vec3(0.0f, 0.0f, -5.0f);
+	cubes[1].transform.pos = glm::vec3(1.0f, 0.0f, -5.0f);
+	cubes[2].transform.pos = glm::vec3(-1.0f, 0.0f, -5.0f);
 
 	DebugCube debugCube;
 	ModeManager modeManager;
@@ -84,18 +118,31 @@ int Application::Init() {
 
 	uint32_t start = SDL_GetTicks();
 
-	Camera cam(0.0f, 0.0f, 10.0f);
+	// Camera cam(0.0f, 0.0f, 10.0f);
+	Camera cam(0.0f, 0.0f, 0.0f);
+	// Camera cam(0.0f, 5.0f, 10.0f);
 	camPtr = &cam;
 
+	Camera debugCamera;
+
 	CameraEditor cameraEditor(&cam);
+	cameraEditorPtr = &cameraEditor;
 
 	// int stencilBits;
 	// glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL, GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE, &stencilBits);
 	// std::cout << "stencilBits: " << stencilBits << std::endl;
 
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	BoxCollider camPoint;
+	camPoint.setColor(glm::vec3(1.0f, 0.0f, 0.0f));
+
+	BoxCollider nearPoint, farPoint;
+	nearPoint.setColor(glm::vec3(0.0f, 1.0f, 0.0f));
+	farPoint.setColor(glm::vec3(0.0f, 1.0f, 0.0f));
+	nearPoint.transform.scale = glm::vec3(0.2f, 0.2f, 0.2f);
+	farPoint.transform.scale = glm::vec3(0.2f, 0.2f, 0.2f);
 
 	ImFont* robotoFont = window.ioPtr->Fonts->AddFontFromFileTTF("ext\\imgui\\fonts\\Roboto-Medium.ttf", 16.0f);
+	bool clicked = false;
 
 	while (window.running) {
 
@@ -135,9 +182,13 @@ int Application::Init() {
 		modeManager.update();
 		cameraEditor.update();
 		cubeEditor.update();
-		cam.update();
+		if (!debugMode) {
+			cam.update();
+		}
+		else {
+			debugCamera.update();
+		}
 		grid.update();
-
 		IssuesEditor::Update(cubes, cam);
 
 		renderer.clear();
@@ -149,15 +200,47 @@ int Application::Init() {
 		}
 		grid.render();
 		cubeEditorPtr->render();
+		if (debugMode) {
+			camPoint.render();
+		}
+		if (clicked) {
+			nearPoint.render();
+			farPoint.render();
+		}
+
+		ImGui::Begin("debug mode");
+		std::string modeStr = (debugMode ? "debug" : "regular");
+		std::string modeStrFull = "mode: " + modeStr;
+		ImGui::Text(modeStrFull.c_str());
+		if (ImGui::Button("toggle debug mode")) {
+			debugMode = !debugMode;
+			if (debugMode) {
+				cameraEditor.cam = &debugCamera;
+				camPoint.transform = cam.transform;
+				debugCamera.transform = cam.transform;
+				camPoint.transform.scale = glm::vec3(0.2f, 0.2f, 0.2f);
+			}
+			else {
+				cameraEditor.cam = &cam;
+			}
+		}
+		ImGui::End();
 
 		ImGui::PopFont();
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+		if (mouseClickState.left && !debugMode && !editorHover) {
+			glm::vec2 screenCoords(mouseState.x, mouseState.y);
+			NearFarPoints nearFarPoints = screenToWorld(screenCoords);
+			nearPoint.transform.pos = nearFarPoints.nearPoint;
+			farPoint.transform.pos = nearFarPoints.farPoint;
+			clicked = true;
+		}
+
 		window.swapBuffers();
 
 	}
 
-	window.close();
 	return 0;
 }
