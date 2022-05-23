@@ -21,4 +21,7 @@ public:
 	Cube* prevFrameCubeSelection;
 	Arrow* arrows[6];
 	float disableSelectionTime;
+
+private:
+	float arrowPosOffset = 0.5f;
 };

@@ -6,20 +6,19 @@ CubeEditor::CubeEditor() {
 	cube = NULL;
 
 	glm::vec3 pos(0.0f, 0.0f, 0.0f);
-	glm::vec3 scale(0.5f, 0.5f, 0.5f);
+	glm::vec3 scale(0.25f, 0.25f, 0.25f);
 
 	transform.pos = pos;
 	transform.rot = glm::vec3(0.0f, 0.0f, 0.0f);
 	transform.scale = scale;
 
-	rightArrow = Arrow(pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, -90.0f), scale, glm::vec3(1.0f, 0.0f, 0.0f));
-	upArrow = Arrow(pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 1.0f, 0.0f));
-	forwardArrow = Arrow(pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale), glm::vec3(90.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 0.0f, 1.0f));
+	rightArrow = Arrow(pos + glm::vec3(arrowPosOffset, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -90.0f), scale, glm::vec3(1.0f, 0.0f, 0.0f));
+	upArrow = Arrow(pos + glm::vec3(0.0f, arrowPosOffset, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 1.0f, 0.0f));
+	forwardArrow = Arrow(pos + glm::vec3(0.0f, 0.0f, arrowPosOffset), glm::vec3(90.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 0.0f, 1.0f));
 
-	scale *= -1;
-	leftArrow = Arrow(pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, -90.0f), scale, glm::vec3(1.0f, 0.0f, 0.0f));
-	downArrow = Arrow(pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 1.0f, 0.0f));
-	backArrow = Arrow(pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale), glm::vec3(90.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 0.0f, 1.0f));
+	leftArrow = Arrow(pos + glm::vec3(-arrowPosOffset, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -90.0f), -scale, glm::vec3(1.0f, 0.0f, 0.0f));
+	downArrow = Arrow(pos + glm::vec3(0.0f, -arrowPosOffset, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), -scale, glm::vec3(0.0f, 1.0f, 0.0f));
+	backArrow = Arrow(pos + glm::vec3(0.0f, 0.0f, -arrowPosOffset), glm::vec3(90.0f, 0.0f, 0.0f), -scale, glm::vec3(0.0f, 0.0f, 1.0f));
 
 	arrows[0] = &rightArrow;
 	arrows[1] = &upArrow;
@@ -50,17 +49,14 @@ void CubeEditor::update() {
 
 	transform.pos = cube->transform.pos;
 	glm::vec3& pos = transform.pos;
-	glm::vec3 scale = transform.scale;
 
-	arrows[0]->transform.pos = pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale);
-	arrows[1]->transform.pos = pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale);
-	arrows[2]->transform.pos = pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale);
+	arrows[0]->transform.pos = pos + glm::vec3(arrowPosOffset, 0.0f, 0.0f);
+	arrows[1]->transform.pos = pos + glm::vec3(0.0f, arrowPosOffset, 0.0f);
+	arrows[2]->transform.pos = pos + glm::vec3(0.0f, 0.0f, arrowPosOffset);
 
-	scale *= -1;
-
-	arrows[3]->transform.pos = pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale);
-	arrows[4]->transform.pos = pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale);
-	arrows[5]->transform.pos = pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale);
+	arrows[3]->transform.pos = pos + glm::vec3(-arrowPosOffset, 0.0f, 0.0f);
+	arrows[4]->transform.pos = pos + glm::vec3(0.0f, -arrowPosOffset, 0.0f);
+	arrows[5]->transform.pos = pos + glm::vec3(0.0f, 0.0f, -arrowPosOffset);
 
 	for (int i = 0; i < 6; i++) {
 		arrows[i]->update();

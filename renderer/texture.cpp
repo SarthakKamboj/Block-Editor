@@ -4,7 +4,7 @@ Texture::Texture() {
 
 }
 
-Texture::Texture(const char* file_path, int _texUnit) {
+Texture::Texture(const char* filePath, int _texUnit) {
 
 	if (_texUnit > 15) {
 		std::cout << "texture unit is too big" << std::endl;
@@ -12,9 +12,10 @@ Texture::Texture(const char* file_path, int _texUnit) {
 	}
 
 	texUnit = _texUnit;
+	stbi_set_flip_vertically_on_load(true);
 
 	int width, height, nrChannels;
-	unsigned char* data = stbi_load(file_path, &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load(filePath, &width, &height, &nrChannels, 0);
 
 	glGenTextures(1, &texture);
 	glActiveTexture(GL_TEXTURE0 + texUnit);
@@ -27,7 +28,13 @@ Texture::Texture(const char* file_path, int _texUnit) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	if (nrChannels == 4) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	}
+	if (nrChannels == 3) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	}
+
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glBindTexture(GL_TEXTURE_2D, 0);

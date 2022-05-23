@@ -7,7 +7,7 @@
 class Texture {
 public:
 	Texture();
-	Texture(const char* file_path, int texUnit);
+	Texture(const char* filePath, int texUnit);
 	void bind();
 	void unbind();
 

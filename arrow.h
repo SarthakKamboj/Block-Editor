@@ -2,6 +2,8 @@
 
 #include "renderer/vao.h"
 #include "renderer/vbo.h"
+#include "renderer/ebo.h"
+#include "renderer/texture.h"
 #include "renderer/shaderProgram.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
@@ -26,10 +28,10 @@ public:
 private:
 	VAO vao;
 	VBO vbo;
+	EBO ebo;
+
 	ShaderProgram arrowShader;
 
 	glm::vec3 color;
 	glm::vec3 highlightColor;
-
-	glm::vec3 colliderDim;
 };

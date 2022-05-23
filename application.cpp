@@ -98,11 +98,11 @@ int Application::Init() {
 	Renderer renderer;
 	rendererPtr = &renderer;
 
-	CubeEditor cubeEditor;
-	cubeEditorPtr = &cubeEditor;
-
 	Cube cube0;
 	cubes.push_back(cube0);
+
+	CubeEditor cubeEditor;
+	cubeEditorPtr = &cubeEditor;
 
 	cubeEditorPtr->cube = &cubes[0];
 	cubes[0].transform.pos = glm::vec3(0.0f, 0.5f, -8.0f);
@@ -117,6 +117,7 @@ int Application::Init() {
 
 	Camera cam(0.0f, 0.0f, -2.0f);
 	camPtr = &cam;
+	camPtr->transform.rot.y = -90.0f;
 
 	CameraEditor cameraEditor(&cam);
 	cameraEditorPtr = &cameraEditor;
