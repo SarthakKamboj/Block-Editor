@@ -17,9 +17,7 @@ public:
 	Transform transform;
 	Arrow rightArrow, upArrow, forwardArrow;
 	Arrow leftArrow, downArrow, backArrow;
-	// Cube* cube;
 	Cube* cubeClickedOn;
-	// Cube* prevFrameCubeSelection;
 	Arrow* arrows[6];
 	float disableSelectionTime;
 
@@ -27,6 +25,6 @@ public:
 
 private:
 	void addCube(Cube* cubePtr);
-	float arrowPosOffset = 0.5f;
+	float arrowPosOffset = 0.35f;
 	void moveCubes(glm::vec3 offset);
 };

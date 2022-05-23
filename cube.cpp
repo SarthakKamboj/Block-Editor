@@ -90,19 +90,7 @@ Cube::Cube() {
 void Cube::update() {
 	boxCollider.transform = transform;
 
-	/*
-	if (mouseClickState.left && !editorHover) {
-		glm::vec2 screenCoords(mouseState.x, mouseState.y);
-		Ray ray = boxCollider.screenToLocalRay(screenCoords);
-
-		if (boxCollider.rayCollide(ray)) {
-			cubeEditorPtr->cube = this;
-			debug_cube.transform.pos = boxCollider.frontColPoint;
-		}
-	}
-	*/
-
-	if (modeManagerPtr->mode != Mode::SELECT) {
+	if (modeManagerPtr->mode != Mode::SELECT || rendererPtr->isInDebugMode()) {
 		return;
 	}
 
@@ -119,11 +107,7 @@ void Cube::update() {
 				float selectedCubeDistToCam = pow(selectedCubeTransform.pos.x - camPtr->transform.pos.x, 2) + pow(selectedCubeTransform.pos.y - camPtr->transform.pos.y, 2) + pow(selectedCubeTransform.pos.z - camPtr->transform.pos.z, 2);
 				closerToCam = (curDistToCam <= selectedCubeDistToCam);
 			}
-			/*
-			if (cubeEditorPtr->selectedCubes.size() > 0 && keyDownMap[SDLK_LCTRL]) {
-				cubeEditorPtr->addCube(this);
-			}
-			*/
+
 			if (closerToCam) {
 				cubeEditorPtr->cubeClickedOn = this;
 			}
@@ -134,7 +118,6 @@ void Cube::update() {
 
 
 void Cube::lateUpdate() {
-	// outline = (cubeEditorPtr->cube == this);
 	outline = false;
 	for (int i = 0; i < cubeEditorPtr->selectedCubes.size(); i++) {
 		if (cubeEditorPtr->selectedCubes[i] == this) {
@@ -163,8 +146,6 @@ void Cube::setupRenderOutline() {
 }
 
 void Cube::render() {
-
-	// boxCollider.render();
 
 	if (!outline) {
 		rendererPtr->submitShader(shaderProgram, transform);
@@ -198,11 +179,6 @@ void Cube::renderOutline() {
 	drawCube();
 	outlineProgram.unbind();
 
-	/*
-	glDisable(GL_STENCIL_TEST);
-	boxCollider.render();
-	glEnable(GL_DEPTH_TEST);
-	*/
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_STENCIL_TEST);
 }

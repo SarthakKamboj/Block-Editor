@@ -1,11 +1,11 @@
 #include "cubeEditor.h"
 #include "input/input.h"
+#include "renderer/renderer.h"
 
 extern float deltaTime;
 extern MouseClickState mouseClickState;
 
 CubeEditor::CubeEditor() {
-	// cube = NULL;
 
 	glm::vec3 pos(0.0f, 0.0f, 0.0f);
 	glm::vec3 scale(0.25f, 0.25f, 0.25f);
@@ -29,7 +29,6 @@ CubeEditor::CubeEditor() {
 	arrows[4] = &downArrow;
 	arrows[5] = &backArrow;
 
-	// prevFrameCubeSelection = NULL;
 	cubeClickedOn = NULL;
 	disableSelectionTime = 0.0f;
 }
@@ -52,8 +51,10 @@ void CubeEditor::moveCubes(glm::vec3 offset) {
 
 extern bool editorHover;
 extern std::map<SDL_Keycode, bool> keyDownMap;
+extern Renderer* rendererPtr;
 void CubeEditor::update() {
-	// if (cube == NULL) {
+
+	if (rendererPtr->isInDebugMode()) return;
 
 	if (mouseClickState.left) {
 		if (cubeClickedOn != NULL) {
@@ -84,19 +85,11 @@ void CubeEditor::update() {
 		ImGui::Begin("triangle info");
 		ImGui::Text("select a cube");
 		ImGui::End();
-		// prevFrameCubeSelection = NULL;
 		return;
 	}
 
-	/*
-	if (prevFrameCubeSelection != cube) {
-		disableSelectionTime = 0.25f;
-	}
-	*/
-
 	disableSelectionTime = fmax(0.0f, disableSelectionTime - deltaTime);
 
-	// transform.pos = cube->transform.pos;
 	transform.pos = selectedCubes[selectedCubes.size() - 1]->transform.pos;
 	glm::vec3& pos = transform.pos;
 
@@ -114,89 +107,30 @@ void CubeEditor::update() {
 
 	if (disableSelectionTime == 0.0f) {
 		if (rightArrow.clickedOn) {
-			// cube->transform.pos += glm::vec3(1.0f, 0.0f, 0.0f);
 			moveCubes(glm::vec3(1.0f, 0.0f, 0.0f));
 		}
 		if (upArrow.clickedOn) {
-			// cube->transform.pos += glm::vec3(0.0f, 1.0f, 0.0f);
 			moveCubes(glm::vec3(0.0f, 1.0f, 0.0f));
 		}
 		if (forwardArrow.clickedOn) {
-			// cube->transform.pos += glm::vec3(0.0f, 0.0f, 1.0f);
 			moveCubes(glm::vec3(0.0f, 0.0f, 1.0f));
 		}
 		if (leftArrow.clickedOn) {
-			// cube->transform.pos -= glm::vec3(1.0f, 0.0f, 0.0f);
 			moveCubes(glm::vec3(-1.0f, 0.0f, 0.0f));
 		}
 		if (downArrow.clickedOn) {
-			// cube->transform.pos -= glm::vec3(0.0f, 1.0f, 0.0f);
 			moveCubes(glm::vec3(0.0f, -1.0f, 0.0f));
 		}
 		if (backArrow.clickedOn) {
-			// cube->transform.pos -= glm::vec3(0.0f, 0.0f, 1.0f);
 			moveCubes(glm::vec3(0.0f, 0.0f, -1.0f));
 		}
 	}
 
-	/*
-	ImGui::Begin("triangle info");
-
-	ImGui::Text(cube->name.c_str());
-
-	if (ImGui::CollapsingHeader("transform")) {
-		if (ImGui::TreeNode("position")) {
-			ImGui::SliderFloat("x", &cube->transform.pos.x, -3.0f, 3.0f);
-			ImGui::SliderFloat("y", &cube->transform.pos.y, -3.0f, 3.0f);
-			ImGui::SliderFloat("z", &cube->transform.pos.z, -3.0f, 3.0f);
-
-			if (ImGui::Button("reset")) {
-				cube->transform.pos = glm::vec3();
-			}
-
-			ImGui::TreePop();
-		}
-
-		if (ImGui::TreeNode("scale")) {
-			ImGui::SliderFloat("x", &cube->transform.scale.x, 0.0f, 5.0f);
-			ImGui::SliderFloat("y", &cube->transform.scale.y, 0.0f, 5.0f);
-			ImGui::SliderFloat("z", &cube->transform.scale.z, 0.0f, 5.0f);
-
-			if (ImGui::Button("reset")) {
-				cube->transform.scale = glm::vec3(1.0f, 1.0f, 1.0f);
-			}
-
-			ImGui::TreePop();
-		}
-
-		if (ImGui::TreeNode("rotation")) {
-			ImGui::SliderFloat("x", &cube->transform.rot.x, -180.0f, 180.0f);
-			ImGui::SliderFloat("y", &cube->transform.rot.y, -180.0f, 180.0f);
-			ImGui::SliderFloat("z", &cube->transform.rot.z, -180.0f, 180.0f);
-
-			if (ImGui::Button("reset")) {
-				cube->transform.rot = glm::vec3();
-			}
-
-			ImGui::TreePop();
-		}
-	}
-	if (ImGui::CollapsingHeader("color")) {
-		ImGui::ColorEdit3("Triangle color", &cube->color.x);
-	}
-
-	ImGui::End();
-	*/
-
-	// prevFrameCubeSelection = cube;
-
 }
 
 void CubeEditor::render() {
-	// if (cube == NULL) return;
 	if (selectedCubes.size() == 0) return;
 
-	// cube->renderOutline();
 	for (int i = 0; i < selectedCubes.size(); i++) {
 		selectedCubes[i]->renderOutline();
 	}
@@ -207,9 +141,7 @@ void CubeEditor::render() {
 }
 
 void CubeEditor::setupOutline() {
-	// if (cube == NULL) return;
 	if (selectedCubes.size() == 0) return;
-	// cube->setupRenderOutline();
 	for (int i = 0; i < selectedCubes.size(); i++) {
 		selectedCubes[i]->setupRenderOutline();
 	}

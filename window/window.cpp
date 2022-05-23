@@ -19,14 +19,6 @@ Window::Window() {
 	ioPtr = &io;
 	ImGui::StyleColorsDark();
 
-	/*
-	if (first) {
-		ImGui_ImplSDL2_InitForOpenGL(window, context);
-		const char* glsl_version = "#version 330";
-		ImGui_ImplOpenGL3_Init(glsl_version);
-	}
-	*/
-
 	running = true;
 	first = false;
 

@@ -103,7 +103,6 @@ void ShaderProgram::setMat4(const GLchar* varName, GLboolean transpose, const GL
 	unbind();
 }
 
-// TODO: figure out why location shaderPath printing causing error
 GLint ShaderProgram::getVariableLocation(const GLchar* varName) {
 	if (programId == -1) return -1;
 	GLint location = glGetUniformLocation(programId, varName);

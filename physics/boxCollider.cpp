@@ -75,21 +75,20 @@ void BoxCollider::setColor(glm::vec3 color) {
 }
 
 bool BoxCollider::pointCollide(glm::vec3& point) {
-	glm::vec3& scale = transform.scale;
+	float extentVal = 0.5f;
 
 	return (
-		point.x >= (-1.0f / 2.0f) &&
-		point.x <= (1.0f / 2.0f) &&
-		point.y >= (-1.0f / 2.0f) &&
-		point.y <= (1.0f / 2.0f) &&
-		point.z >= (-1.0f / 2.0f) &&
-		point.z <= (1.0f / 2.0f)
+		point.x >= -extentVal &&
+		point.x <= extentVal &&
+		point.y >= -extentVal &&
+		point.y <= extentVal &&
+		point.z >= -extentVal &&
+		point.z <= extentVal
 		);
 }
 
 void BoxCollider::render() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	// glDisable(GL_DEPTH_TEST);
 	rendererPtr->submitShader(colliderProgram, transform);
 
 	colliderProgram.bind();
@@ -98,7 +97,6 @@ void BoxCollider::render() {
 	vao.unbind();
 	colliderProgram.unbind();
 
-	// glEnable(GL_DEPTH_TEST);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
@@ -110,23 +108,9 @@ bool BoxCollider::rayCollide(Ray& ray) {
 
 	glm::vec3& scale = transform.scale;
 
-	// float frontZ = (scale.z / 2.0f);
-	// float backZ = -(scale.z / 2.0f);
-
-	// float leftX = -(scale.x / 2.0f);
-	// float rightX = (scale.x / 2.0f);
-
-	// float topY = (scale.y / 2.0f);
-	// float bottomY = -(scale.y / 2.0f);
-
-	float frontZ = (1.0f / 2.0f);
-	float backZ = -(1.0f / 2.0f);
-
-	float leftX = -(1.0f / 2.0f);
-	float rightX = (1.0f / 2.0f);
-
-	float topY = (1.0f / 2.0f);
-	float bottomY = -(1.0f / 2.0f);
+	float extentVal = 0.5f;
+	float frontZ = extentVal, rightX = extentVal, topY = extentVal;
+	float backZ = -extentVal, leftX = -extentVal, bottomY = -extentVal;
 
 	float unitsToFrontPlane = (frontZ - ray.origin.z) / ray.dir.z;
 	float unitsToBackPlane = (backZ - ray.origin.z) / ray.dir.z;
@@ -176,44 +160,12 @@ bool BoxCollider::rayCollide(Ray& ray) {
 }
 
 Ray BoxCollider::screenToLocalRay(glm::vec2& screenCoords) {
-	/*
-	float xNdc = ((float)(screenCoords.x - (width / 2.0f))) / (width / 2.0f);
-	float yNdc = -1.0f * ((float)(screenCoords.y - (height / 2.0f))) / (height / 2.0f);
-	glm::vec4 nearNdc(xNdc, yNdc, -1.0f, 1.0f);
-	glm::vec4 farNdc(xNdc, yNdc, 1.0f, 1.0f);
-
-	glm::mat4 translationMat = getTranslationMatrix(transform.pos.x, transform.pos.y, transform.pos.z);
-	glm::mat4 rotationMat = getRotationMatrix(transform.rot.x, transform.rot.y, transform.rot.z);
-	glm::mat4 scaleMat = getScaleMatrix(transform.scale.x, transform.scale.y, transform.scale.z);
-	glm::mat4 model = translationMat * rotationMat * scaleMat;
-
-	// glm::mat4 model(1.0f);
-	// model = glm::translate(model, transform.pos);
-	// glm::vec3& rot = transform.rot;
-	// model = model * getRotationMatrix(rot.x, rot.y, rot.z);
-	// model = glm::scale(model, transform.scale);
-
-	glm::mat4 screenToLocalMat = glm::inverse(projection * view * model);
-	// glm::vec4 nearLocal = ndcToLocalMat * nearNdc;
-	// glm::vec4 farLocal = ndcToLocalMat * farNdc;
-
-	glm::vec4 nearLocal = screenToLocalMat * nearNdc;
-	glm::vec4 farLocal = screenToLocalMat * farNdc;
-
-	nearLocal /= nearLocal.w;
-	farLocal /= farLocal.w;
-	*/
-
-	// glm::vec3 nearVec3(nearLocal.x, nearLocal.y, nearLocal.z);
-	// glm::vec3 farVec3(farLocal.x, farLocal.y, farLocal.z);
-
 	NearFarPointsVec3 points = screenToLocal(screenCoords);
 
 	Ray ray;
 	ray.origin = points.nearPoint;
 	glm::vec3 diff = points.farPoint - points.nearPoint;
 	ray.dir = glm::normalize(diff);
-	// std::cout << pow(pow(diff.x, 2) + pow(diff.y, 2) + pow(diff.z, 2), 0.5f) << std::endl;
 
 	return ray;
 }
@@ -224,27 +176,6 @@ NearFarPointsVec3 BoxCollider::screenToLocal(glm::vec2& screenCoords) {
 	glm::vec4 nearNdc(xNdc, yNdc, -1.0f, 1.0f);
 	glm::vec4 farNdc(xNdc, yNdc, 1.0f, 1.0f);
 
-	/*
-	glm::mat4 translationMat = getTranslationMatrix(transform.pos.x, transform.pos.y, transform.pos.z);
-	glm::mat4 rotationMat = getRotationMatrix(transform.rot.x, transform.rot.y, transform.rot.z);
-	glm::mat4 scaleMat = getScaleMatrix(transform.scale.x, transform.scale.y, transform.scale.z);
-	glm::mat4 model = translationMat * rotationMat * scaleMat;
-
-	glm::mat4 ndcToLocalMat = glm::inverse(projection * view * model);
-	glm::vec4 nearLocal = ndcToLocalMat * nearNdc;
-	glm::vec4 farLocal = ndcToLocalMat * farNdc;
-
-	nearLocal /= nearLocal.w;
-	farLocal /= farLocal.w;
-
-	glm::vec3 nearVec3(nearLocal.x, nearLocal.y, nearLocal.z);
-	glm::vec3 farVec3(farLocal.x, farLocal.y, farLocal.z);
-
-	NearFarPointsVec3 nearFarPoints;
-	nearFarPoints.nearPoint = nearVec3;
-	nearFarPoints.farPoint = farVec3;
-	*/
-
 	NearFarPointsVec3 nearFarPoints;
 	nearFarPoints.nearPoint = ndcToLocal(nearNdc);
 	nearFarPoints.farPoint = ndcToLocal(farNdc);
@@ -253,14 +184,6 @@ NearFarPointsVec3 BoxCollider::screenToLocal(glm::vec2& screenCoords) {
 }
 
 glm::vec3 BoxCollider::localToWorld(glm::vec3 localPoint) {
-	/*
-	glm::mat4 model(1.0f);
-	model = glm::translate(model, transform.pos);
-	glm::vec3& rot = transform.rot;
-	model = model * getRotationMatrix(rot.x, rot.y, rot.z);
-	model = glm::scale(model, transform.scale);
-	*/
-
 	glm::mat4 translationMat = getTranslationMatrix(transform.pos.x, transform.pos.y, transform.pos.z);
 	glm::mat4 rotationMat = getRotationMatrix(transform.rot.x, transform.rot.y, transform.rot.z);
 	glm::mat4 scaleMat = getScaleMatrix(transform.scale.x, transform.scale.y, transform.scale.z);
@@ -303,7 +226,6 @@ glm::vec4 BoxCollider::localToNDC(glm::vec3 localPoint) {
 
 	glm::vec4 ndcPoint = projection * view * model * glm::vec4(localPoint, 1.0f);
 	ndcPoint /= ndcPoint.w;
-	// printVec4(ndcPoint);
 
 	return ndcPoint;
 }

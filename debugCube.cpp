@@ -50,12 +50,12 @@ void DebugCube::setColor(glm::vec3 color) {
 }
 
 void DebugCube::render() {
-	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	rendererPtr->submitShader(shaderProgram, transform);
 	shaderProgram.bind();
 	drawCube();
 	shaderProgram.unbind();
-	// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void DebugCube::drawCube() {

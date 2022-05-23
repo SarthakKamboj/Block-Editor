@@ -81,10 +81,6 @@ int Application::Init() {
 	CubeEditor cubeEditor;
 	cubeEditorPtr = &cubeEditor;
 
-	// cubeEditorPtr->selectedCubes.push_back(&cubes[0]);
-	// cubes[0].transform.pos = glm::vec3(0.0f, 0.5f, -8.0f);
-	// cubes[0].transform.scale = glm::vec3(1.25f, 1.5f, 2.0f);
-
 	ModeManager modeManager;
 	modeManagerPtr = &modeManager;
 
@@ -102,12 +98,6 @@ int Application::Init() {
 	DebugCube camPoint;
 	camPoint.setColor(glm::vec3(0.0f, 1.0f, 1.0f));
 	camPoint.transform.scale = glm::vec3(0.2f, 0.2f, 0.2f);
-
-	DebugCube clickColPoints[6];
-	for (int i = 0; i < 6; i++) {
-		clickColPoints[i].setColor(glm::vec3(0.0f, 1.0f, 0.0f));
-		clickColPoints[i].transform.scale = glm::vec3(0.05f, 0.05f, 0.05f);
-	}
 
 	ImFont* robotoFont = window.ioPtr->Fonts->AddFontFromFileTTF("ext\\imgui\\fonts\\Roboto-Medium.ttf", 16.0f);
 
@@ -132,11 +122,6 @@ int Application::Init() {
 
 		editorHover = ImGui::IsAnyItemHovered();
 
-		/*
-		if ((mouseClickState.left && !editorHover && !keyPressedMap[SDLK_LCTRL]) || (modeManager.mode != Mode::SELECT)) {
-			cubeEditor.cubeClickedOn = NULL;
-		}
-		*/
 		cubeEditor.cubeClickedOn = NULL;
 
 		for (int i = 0; i < cubes.size(); i++) {
