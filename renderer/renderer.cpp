@@ -1,7 +1,6 @@
 #include "renderer.h"
 #include "cameraEditor.h"
 
-// extern Camera* camPtr;
 extern CameraEditor* cameraEditorPtr;
 extern int width, height;
 
@@ -10,12 +9,44 @@ float pov;
 
 Renderer::Renderer() {
 	pov = 45.0f;
+	debugMode = false;
 }
 
+static bool debuggedBefore = false;
+void Renderer::enableDebugMode() {
+	debugMode = true;
+	prevCamera = cameraEditorPtr->cam;
+	cameraEditorPtr->cam = &debugCamera;
+	if (!debuggedBefore) {
+		debugCamera.transform = prevCamera->transform;
+		debuggedBefore = true;
+	}
+	else {
+		debugCamera.transform = prevDebugCamTransform;
+	}
+}
+
+void Renderer::disableDebugMode() {
+	debugMode = false;
+	cameraEditorPtr->cam = prevCamera;
+}
+
+void Renderer::toggleDebugMode() {
+	if (debugMode) {
+		disableDebugMode();
+	}
+	else {
+		enableDebugMode();
+	}
+}
 
 void Renderer::submitShaderWithoutTransform(ShaderProgram& shaderProgram) {
 	shaderProgram.setMat4("projection", GL_FALSE, glm::value_ptr(projection));
 	shaderProgram.setMat4("view", GL_FALSE, glm::value_ptr(view));
+}
+
+bool Renderer::isInDebugMode() {
+	return debugMode;
 }
 
 void Renderer::submitShader(ShaderProgram& shaderProgram, Transform transform) {
@@ -43,7 +74,12 @@ void Renderer::clear() {
 }
 
 void Renderer::frameSetup() {
-	projection = getProjectionMatrix(pov, 0.1f, 100.0f, ((float)width) / height);
-	// view = camPtr->getViewMat();
+	if (debugMode) {
+		projection = getProjectionMatrix(45.0f, 0.1f, 100.0f, ((float)width) / height);
+	}
+	else {
+		projection = getProjectionMatrix(pov, 0.1f, 100.0f, ((float)width) / height);
+	}
 	view = cameraEditorPtr->cam->getViewMat();
+	prevDebugCamTransform = debugCamera.transform;
 }

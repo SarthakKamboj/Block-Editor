@@ -5,25 +5,28 @@ CubeEditor::CubeEditor() {
 
 	glm::vec3 pos(0.0f, 0.0f, 0.0f);
 	glm::vec3 scale(0.5f, 0.5f, 0.5f);
-	// glm::vec3 scale(1.0f, 1.0f, 1.0f);
 
 	transform.pos = pos;
 	transform.rot = glm::vec3(0.0f, 0.0f, 0.0f);
 	transform.scale = scale;
 
-	xArrow = Arrow(pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, -90.0f), scale, glm::vec3(1.0f, 0.0f, 0.0f));
-	yArrow = Arrow(pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 1.0f, 0.0f));
-	zArrow = Arrow(pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale), glm::vec3(90.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 0.0f, 1.0f));
+	rightArrow = Arrow(pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, -90.0f), scale, glm::vec3(1.0f, 0.0f, 0.0f));
+	upArrow = Arrow(pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 1.0f, 0.0f));
+	forwardArrow = Arrow(pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale), glm::vec3(90.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 0.0f, 1.0f));
 
-	/*
-	xArrow = Arrow(pos + (glm::vec3(2.0f, 0.0f, 0.0f)), glm::vec3(0.0f, 0.0f, -90.0f), scale, glm::vec3(1.0f, 0.0f, 0.0f));
-	yArrow = Arrow(pos + (glm::vec3(0.0f, 2.0f, 0.0f)), glm::vec3(0.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 1.0f, 0.0f));
-	zArrow = Arrow(pos + (glm::vec3(0.0f, 0.0f, 2.0f)), glm::vec3(90.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 0.0f, 1.0f));
-	*/
+	scale *= -1;
+	leftArrow = Arrow(pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, -90.0f), scale, glm::vec3(1.0f, 0.0f, 0.0f));
+	downArrow = Arrow(pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 1.0f, 0.0f));
+	backArrow = Arrow(pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale), glm::vec3(90.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 0.0f, 1.0f));
 
-	arrows[0] = xArrow;
-	arrows[1] = yArrow;
-	arrows[2] = zArrow;
+	arrows[0] = &rightArrow;
+	arrows[1] = &upArrow;
+	arrows[2] = &forwardArrow;
+	arrows[3] = &leftArrow;
+	arrows[4] = &downArrow;
+	arrows[5] = &backArrow;
+
+	prevFrameCubeSelection = NULL;
 }
 
 extern bool editorHover;
@@ -32,25 +35,48 @@ void CubeEditor::update() {
 		ImGui::Begin("triangle info");
 		ImGui::Text("select a cube");
 		ImGui::End();
+		prevFrameCubeSelection = NULL;
 		return;
 	}
 
-	glm::vec3& pos = cube->transform.pos;
-	glm::vec3& scale = transform.scale;
+	transform.pos = cube->transform.pos;
+	glm::vec3& pos = transform.pos;
+	glm::vec3 scale = transform.scale;
 
-	xArrow.transform.pos = pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale);
-	yArrow.transform.pos = pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale);
-	zArrow.transform.pos = pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale);
+	arrows[0]->transform.pos = pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale);
+	arrows[1]->transform.pos = pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale);
+	arrows[2]->transform.pos = pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale);
 
-	/*
-	xArrow.transform.pos = pos + (glm::vec3(1.0f, 0.0f, 0.0f));
-	yArrow.transform.pos = pos + (glm::vec3(0.0f, 1.0f, 0.0f));
-	zArrow.transform.pos = pos + (glm::vec3(0.0f, 0.0f, 1.0f));
-	*/
+	scale *= -1;
 
-	xArrow.update();
-	yArrow.update();
-	zArrow.update();
+	arrows[3]->transform.pos = pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale);
+	arrows[4]->transform.pos = pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale);
+	arrows[5]->transform.pos = pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale);
+
+	for (int i = 0; i < 6; i++) {
+		if (prevFrameCubeSelection != NULL) {
+			arrows[i]->update();
+		}
+	}
+
+	if (rightArrow.clickedOn) {
+		cube->transform.pos += glm::vec3(1.0f, 0.0f, 0.0f);
+	}
+	if (upArrow.clickedOn) {
+		cube->transform.pos += glm::vec3(0.0f, 1.0f, 0.0f);
+	}
+	if (forwardArrow.clickedOn) {
+		cube->transform.pos += glm::vec3(0.0f, 0.0f, 1.0f);
+	}
+	if (leftArrow.clickedOn) {
+		cube->transform.pos -= glm::vec3(1.0f, 0.0f, 0.0f);
+	}
+	if (downArrow.clickedOn) {
+		cube->transform.pos -= glm::vec3(0.0f, 1.0f, 0.0f);
+	}
+	if (backArrow.clickedOn) {
+		cube->transform.pos -= glm::vec3(0.0f, 0.0f, 1.0f);
+	}
 
 	ImGui::Begin("triangle info");
 
@@ -99,15 +125,18 @@ void CubeEditor::update() {
 
 	ImGui::End();
 
+	prevFrameCubeSelection = cube;
+
 }
 
 void CubeEditor::render() {
 	if (cube == NULL) return;
 
 	cube->renderOutline();
-	xArrow.render();
-	yArrow.render();
-	zArrow.render();
+
+	for (int i = 0; i < 6; i++) {
+		arrows[i]->render();
+	}
 }
 
 void CubeEditor::setupOutline() {

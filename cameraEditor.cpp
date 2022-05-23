@@ -5,6 +5,9 @@ CameraEditor::CameraEditor(Camera* _camera) {
 }
 
 void CameraEditor::update() {
+
+	cam->update();
+
 	ImGui::Begin("Camera Info");
 
 	if (ImGui::CollapsingHeader("transform")) {

@@ -21,8 +21,6 @@ extern Renderer* rendererPtr;
 
 Arrow::Arrow() {}
 
-// TODO: make box collider with arrow work 
-
 Arrow::Arrow(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, glm::vec3 _color) {
 	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
 
@@ -35,7 +33,6 @@ Arrow::Arrow(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, glm::vec3 _color) {
 	arrowShader = ShaderProgram(vertexFilePath, fragmentFilePath);
 
 	colliderDim = glm::vec3(0.4f, 1.0f, 0.1f);
-	// colliderDim = glm::vec3(1.0f, 1.0f, 1.0f);
 
 	transform = Transform(pos, rot, scale);
 
@@ -50,22 +47,25 @@ Arrow::Arrow(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, glm::vec3 _color) {
 }
 
 void Arrow::update() {
+	clickedOn = false;
 	boxCollider.transform = transform;
 	boxCollider.transform.scale = transform.scale * colliderDim;
 
 	glm::vec2 screenCoords(mouseState.x, mouseState.y);
 
 	Ray ray = boxCollider.screenToLocalRay(screenCoords);
-	// arrowShader.setVec3("color", glm::value_ptr(color));
 
 	// if (mouseClickState.left) {
+	/*
 	if (boxCollider.rayCollide(ray)) {
 		std::cout << "arrow click" << std::endl;
 	}
+	*/
 	// }
 
 	if (boxCollider.rayCollide(ray)) {
 		arrowShader.setVec3("color", glm::value_ptr(highlightColor));
+		clickedOn = mouseClickState.left;
 	}
 	else {
 		arrowShader.setVec3("color", glm::value_ptr(color));
@@ -75,7 +75,6 @@ void Arrow::update() {
 void Arrow::render() {
 	glDisable(GL_DEPTH_TEST);
 	boxCollider.render();
-	// glEnable(GL_DEPTH_TEST);
 
 	rendererPtr->submitShader(arrowShader, transform);
 

@@ -21,6 +21,8 @@ public:
 	Transform transform;
 	BoxCollider boxCollider;
 
+	bool clickedOn;
+
 private:
 	VAO vao;
 	VBO vbo;

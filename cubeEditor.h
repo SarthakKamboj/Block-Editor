@@ -14,7 +14,9 @@ public:
 	void render();
 
 	Transform transform;
-	Arrow xArrow, yArrow, zArrow;
+	Arrow rightArrow, upArrow, forwardArrow;
+	Arrow leftArrow, downArrow, backArrow;
 	Cube* cube;
-	Arrow arrows[3];
+	Cube* prevFrameCubeSelection;
+	Arrow* arrows[6];
 };
