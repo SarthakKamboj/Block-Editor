@@ -185,11 +185,10 @@ int Application::Init() {
 		std::string modeStrFull = "mode: " + modeStr;
 		ImGui::Text(modeStrFull.c_str());
 		if (ImGui::Button("toggle debug mode")) {
-			renderer.toggleDebugMode();
-			Camera* prevCamera = cameraEditor.cam;
-			if (renderer.isInDebugMode()) {
-				camPoint.transform.pos = prevCamera->transform.pos;
+			if (!renderer.isInDebugMode()) {
+				camPoint.transform.pos = cameraEditorPtr->cam->transform.pos;
 			}
+			renderer.toggleDebugMode();
 		}
 		ImGui::End();
 

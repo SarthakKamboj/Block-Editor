@@ -74,19 +74,13 @@ void Renderer::clear() {
 }
 
 void Renderer::frameSetup() {
-	/*
 	if (debugMode) {
 		projection = getProjectionMatrix(45.0f, 0.1f, 100.0f, ((float)width) / height);
 	}
 	else {
 		projection = getProjectionMatrix(pov, 0.1f, 100.0f, ((float)width) / height);
 	}
-	*/
 
-	// projection = getProjectionMatrix(45.0f, 0.1f, 100.0f, ((float)width) / height);
-	projection = getProjectionMatrix(pov, 0.1f, 100.0f, ((float)width) / height);
 	view = cameraEditorPtr->cam->getViewMat();
-	printMat4(view);
-	std::cout << std::endl;
 	prevDebugCamTransform = debugCamera.transform;
 }
