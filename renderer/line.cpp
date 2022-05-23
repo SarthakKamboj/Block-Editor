@@ -29,6 +29,10 @@ void Line::setStartPos(glm::vec3 _pos) {
 	vertices[2] = _pos.z;
 }
 
+void Line::setColor(glm::vec3 color) {
+	lineProgram.setVec3("color", glm::value_ptr(color));
+}
+
 void Line::setEndPos(glm::vec3 _pos) {
 	vertices[3] = _pos.x;
 	vertices[4] = _pos.y;
@@ -39,6 +43,7 @@ void Line::render() {
 	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
 	rendererPtr->submitShaderWithoutTransform(lineProgram);
 
+	glEnable(GL_DEPTH_TEST);
 	lineProgram.bind();
 	vao.bind();
 	glDrawArrays(GL_LINES, 0, sizeof(vertices) / sizeof(vertices[0]));

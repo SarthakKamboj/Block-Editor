@@ -12,6 +12,7 @@
 #include "math/linAlgHelper.h"
 #include "transform.h"
 #include <vector>
+#include "nearFarPoints.h"
 
 class BoxCollider {
 public:
@@ -24,8 +25,12 @@ public:
 
 	bool pointCollide(glm::vec3& point);
 	bool rayCollide(Ray& point);
-	Ray screenToLocalRay(glm::vec2& screen_coords);
+	Ray screenToLocalRay(glm::vec2& screenCoords);
+	NearFarPointsVec3 screenToLocal(glm::vec2& screenCoords);
+	glm::vec3 ndcToLocal(glm::vec4& ndcCoords);
 	glm::vec3 localToWorld(glm::vec3 point);
+	glm::vec4 localToNDC(glm::vec3 point);
+	glm::vec3 localToLocal(glm::vec3 point);
 
 	VAO vao;
 	VBO vbo;

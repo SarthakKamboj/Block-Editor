@@ -5,6 +5,7 @@ CubeEditor::CubeEditor() {
 
 	glm::vec3 pos(0.0f, 0.0f, 0.0f);
 	glm::vec3 scale(0.5f, 0.5f, 0.5f);
+	// glm::vec3 scale(1.0f, 1.0f, 1.0f);
 
 	transform.pos = pos;
 	transform.rot = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -13,6 +14,12 @@ CubeEditor::CubeEditor() {
 	xArrow = Arrow(pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, -90.0f), scale, glm::vec3(1.0f, 0.0f, 0.0f));
 	yArrow = Arrow(pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale), glm::vec3(0.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 1.0f, 0.0f));
 	zArrow = Arrow(pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale), glm::vec3(90.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 0.0f, 1.0f));
+
+	/*
+	xArrow = Arrow(pos + (glm::vec3(2.0f, 0.0f, 0.0f)), glm::vec3(0.0f, 0.0f, -90.0f), scale, glm::vec3(1.0f, 0.0f, 0.0f));
+	yArrow = Arrow(pos + (glm::vec3(0.0f, 2.0f, 0.0f)), glm::vec3(0.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 1.0f, 0.0f));
+	zArrow = Arrow(pos + (glm::vec3(0.0f, 0.0f, 2.0f)), glm::vec3(90.0f, 0.0f, 0.0f), scale, glm::vec3(0.0f, 0.0f, 1.0f));
+	*/
 
 	arrows[0] = xArrow;
 	arrows[1] = yArrow;
@@ -34,6 +41,12 @@ void CubeEditor::update() {
 	xArrow.transform.pos = pos + (glm::vec3(0.5f, 0.0f, 0.0f) * scale);
 	yArrow.transform.pos = pos + (glm::vec3(0.0f, 0.5f, 0.0f) * scale);
 	zArrow.transform.pos = pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale);
+
+	/*
+	xArrow.transform.pos = pos + (glm::vec3(1.0f, 0.0f, 0.0f));
+	yArrow.transform.pos = pos + (glm::vec3(0.0f, 1.0f, 0.0f));
+	zArrow.transform.pos = pos + (glm::vec3(0.0f, 0.0f, 1.0f));
+	*/
 
 	xArrow.update();
 	yArrow.update();

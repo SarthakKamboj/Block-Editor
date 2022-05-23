@@ -46,6 +46,9 @@
     <Filter Include="Source Files\window">
       <UniqueIdentifier>{c9d84d82-7f8e-412e-8b24-11b5d0508e00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\helper">
+      <UniqueIdentifier>{2d47b501-ee97-4a20-b345-57f5c5b5aed7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -140,6 +143,9 @@
     </ClCompile>
     <ClCompile Include="renderer\line.cpp">
       <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="helper\helper.cpp">
+      <Filter>Source Files\helper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -241,6 +247,12 @@
     </ClInclude>
     <ClInclude Include="renderer\line.h">
       <Filter>Source Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="nearFarPoints.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\helper.h">
+      <Filter>Source Files\helper</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -171,6 +171,7 @@
     <ClCompile Include="ext\imgui\imgui_impl_sdl.cpp" />
     <ClCompile Include="ext\imgui\imgui_tables.cpp" />
     <ClCompile Include="ext\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="helper\helper.cpp" />
     <ClCompile Include="input\input.cpp" />
     <ClCompile Include="issuesEditor.cpp" />
     <ClCompile Include="main.cpp" />
@@ -205,11 +206,13 @@
     <ClInclude Include="ext\imgui\imstb_rectpack.h" />
     <ClInclude Include="ext\imgui\imstb_textedit.h" />
     <ClInclude Include="ext\imgui\imstb_truetype.h" />
+    <ClInclude Include="helper\helper.h" />
     <ClInclude Include="input\input.h" />
     <ClInclude Include="issuesEditor.h" />
     <ClInclude Include="math\linAlgHelper.h" />
     <ClInclude Include="math\ray.h" />
     <ClInclude Include="modeManager.h" />
+    <ClInclude Include="nearFarPoints.h" />
     <ClInclude Include="physics\boxCollider.h" />
     <ClInclude Include="renderer\camera.h" />
     <ClInclude Include="renderer\ebo.h" />

@@ -12,6 +12,7 @@ public:
 	void render();
 	void setStartPos(glm::vec3 _pos);
 	void setEndPos(glm::vec3 _pos);
+	void setColor(glm::vec3 color);
 
 	VAO vao;
 	VBO vbo;

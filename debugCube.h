@@ -15,6 +15,7 @@ class DebugCube {
 public:
 	DebugCube();
 	void render();
+	void setColor(glm::vec3 color);
 
 	Transform transform;
 private:

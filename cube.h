@@ -47,7 +47,5 @@ private:
 	ShaderProgram outlineProgram;
 	Texture texture;
 
-	DebugCube debugCubes[6];
-
 	void drawCube();
 };

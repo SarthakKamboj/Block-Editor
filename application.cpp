@@ -27,6 +27,8 @@
 #include "issuesEditor.h"
 #include "glm/glm.hpp"
 #include "renderer/line.h"
+#include "nearFarPoints.h"
+#include "helper/helper.h"
 
 extern std::map<SDL_Keycode, bool> keyPressedMap;
 extern MouseClickState mouseClickState;
@@ -48,12 +50,7 @@ bool debugMode;
 bool debuggedOnce = false;
 Transform debugCamTransform;
 
-typedef struct NearFarPoints {
-	glm::vec3 nearPoint;
-	glm::vec3 farPoint;
-} NearFarPoints;
-
-NearFarPoints screenToWorld(glm::vec2 screenCoords) {
+NearFarPointsVec3 screenToWorld(glm::vec2 screenCoords) {
 	float xNdc = ((float)(screenCoords.x - (width / 2.0f))) / (width / 2.0f);
 	float yNdc = -1.0f * ((float)(screenCoords.y - (height / 2.0f))) / (height / 2.0f);
 	glm::vec4 nearNdc(xNdc, yNdc, -1.0f, 1.0f);
@@ -69,7 +66,7 @@ NearFarPoints screenToWorld(glm::vec2 screenCoords) {
 	glm::vec3 nearVec3(nearCoord.x, nearCoord.y, nearCoord.z);
 	glm::vec3 farVec3(farCoord.x, farCoord.y, farCoord.z);
 
-	NearFarPoints nearFarPoints;
+	NearFarPointsVec3 nearFarPoints;
 	nearFarPoints.nearPoint = nearVec3;
 	nearFarPoints.farPoint = farVec3;
 
@@ -108,15 +105,27 @@ int Application::Init() {
 
 	Cube cube0, cube1, cube2;
 	cubes.push_back(cube0);
-	cubes.push_back(cube1);
-	cubes.push_back(cube2);
+	// cubes.push_back(cube1);
+	// cubes.push_back(cube2);
 
 	cubeEditorPtr->cube = &cubes[0];
-	cubes[0].transform.pos = glm::vec3(0.0f, 0.0f, -5.0f);
-	cubes[1].transform.pos = glm::vec3(1.0f, 0.0f, -5.0f);
-	cubes[2].transform.pos = glm::vec3(-1.0f, 0.0f, -5.0f);
+	cubes[0].transform.pos = glm::vec3(0.0f, 0.5f, -8.0f);
+	cubes[0].transform.scale = glm::vec3(1.25f, 1.5f, 2.0f);
+	glm::vec3 origPoint(0.5f, 0.5f, 0.5f);
+	// cubes[0].boxCollider.
+
+	// cubes[1].transform.pos = glm::vec3(0.0f, 0.5f, -5.0f);
+	// cubes[1].boxCollider.setColor(glm::vec3(1.0f, 1.0f, 0.0f));
+	// cubes[1].transform.pos = glm::vec3(1.0f, 0.0f, -5.0f);
+	// cubes[2].transform.pos = glm::vec3(-1.0f, 0.0f, -5.0f);
 
 	DebugCube debugCube;
+	// debugCube.transform.pos = cubes[0].transform.pos;
+	debugCube.transform.pos = glm::vec3(0.0f, 0.0f, 0.0f);
+	debugCube.transform.rot = glm::vec3(0.0f, 0.0f, 0.0f);
+	debugCube.transform.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	debugCube.setColor(glm::vec3(0.0f, 1.0f, 0.0f));
+
 	ModeManager modeManager;
 	modeManagerPtr = &modeManager;
 
@@ -125,7 +134,7 @@ int Application::Init() {
 	uint32_t start = SDL_GetTicks();
 
 	// Camera cam(0.0f, 0.0f, 10.0f);
-	Camera cam(0.0f, 0.0f, 0.0f);
+	Camera cam(0.0f, 0.0f, -2.0f);
 	// Camera cam(0.0f, 5.0f, 10.0f);
 	camPtr = &cam;
 
@@ -134,27 +143,31 @@ int Application::Init() {
 	CameraEditor cameraEditor(&cam);
 	cameraEditorPtr = &cameraEditor;
 
+	DebugCube origin;
+	origin.transform.pos = glm::vec3(0.0f, 0.0f, 0.0f);
+
 	// int stencilBits;
 	// glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL, GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE, &stencilBits);
 	// std::cout << "stencilBits: " << stencilBits << std::endl;
 
-	BoxCollider camPoint;
-	camPoint.setColor(glm::vec3(1.0f, 0.0f, 0.0f));
+	DebugCube camPoint;
+	camPoint.setColor(glm::vec3(0.0f, 1.0f, 1.0f));
 
-	BoxCollider lineColPoints[6];
+	DebugCube clickColPoints[6];
 	for (int i = 0; i < 6; i++) {
-		lineColPoints[i].setColor(glm::vec3(0.0f, 1.0f, 0.0f));
-		lineColPoints[i].transform.scale = glm::vec3(0.2f, 0.2f, 0.2f);
+		clickColPoints[i].setColor(glm::vec3(0.0f, 1.0f, 0.0f));
+		clickColPoints[i].transform.scale = glm::vec3(0.05f, 0.05f, 0.05f);
 	}
 
-	BoxCollider nearPoint, farPoint;
-	nearPoint.setColor(glm::vec3(0.0f, 1.0f, 0.0f));
-	farPoint.setColor(glm::vec3(0.0f, 1.0f, 0.0f));
-	nearPoint.transform.scale = glm::vec3(0.2f, 0.2f, 0.2f);
-	farPoint.transform.scale = glm::vec3(0.2f, 0.2f, 0.2f);
-
 	ImFont* robotoFont = window.ioPtr->Fonts->AddFontFromFileTTF("ext\\imgui\\fonts\\Roboto-Medium.ttf", 16.0f);
-	bool clicked = false;
+	std::vector<glm::vec3> colPoints;
+
+	Line testLine;
+	testLine.setStartPos(glm::vec3(0.0f, 0.0f, 0.0f));
+	testLine.setEndPos(glm::vec3(0.0f, 5.0f, 0.0f));
+	testLine.setColor(glm::vec3(1.0f, 0.0f, 0.0f));
+
+	renderer.frameSetup();
 
 	while (window.running) {
 
@@ -191,8 +204,35 @@ int Application::Init() {
 			cubes[i].lateUpdate();
 		}
 
+		/*
+		if (mouseClickState.left && !editorHover) {
+			for (int i = 0; i < cubes.size(); i++) {
+				if (cubeEditorPtr->cube == &cubes[i]) {
+					colPoints = cubeEditorPtr->cube->boxCollider.localColPoints;
+					for (int i = 0; i < colPoints.size(); i++) {
+						clickColPoints[i].transform.pos = cubeEditorPtr->cube->boxCollider.localToWorld(colPoints[i]);
+					}
+				}
+			}
+		}
+		*/
+
+		// if (mouseClickState.left && !editorHover) {
+		if (!editorHover && cubeEditorPtr->cube != NULL) {
+			auto& item = *cubeEditorPtr->cube;
+			// auto& item = cubeEditorPtr->yArrow;
+			// auto& item = cubeEditorPtr->zArrow;
+			colPoints = item.boxCollider.localColPoints;
+			for (int i = 0; i < colPoints.size(); i++) {
+				clickColPoints[i].transform.pos = item.boxCollider.localToWorld(colPoints[i]);
+			}
+		}
+
 		modeManager.update();
 		cameraEditor.update();
+		if (mouseClickState.left && !editorHover) {
+			std::cout << "left click" << std::endl;
+		}
 		cubeEditor.update();
 		if (!debugMode) {
 			cam.update();
@@ -202,13 +242,22 @@ int Application::Init() {
 		}
 		grid.update();
 		IssuesEditor::Update(cubes, cam);
+
+		// cubes[0].update();
+		BoxCollider& bc = cubes[0].boxCollider;
+		glm::vec3 local(0.5f, 0.5f, 0.5f);
+		// bc.localToLocal(local);
+		glm::vec4 ndc = bc.localToNDC(local);
+		glm::vec3 localBack = bc.ndcToLocal(ndc);
+		printVec3(local);
+		printVec3(localBack);
+
 		if (debugMode) {
 			debugCamTransform = debugCamera.transform;
 
-			std::vector<glm::vec3>& colPoints = cubeEditorPtr->arrows[1].boxCollider.localColPoints;
-			for (int i = 0; i < colPoints.size(); i++) {
-				lineColPoints[i].transform.pos = colPoints[i];
-			}
+			// std::vector<glm::vec3>& colPoints = cubeEditorPtr->cube->boxCollider.lastLocalColPoints;
+			// std::vector<glm::vec3>& colPoints = cubeEditorPtr->arrows[1].boxCollider.lastLocalColPoints;
+
 		}
 
 		renderer.clear();
@@ -220,21 +269,21 @@ int Application::Init() {
 		}
 		grid.render();
 		cubeEditorPtr->render();
+		testLine.render();
 		if (debugMode) {
-			camPoint.render();
-			std::vector<glm::vec3>& colPoints = cubeEditorPtr->arrows[1].boxCollider.localColPoints;
-			glDisable(GL_DEPTH_TEST);
-			for (int i = 0; i < colPoints.size(); i++) {
-				lineColPoints[i].render();
-			}
-			glEnable(GL_DEPTH_TEST);
+			// camPoint.render();
+			// origin.render();
+			// std::vector<glm::vec3>& colPoints = cubeEditorPtr->arrows[1].boxCollider.localColPoints;
+			// std::vector<glm::vec3>& colPoints = cubeEditorPtr->cube->boxCollider.lastLocalColPoints;
+			// std::vector<glm::vec3>& colPoints = cubeEditorPtr->arrows[1].boxCollider.lastLocalColPoints;	
 		}
+		// glDisable(GL_DEPTH_TEST);
+		for (int i = 0; i < colPoints.size(); i++) {
+			clickColPoints[i].render();
+		}
+		// glEnable(GL_DEPTH_TEST);
 		collisionLine.render();
-		if (clicked) {
-			// nearPoint.render();
-			// farPoint.render();
-			// collisionLine.render();
-		}
+		// debugCube.render();
 
 		ImGui::Begin("debug mode");
 		std::string modeStr = (debugMode ? "debug" : "regular");
@@ -267,12 +316,10 @@ int Application::Init() {
 
 		if (mouseClickState.left && !debugMode && !editorHover) {
 			glm::vec2 screenCoords(mouseState.x, mouseState.y);
-			NearFarPoints nearFarPoints = screenToWorld(screenCoords);
-			nearPoint.transform.pos = nearFarPoints.nearPoint;
-			farPoint.transform.pos = nearFarPoints.farPoint;
-			clicked = true;
-			collisionLine.setStartPos(nearPoint.transform.pos);
-			collisionLine.setEndPos(farPoint.transform.pos);
+			// NearFarPointsVec3 nearFarPoints = screenToWorld(screenCoords);
+			NearFarPointsVec3 nearFarPoints = cubes[0].boxCollider.screenToLocal(screenCoords);
+			collisionLine.setStartPos(nearFarPoints.nearPoint);
+			collisionLine.setEndPos(nearFarPoints.farPoint);
 		}
 
 		window.swapBuffers();

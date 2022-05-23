@@ -1,7 +1,6 @@
 #include "debugCube.h"
 #include "renderer/renderer.h"
 
-// extern glm::mat4 projection, view;
 extern Renderer* rendererPtr;
 
 static float vertices[] = {
@@ -46,32 +45,17 @@ DebugCube::DebugCube() {
 	shaderProgram.setVec3("color", glm::value_ptr(glm::vec3(1.0f, 0.0f, 0.0f)));
 }
 
+void DebugCube::setColor(glm::vec3 color) {
+	shaderProgram.setVec3("color", glm::value_ptr(color));
+}
+
 void DebugCube::render() {
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	/*
-	glm::vec3& pos = transform.pos;
-	glm::mat4 translationMat = getTranslationMatrix(pos.x, pos.y, pos.z);
-
-	glm::vec3& rot = transform.rot;
-	glm::mat4 rotMat = getRotationMatrix(rot.x, rot.y, rot.z);
-
-	glm::vec3& scale = transform.scale;
-	glm::mat4 scaleMat = getScaleMatrix(scale.x, scale.y, scale.z);
-
-	shaderProgram.setMat4("translate", GL_FALSE, mat4GetPtr(translationMat));
-	shaderProgram.setMat4("rot", GL_FALSE, mat4GetPtr(rotMat));
-	shaderProgram.setMat4("scale", GL_FALSE, mat4GetPtr(scaleMat));
-	shaderProgram.setMat4("projection", GL_FALSE, mat4GetPtr(projection));
-	shaderProgram.setMat4("view", GL_FALSE, mat4GetPtr(view));
-	*/
-
+	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	rendererPtr->submitShader(shaderProgram, transform);
-
 	shaderProgram.bind();
 	drawCube();
 	shaderProgram.unbind();
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void DebugCube::drawCube() {
