@@ -1,5 +1,7 @@
 #include "cubeEditor.h"
 
+extern float deltaTime;
+
 CubeEditor::CubeEditor() {
 	cube = NULL;
 
@@ -27,6 +29,7 @@ CubeEditor::CubeEditor() {
 	arrows[5] = &backArrow;
 
 	prevFrameCubeSelection = NULL;
+	disableSelectionTime = 0.0f;
 }
 
 extern bool editorHover;
@@ -38,6 +41,12 @@ void CubeEditor::update() {
 		prevFrameCubeSelection = NULL;
 		return;
 	}
+
+	if (prevFrameCubeSelection != cube) {
+		disableSelectionTime = 0.25f;
+	}
+
+	disableSelectionTime = fmax(0.0f, disableSelectionTime - deltaTime);
 
 	transform.pos = cube->transform.pos;
 	glm::vec3& pos = transform.pos;
@@ -54,28 +63,28 @@ void CubeEditor::update() {
 	arrows[5]->transform.pos = pos + (glm::vec3(0.0f, 0.0f, 0.5f) * scale);
 
 	for (int i = 0; i < 6; i++) {
-		if (prevFrameCubeSelection != NULL) {
-			arrows[i]->update();
-		}
+		arrows[i]->update();
 	}
 
-	if (rightArrow.clickedOn) {
-		cube->transform.pos += glm::vec3(1.0f, 0.0f, 0.0f);
-	}
-	if (upArrow.clickedOn) {
-		cube->transform.pos += glm::vec3(0.0f, 1.0f, 0.0f);
-	}
-	if (forwardArrow.clickedOn) {
-		cube->transform.pos += glm::vec3(0.0f, 0.0f, 1.0f);
-	}
-	if (leftArrow.clickedOn) {
-		cube->transform.pos -= glm::vec3(1.0f, 0.0f, 0.0f);
-	}
-	if (downArrow.clickedOn) {
-		cube->transform.pos -= glm::vec3(0.0f, 1.0f, 0.0f);
-	}
-	if (backArrow.clickedOn) {
-		cube->transform.pos -= glm::vec3(0.0f, 0.0f, 1.0f);
+	if (disableSelectionTime == 0.0f) {
+		if (rightArrow.clickedOn) {
+			cube->transform.pos += glm::vec3(1.0f, 0.0f, 0.0f);
+		}
+		if (upArrow.clickedOn) {
+			cube->transform.pos += glm::vec3(0.0f, 1.0f, 0.0f);
+		}
+		if (forwardArrow.clickedOn) {
+			cube->transform.pos += glm::vec3(0.0f, 0.0f, 1.0f);
+		}
+		if (leftArrow.clickedOn) {
+			cube->transform.pos -= glm::vec3(1.0f, 0.0f, 0.0f);
+		}
+		if (downArrow.clickedOn) {
+			cube->transform.pos -= glm::vec3(0.0f, 1.0f, 0.0f);
+		}
+		if (backArrow.clickedOn) {
+			cube->transform.pos -= glm::vec3(0.0f, 0.0f, 1.0f);
+		}
 	}
 
 	ImGui::Begin("triangle info");

@@ -45,7 +45,7 @@ CameraEditor* cameraEditorPtr;
 bool editorHover;
 
 std::vector<Cube> cubes;
-// bool debugMode;
+float deltaTime;
 
 bool debuggedOnce = false;
 Transform debugCamTransform;
@@ -75,7 +75,7 @@ NearFarPointsVec3 screenToWorld(glm::vec2 screenCoords) {
 
 int Application::Init() {
 
-	// debugMode = false;
+	deltaTime = 0.0f;
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		std::cout << "sdl gave error" << std::endl;
@@ -136,6 +136,7 @@ int Application::Init() {
 	while (window.running) {
 		uint32_t cur = SDL_GetTicks();
 		uint32_t diff = cur - start;
+		deltaTime = diff / 1000.0f;
 		start = cur;
 
 		Input::handleInput();

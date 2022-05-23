@@ -5,6 +5,7 @@
 #include "transform.h"
 #include "arrow.h"
 #include <vector>
+#include "math.h"
 
 class CubeEditor {
 public:
@@ -19,4 +20,5 @@ public:
 	Cube* cube;
 	Cube* prevFrameCubeSelection;
 	Arrow* arrows[6];
+	float disableSelectionTime;
 };
