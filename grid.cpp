@@ -4,6 +4,7 @@
 #include "cube.h"
 #include "modeManager.h"
 #include "renderer/renderer.h"
+#include "cubeEditor.h"
 
 static float scale = 20.0f;
 
