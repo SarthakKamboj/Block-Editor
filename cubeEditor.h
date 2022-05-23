@@ -17,11 +17,16 @@ public:
 	Transform transform;
 	Arrow rightArrow, upArrow, forwardArrow;
 	Arrow leftArrow, downArrow, backArrow;
-	Cube* cube;
-	Cube* prevFrameCubeSelection;
+	// Cube* cube;
+	Cube* cubeClickedOn;
+	// Cube* prevFrameCubeSelection;
 	Arrow* arrows[6];
 	float disableSelectionTime;
 
+	std::vector<Cube*> selectedCubes;
+
 private:
+	void addCube(Cube* cubePtr);
 	float arrowPosOffset = 0.5f;
+	void moveCubes(glm::vec3 offset);
 };

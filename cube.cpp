@@ -14,10 +14,10 @@ extern MouseState mouseState;
 extern bool editorHover;
 extern Camera* camPtr;
 extern Renderer* rendererPtr;
+extern std::map<SDL_Keycode, bool> keyPressedMap;
+extern std::map<SDL_Keycode, bool> keyDownMap;
 
 int Cube::idx = 0;
-
-// extern glm::mat4 projection, view;
 
 static float vertices[] = {
 	0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
@@ -113,14 +113,19 @@ void Cube::update() {
 		if (boxCollider.rayCollide(ray)) {
 			bool closerToCam = true;
 			float dist = 0;
-			if (cubeEditorPtr->cube) {
+			if (cubeEditorPtr->cubeClickedOn) {
 				float curDistToCam = pow(transform.pos.x - camPtr->transform.pos.x, 2) + pow(transform.pos.y - camPtr->transform.pos.y, 2) + pow(transform.pos.z - camPtr->transform.pos.z, 2);
-				Transform selectedCubeTransform = cubeEditorPtr->cube->transform;
+				Transform selectedCubeTransform = cubeEditorPtr->cubeClickedOn->transform;
 				float selectedCubeDistToCam = pow(selectedCubeTransform.pos.x - camPtr->transform.pos.x, 2) + pow(selectedCubeTransform.pos.y - camPtr->transform.pos.y, 2) + pow(selectedCubeTransform.pos.z - camPtr->transform.pos.z, 2);
 				closerToCam = (curDistToCam <= selectedCubeDistToCam);
 			}
+			/*
+			if (cubeEditorPtr->selectedCubes.size() > 0 && keyDownMap[SDLK_LCTRL]) {
+				cubeEditorPtr->addCube(this);
+			}
+			*/
 			if (closerToCam) {
-				cubeEditorPtr->cube = this;
+				cubeEditorPtr->cubeClickedOn = this;
 			}
 		}
 
@@ -129,7 +134,14 @@ void Cube::update() {
 
 
 void Cube::lateUpdate() {
-	outline = (cubeEditorPtr->cube == this);
+	// outline = (cubeEditorPtr->cube == this);
+	outline = false;
+	for (int i = 0; i < cubeEditorPtr->selectedCubes.size(); i++) {
+		if (cubeEditorPtr->selectedCubes[i] == this) {
+			outline = true;
+			return;
+		}
+	}
 }
 
 void Cube::setupRenderOutline() {

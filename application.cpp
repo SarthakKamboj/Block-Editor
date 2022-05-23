@@ -50,29 +50,6 @@ float deltaTime;
 bool debuggedOnce = false;
 Transform debugCamTransform;
 
-NearFarPointsVec3 screenToWorld(glm::vec2 screenCoords) {
-	float xNdc = ((float)(screenCoords.x - (width / 2.0f))) / (width / 2.0f);
-	float yNdc = -1.0f * ((float)(screenCoords.y - (height / 2.0f))) / (height / 2.0f);
-	glm::vec4 nearNdc(xNdc, yNdc, -1.0f, 1.0f);
-	glm::vec4 farNdc(xNdc, yNdc, 1.0f, 1.0f);
-
-	glm::mat4 screenToWorldMat = glm::inverse(projection * view);
-	glm::vec4 nearCoord = screenToWorldMat * nearNdc;
-	glm::vec4 farCoord = screenToWorldMat * farNdc;
-
-	nearCoord /= nearCoord.w;
-	farCoord /= farCoord.w;
-
-	glm::vec3 nearVec3(nearCoord.x, nearCoord.y, nearCoord.z);
-	glm::vec3 farVec3(farCoord.x, farCoord.y, farCoord.z);
-
-	NearFarPointsVec3 nearFarPoints;
-	nearFarPoints.nearPoint = nearVec3;
-	nearFarPoints.farPoint = farVec3;
-
-	return nearFarPoints;
-}
-
 int Application::Init() {
 
 	deltaTime = 0.0f;
@@ -104,9 +81,9 @@ int Application::Init() {
 	CubeEditor cubeEditor;
 	cubeEditorPtr = &cubeEditor;
 
-	cubeEditorPtr->cube = &cubes[0];
-	cubes[0].transform.pos = glm::vec3(0.0f, 0.5f, -8.0f);
-	cubes[0].transform.scale = glm::vec3(1.25f, 1.5f, 2.0f);
+	// cubeEditorPtr->selectedCubes.push_back(&cubes[0]);
+	// cubes[0].transform.pos = glm::vec3(0.0f, 0.5f, -8.0f);
+	// cubes[0].transform.scale = glm::vec3(1.25f, 1.5f, 2.0f);
 
 	ModeManager modeManager;
 	modeManagerPtr = &modeManager;
@@ -155,9 +132,12 @@ int Application::Init() {
 
 		editorHover = ImGui::IsAnyItemHovered();
 
+		/*
 		if ((mouseClickState.left && !editorHover && !keyPressedMap[SDLK_LCTRL]) || (modeManager.mode != Mode::SELECT)) {
-			cubeEditor.cube = NULL;
+			cubeEditor.cubeClickedOn = NULL;
 		}
+		*/
+		cubeEditor.cubeClickedOn = NULL;
 
 		for (int i = 0; i < cubes.size(); i++) {
 			cubes[i].update();
@@ -166,6 +146,7 @@ int Application::Init() {
 		for (int i = 0; i < cubes.size(); i++) {
 			cubes[i].lateUpdate();
 		}
+
 		modeManager.update();
 		cameraEditor.update();
 		cubeEditor.update();
