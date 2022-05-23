@@ -6,7 +6,6 @@ CameraEditor::CameraEditor(Camera* _camera) {
 
 void CameraEditor::update() {
 
-	cam->update();
 
 	ImGui::Begin("Camera Info");
 
@@ -36,5 +35,5 @@ void CameraEditor::update() {
 
 	ImGui::End();
 
-
+	cam->update();
 }
