@@ -21,25 +21,6 @@ void CubeManager::addCube(Transform transform) {
 
 }
 
-/*
-void CubeManager::addCube(Cube* cube) {
-	if (numCubes >= MaxCubes) {
-		return;
-	}
-
-	for (int i = 0; i < MaxCubes; i++) {
-		if (cubes[i] == cube) {
-			return;
-		}
-		if (cubes[i] == NULL) {
-			cubes[i] = cube;
-			numCubes += 1;
-			return;
-		}
-	}
-}
-*/
-
 void CubeManager::removeCube(Cube* cubeToRemovePtr) {
 	if (cubeToRemovePtr == NULL) return;
 	for (int i = 0; i < MaxCubes; i++) {
