@@ -158,6 +158,7 @@
     <ClCompile Include="application.cpp" />
     <ClCompile Include="arrow.cpp" />
     <ClCompile Include="cameraEditor.cpp" />
+    <ClCompile Include="colorSelector.cpp" />
     <ClCompile Include="cube.cpp" />
     <ClCompile Include="debugCube.cpp" />
     <ClCompile Include="ext\stb\stb_image.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="application.h" />
     <ClInclude Include="arrow.h" />
     <ClInclude Include="cameraEditor.h" />
+    <ClInclude Include="colorSelector.h" />
     <ClInclude Include="cube.h" />
     <ClInclude Include="debugCube.h" />
     <ClInclude Include="ext\stb\stb_image.h" />

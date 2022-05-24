@@ -25,6 +25,7 @@ public:
 
 	void update();
 	void lateUpdate();
+	void setColor(glm::vec3 color);
 
 	Transform transform;
 

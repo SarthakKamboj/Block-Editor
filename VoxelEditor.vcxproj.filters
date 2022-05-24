@@ -153,6 +153,9 @@
     <ClCompile Include="renderer\plane.cpp">
       <Filter>Source Files\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="colorSelector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ext\imgui\imconfig.h">
@@ -265,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="renderer\plane.h">
       <Filter>Source Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="colorSelector.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

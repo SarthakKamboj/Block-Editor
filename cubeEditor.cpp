@@ -152,9 +152,11 @@ void CubeEditor::update() {
 			ImGui::TreePop();
 		}
 	}
+	/*
 	if (ImGui::CollapsingHeader("color")) {
 		ImGui::ColorEdit3("Triangle color", &cube->color.x);
 	}
+	*/
 	ImGui::End();
 
 }

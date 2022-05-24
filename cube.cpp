@@ -82,6 +82,7 @@ Cube::Cube() {
 	outline = false;
 
 	color = glm::vec3(0.0f, 0.43f, 1.0f);
+	setColor(color);
 
 	boxCollider = BoxCollider(transform.pos, transform.scale, transform.rot);
 
@@ -136,7 +137,6 @@ void Cube::setupRenderOutline() {
 	texture.bind();
 	rendererPtr->submitShader(shaderProgram, transform);
 	shaderProgram.setInt("texUnit", 0);
-	shaderProgram.setVec3("color", glm::value_ptr(color));
 
 	shaderProgram.bind();
 	drawCube();
@@ -147,14 +147,16 @@ void Cube::setupRenderOutline() {
 
 }
 
+void Cube::setColor(glm::vec3 color) {
+	shaderProgram.setVec3("color", glm::value_ptr(color));
+}
+
 void Cube::render() {
 
 	if (!outline) {
 		rendererPtr->submitShader(shaderProgram, transform);
 
-		shaderProgram.setVec3("color", glm::value_ptr(color));
 		shaderProgram.setInt("texUnit", 0);
-
 		texture.bind();
 		shaderProgram.bind();
 		drawCube();

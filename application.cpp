@@ -30,6 +30,7 @@
 #include "nearFarPoints.h"
 #include "helper/helper.h"
 #include "groupSelector.h" 
+#include "colorSelector.h"
 
 extern std::map<SDL_Keycode, bool> keyPressedMap;
 extern MouseClickState mousePressedState;
@@ -91,6 +92,8 @@ int Application::Init() {
 	camPtr = &cam;
 	camPtr->transform.rot.y = -90.0f;
 
+	ColorSelector colorSelector;
+
 	CameraEditor cameraEditor(&cam);
 	cameraEditorPtr = &cameraEditor;
 
@@ -139,6 +142,7 @@ int Application::Init() {
 		cubeEditor.update();
 		grid.update();
 		groupSelector.update();
+		colorSelector.update();
 		IssuesEditor::Update(cubes, cam);
 		window.updateDimension();
 
