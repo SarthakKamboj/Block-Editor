@@ -124,10 +124,6 @@ void Grid::render() {
 	}
 	*/
 
-	if (boxCollider.localColPoints.size() > 0) {
-		plane.render();
-	}
-
 	rendererPtr->submitShader(shaderProgram, transform);
 
 	shaderProgram.setInt("texUnit", textureUnit);
@@ -140,4 +136,11 @@ void Grid::render() {
 	shaderProgram.unbind();
 	texture.unbind();
 
+	if (modeManagerPtr->mode != Mode::ADD) {
+		return;
+	}
+
+	if (boxCollider.localColPoints.size() > 0) {
+		plane.render();
+	}
 }

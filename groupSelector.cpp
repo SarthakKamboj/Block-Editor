@@ -44,12 +44,15 @@ GroupSelector::GroupSelector() {
 
 extern std::vector<Cube> cubes;
 extern CubeEditor* cubeEditorPtr;
+extern bool editorHover;
 void GroupSelector::update() {
 
 	if (modeManagerPtr->mode != Mode::SELECT) {
 		activelySelecting = false;
 		return;
 	}
+
+	if (editorHover) return;
 
 	if (mousePressedState.left) {
 		activelySelecting = true;

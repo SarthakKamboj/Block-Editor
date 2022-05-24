@@ -126,6 +126,37 @@ void CubeEditor::update() {
 		}
 	}
 
+	Cube* cube = selectedCubes[selectedCubes.size() - 1];
+	ImGui::Begin("cube info");
+	ImGui::Text(cube->name.c_str());
+	if (ImGui::CollapsingHeader("transform")) {
+		if (ImGui::TreeNode("position")) {
+			ImGui::Text("x: %f", cube->transform.pos.x);
+			ImGui::Text("y: %f", cube->transform.pos.y);
+			ImGui::Text("z: %f", cube->transform.pos.z);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("scale")) {
+			ImGui::Text("x: %f", cube->transform.scale.x);
+			ImGui::Text("y: %f", cube->transform.scale.y);
+			ImGui::Text("z: %f", cube->transform.scale.z);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("rotation")) {
+			ImGui::Text("x: %f", cube->transform.rot.x);
+			ImGui::Text("y: %f", cube->transform.rot.y);
+			ImGui::Text("z: %f", cube->transform.rot.z);
+
+			ImGui::TreePop();
+		}
+	}
+	if (ImGui::CollapsingHeader("color")) {
+		ImGui::ColorEdit3("Triangle color", &cube->color.x);
+	}
+	ImGui::End();
+
 }
 
 void CubeEditor::render() {

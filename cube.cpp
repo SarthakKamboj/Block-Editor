@@ -85,8 +85,8 @@ Cube::Cube() {
 
 	boxCollider = BoxCollider(transform.pos, transform.scale, transform.rot);
 
-	const char* texture_file_path = "images\\cube_wall.png";
-	texture = Texture(texture_file_path, 0);
+	const char* texFilePath = "images\\cube_wall.png";
+	texture = Texture(texFilePath, 0);
 }
 
 void Cube::update() {
@@ -153,7 +153,7 @@ void Cube::setupRenderOutline() {
 	texture.bind();
 	rendererPtr->submitShader(shaderProgram, transform);
 	shaderProgram.setInt("texUnit", 0);
-	shaderProgram.setVec3("inColor", glm::value_ptr(color));
+	shaderProgram.setVec3("color", glm::value_ptr(color));
 
 	shaderProgram.bind();
 	drawCube();
@@ -169,7 +169,7 @@ void Cube::render() {
 	if (!outline) {
 		rendererPtr->submitShader(shaderProgram, transform);
 
-		shaderProgram.setVec3("inColor", glm::value_ptr(color));
+		shaderProgram.setVec3("color", glm::value_ptr(color));
 		shaderProgram.setInt("texUnit", 0);
 
 		texture.bind();
