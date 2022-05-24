@@ -29,9 +29,10 @@
 #include "renderer/line.h"
 #include "nearFarPoints.h"
 #include "helper/helper.h"
+#include "groupSelector.h" 
 
 extern std::map<SDL_Keycode, bool> keyPressedMap;
-extern MouseClickState mouseClickState;
+extern MouseClickState mousePressedState;
 extern MouseState mouseState;
 extern int width, height;
 extern glm::mat4 projection, view;
@@ -41,6 +42,7 @@ CubeEditor* cubeEditorPtr;
 ModeManager* modeManagerPtr;
 Renderer* rendererPtr;
 CameraEditor* cameraEditorPtr;
+GroupSelector* groupSelectorPtr;
 
 bool editorHover;
 
@@ -95,6 +97,9 @@ int Application::Init() {
 	CameraEditor cameraEditor(&cam);
 	cameraEditorPtr = &cameraEditor;
 
+	GroupSelector groupSelector;
+	groupSelectorPtr = &groupSelector;
+
 	DebugCube camPoint;
 	camPoint.setColor(glm::vec3(0.0f, 1.0f, 1.0f));
 	camPoint.transform.scale = glm::vec3(0.2f, 0.2f, 0.2f);
@@ -136,6 +141,7 @@ int Application::Init() {
 		cameraEditor.update();
 		cubeEditor.update();
 		grid.update();
+		groupSelector.update();
 		IssuesEditor::Update(cubes, cam);
 		window.updateDimension();
 
@@ -146,6 +152,7 @@ int Application::Init() {
 		}
 		grid.render();
 		cubeEditorPtr->render();
+		groupSelector.render();
 
 		ImGui::Begin("debug mode");
 		std::string modeStr = (renderer.isInDebugMode() ? "debug" : "regular");

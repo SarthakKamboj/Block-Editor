@@ -20,11 +20,10 @@ public:
 	Cube* cubeClickedOn;
 	Arrow* arrows[6];
 	float disableSelectionTime;
-
 	std::vector<Cube*> selectedCubes;
 
-private:
 	void addCube(Cube* cubePtr);
+private:
 	float arrowPosOffset = 0.35f;
 	void moveCubes(glm::vec3 offset);
 };

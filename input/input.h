@@ -2,6 +2,7 @@
 
 #include "SDL.h"
 #include <iostream>
+#include "glm/glm.hpp"
 
 typedef struct MouseClickState {
 	bool left;
@@ -19,4 +20,5 @@ typedef struct MouseWheel {
 
 namespace Input {
 	void handleInput();
+	glm::vec2 screenToNdc(int screenX, int screenY);
 }

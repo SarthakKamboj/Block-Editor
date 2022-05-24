@@ -3,7 +3,7 @@
 #include "renderer/renderer.h"
 
 extern float deltaTime;
-extern MouseClickState mouseClickState;
+extern MouseClickState mousePressedState;
 
 CubeEditor::CubeEditor() {
 
@@ -56,7 +56,7 @@ void CubeEditor::update() {
 
 	if (rendererPtr->isInDebugMode()) return;
 
-	if (mouseClickState.left) {
+	if (mousePressedState.left) {
 		if (cubeClickedOn != NULL) {
 			if (keyDownMap[SDLK_LCTRL]) {
 				int removeIdx = -1;

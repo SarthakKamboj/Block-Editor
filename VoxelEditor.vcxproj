@@ -171,6 +171,7 @@
     <ClCompile Include="ext\imgui\imgui_impl_sdl.cpp" />
     <ClCompile Include="ext\imgui\imgui_tables.cpp" />
     <ClCompile Include="ext\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="groupSelector.cpp" />
     <ClCompile Include="helper\helper.cpp" />
     <ClCompile Include="input\input.cpp" />
     <ClCompile Include="issuesEditor.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="renderer\camera.cpp" />
     <ClCompile Include="renderer\ebo.cpp" />
     <ClCompile Include="renderer\line.cpp" />
+    <ClCompile Include="renderer\plane.cpp" />
     <ClCompile Include="renderer\renderer.cpp" />
     <ClCompile Include="renderer\shaderProgram.cpp" />
     <ClCompile Include="renderer\texture.cpp" />
@@ -206,6 +208,7 @@
     <ClInclude Include="ext\imgui\imstb_rectpack.h" />
     <ClInclude Include="ext\imgui\imstb_textedit.h" />
     <ClInclude Include="ext\imgui\imstb_truetype.h" />
+    <ClInclude Include="groupSelector.h" />
     <ClInclude Include="helper\helper.h" />
     <ClInclude Include="input\input.h" />
     <ClInclude Include="issuesEditor.h" />
@@ -217,6 +220,7 @@
     <ClInclude Include="renderer\camera.h" />
     <ClInclude Include="renderer\ebo.h" />
     <ClInclude Include="renderer\line.h" />
+    <ClInclude Include="renderer\plane.h" />
     <ClInclude Include="renderer\renderer.h" />
     <ClInclude Include="renderer\shaderProgram.h" />
     <ClInclude Include="renderer\texture.h" />
@@ -233,10 +237,14 @@
     <None Include="shaders\cube.vert" />
     <None Include="shaders\grid.frag" />
     <None Include="shaders\grid.vert" />
+    <None Include="shaders\groupSelector.frag" />
+    <None Include="shaders\groupSelector.vert" />
     <None Include="shaders\line.frag" />
     <None Include="shaders\line.vert" />
     <None Include="shaders\outline.frag" />
     <None Include="shaders\outline.vert" />
+    <None Include="shaders\plane.frag" />
+    <None Include="shaders\plane.vert" />
     <None Include="shaders\transparent.frag" />
     <None Include="shaders\transparent.vert" />
   </ItemGroup>

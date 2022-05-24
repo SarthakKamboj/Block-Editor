@@ -147,6 +147,12 @@
     <ClCompile Include="helper\helper.cpp">
       <Filter>Source Files\helper</Filter>
     </ClCompile>
+    <ClCompile Include="groupSelector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer\plane.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ext\imgui\imconfig.h">
@@ -254,6 +260,12 @@
     <ClInclude Include="helper\helper.h">
       <Filter>Source Files\helper</Filter>
     </ClInclude>
+    <ClInclude Include="groupSelector.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer\plane.h">
+      <Filter>Source Files\renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\arrow.frag">
@@ -293,6 +305,18 @@
       <Filter>Source Files\shaders</Filter>
     </None>
     <None Include="shaders\line.vert">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="shaders\groupSelector.frag">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="shaders\groupSelector.vert">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="shaders\plane.frag">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="shaders\plane.vert">
       <Filter>Source Files\shaders</Filter>
     </None>
   </ItemGroup>
