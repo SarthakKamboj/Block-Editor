@@ -5,6 +5,7 @@
 #include "cubeEditor.h"
 #include "helper/helper.h"
 #include "modeManager.h"
+#include "cubeManager.h"
 
 extern MouseClickState mouseDownState;
 extern MouseClickState mousePressedState;
@@ -36,7 +37,7 @@ GroupSelector::GroupSelector() {
 	activelySelecting = false;
 }
 
-extern std::vector<Cube> cubes;
+extern CubeManager* cubeManagerPtr;
 extern CubeEditor* cubeEditorPtr;
 extern bool editorHover;
 void GroupSelector::update() {
@@ -64,10 +65,14 @@ void GroupSelector::update() {
 
 	if (!activelySelecting) return;
 
-	for (int cubeIdx = 0; cubeIdx < cubes.size(); cubeIdx++) {
+	for (int cubeIdx = 0; cubeIdx < CubeManager::MaxCubes; cubeIdx++) {
+		if (cubeManagerPtr->cubes[cubeIdx] == NULL) {
+			continue;
+		}
 		for (int i = 0; i < 6; i++) {
+
 			glm::vec3 localPoint = { BoxCollider::vertices[(i * 3)], BoxCollider::vertices[(i * 3) + 1], BoxCollider::vertices[(i * 3) + 2] };
-			glm::vec3 cubeVertNdc = cubes[cubeIdx].boxCollider.localToNDC(localPoint);
+			glm::vec3 cubeVertNdc = cubeManagerPtr->cubes[cubeIdx]->boxCollider.localToNDC(localPoint);
 
 			float largerNdcX = fmax(topLeftNdc.x, topRightNdc.x);
 			float smallerNdcX = fmin(topLeftNdc.x, topRightNdc.x);
@@ -77,7 +82,7 @@ void GroupSelector::update() {
 			if (cubeVertNdc.x >= smallerNdcX && cubeVertNdc.x <= largerNdcX) {
 				if (cubeVertNdc.y >= smallerNdcY && cubeVertNdc.y <= largerNdcY) {
 					if (cubeVertNdc.z >= 0.1f && cubeVertNdc.z <= 100.0f) {
-						cubeEditorPtr->addCube(&cubes[cubeIdx]);
+						cubeEditorPtr->addCube(cubeManagerPtr->cubes[cubeIdx]);
 					}
 				}
 			}

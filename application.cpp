@@ -31,6 +31,7 @@
 #include "helper/helper.h"
 #include "groupSelector.h" 
 #include "colorSelector.h"
+#include "cubeManager.h"
 
 extern std::map<SDL_Keycode, bool> keyPressedMap;
 extern MouseClickState mousePressedState;
@@ -44,10 +45,10 @@ ModeManager* modeManagerPtr;
 Renderer* rendererPtr;
 CameraEditor* cameraEditorPtr;
 GroupSelector* groupSelectorPtr;
+CubeManager* cubeManagerPtr;
 
 bool editorHover;
 
-std::vector<Cube> cubes;
 float deltaTime;
 
 bool debuggedOnce = false;
@@ -77,6 +78,9 @@ int Application::Init() {
 
 	Renderer renderer;
 	rendererPtr = &renderer;
+
+	CubeManager cubeManager;
+	cubeManagerPtr = &cubeManager;
 
 	CubeEditor cubeEditor;
 	cubeEditorPtr = &cubeEditor;
@@ -129,28 +133,20 @@ int Application::Init() {
 
 		cubeEditor.cubeClickedOn = NULL;
 
-		for (int i = 0; i < cubes.size(); i++) {
-			cubes[i].update();
-		}
-
-		for (int i = 0; i < cubes.size(); i++) {
-			cubes[i].lateUpdate();
-		}
-
+		cubeManager.update();
 		modeManager.update();
 		cameraEditor.update();
 		cubeEditor.update();
 		grid.update();
 		groupSelector.update();
 		colorSelector.update();
-		IssuesEditor::Update(cubes, cam);
+		IssuesEditor::Update((Cube**)&cubeManager.cubes, cam);
 		window.updateDimension();
 
 		renderer.clear();
 		cubeEditorPtr->setupOutline();
-		for (int i = 0; i < cubes.size(); i++) {
-			cubes[i].render();
-		}
+		cubeManager.render();
+
 		grid.render();
 		cubeEditorPtr->render();
 		groupSelector.render();

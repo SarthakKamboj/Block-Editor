@@ -9,5 +9,5 @@
 
 class IssuesEditor {
 public:
-	static void Update(std::vector<Cube>& cubes, Camera& cam);
+	static void Update(Cube** cubes, Camera& cam);
 };

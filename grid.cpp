@@ -5,6 +5,7 @@
 #include "modeManager.h"
 #include "renderer/renderer.h"
 #include "cubeEditor.h"
+#include "cubeManager.h"
 
 static float scale = 20.0f;
 
@@ -12,10 +13,10 @@ extern MouseClickState mousePressedState;
 extern MouseClickState mouseDownState;
 extern MouseState mouseState;
 extern bool editorHover;
-extern std::vector<Cube> cubes;
 extern Camera* camPtr;
 extern ModeManager* modeManagerPtr;
 extern Renderer* rendererPtr;
+extern CubeManager* cubeManagerPtr;
 
 static float vertices[] = {
 	0.5f, 0.5f, scale, scale,
@@ -78,7 +79,9 @@ void Grid::update() {
 	}
 
 	if (!editorHover && rayCollided && mousePressedState.left) {
-		Cube newCube;
+		Transform newCubeTransform;
+		newCubeTransform.rot = glm::vec3(0.0f, 0.0f, 0.0f);
+		newCubeTransform.scale = glm::vec3(1.0f, 1.0f, 1.0f);
 		glm::vec3 pos;
 		float closestDist = -1;
 		for (int i = 0; i < boxCollider.localColPoints.size(); i++) {
@@ -97,15 +100,16 @@ void Grid::update() {
 		pos += glm::vec3(0.0f, 0.5f, 0.0f);
 		pos = glm::vec3(round(pos.x), round(pos.y), round(pos.z));
 		bool create = true;
-		for (int i = 0; i < cubes.size(); i++) {
-			glm::vec3& cubePos = cubes[i].transform.pos;
+		for (int i = 0; i < CubeManager::MaxCubes; i++) {
+			if (cubeManagerPtr->cubes[i] == NULL) continue;
+			glm::vec3& cubePos = cubeManagerPtr->cubes[i]->transform.pos;
 			if (cubePos.x == pos.x && cubePos.y == pos.y && cubePos.z == pos.z) {
 				create = false;
 			}
 		}
 		if (create) {
-			newCube.transform.pos = pos;
-			cubes.push_back(newCube);
+			newCubeTransform.pos = pos;
+			cubeManagerPtr->addCube(newCubeTransform);
 		}
 	}
 }

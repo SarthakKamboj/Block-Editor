@@ -160,6 +160,7 @@
     <ClCompile Include="cameraEditor.cpp" />
     <ClCompile Include="colorSelector.cpp" />
     <ClCompile Include="cube.cpp" />
+    <ClCompile Include="cubeManager.cpp" />
     <ClCompile Include="debugCube.cpp" />
     <ClCompile Include="ext\stb\stb_image.cpp" />
     <ClCompile Include="grid.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="cameraEditor.h" />
     <ClInclude Include="colorSelector.h" />
     <ClInclude Include="cube.h" />
+    <ClInclude Include="cubeManager.h" />
     <ClInclude Include="debugCube.h" />
     <ClInclude Include="ext\stb\stb_image.h" />
     <ClInclude Include="grid.h" />
