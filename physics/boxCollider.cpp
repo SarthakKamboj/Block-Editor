@@ -2,7 +2,7 @@
 #include "renderer/renderer.h"
 #include "helper/helper.h"
 
-static float vertices[] = {
+float BoxCollider::vertices[] = {
 	0.5f, 0.5f, 0.5f,
 	0.5f, 0.5f, -0.5f,
 	0.5f, -0.5f, 0.5f,
@@ -39,7 +39,7 @@ BoxCollider::BoxCollider() {
 	colliderProgram.setVec3("color", glm::value_ptr(color));
 
 	ebo.setData(indicies, sizeof(indicies), GL_STATIC_DRAW);
-	vbo.setData(vertices, sizeof(vertices), GL_STATIC_DRAW);
+	vbo.setData(vertices, sizeof(BoxCollider::vertices), GL_STATIC_DRAW);
 
 	vao.bind();
 	ebo.bind();
@@ -101,7 +101,7 @@ void BoxCollider::render() {
 }
 
 extern bool debugMode;
-extern MouseClickState mouseClickState;
+extern MouseClickState mousePressedState;
 bool BoxCollider::rayCollide(Ray& ray) {
 
 	localColPoints.clear();

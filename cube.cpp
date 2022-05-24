@@ -3,12 +3,14 @@
 #include "cubeEditor.h"
 #include "modeManager.h"
 #include "renderer/renderer.h"
+#include "groupSelector.h"
 
 extern CubeEditor* cubeEditorPtr;
 extern ModeManager* modeManagerPtr;
+extern GroupSelector* groupSelectorPtr;
 
 extern int width, height;
-extern MouseClickState mouseClickState;
+extern MouseClickState mousePressedState;
 extern MouseState mouseState;
 
 extern bool editorHover;
@@ -94,7 +96,7 @@ void Cube::update() {
 		return;
 	}
 
-	if (mouseClickState.left && !editorHover) {
+	if (mousePressedState.left && !editorHover) {
 		glm::vec2 screenCoords(mouseState.x, mouseState.y);
 		Ray ray = boxCollider.screenToLocalRay(screenCoords);
 
@@ -112,8 +114,25 @@ void Cube::update() {
 				cubeEditorPtr->cubeClickedOn = this;
 			}
 		}
-
 	}
+
+	// if (!groupSelectorPtr->activelySelecting) return;
+
+	/*
+	glm::vec2 points[4] = {
+		groupSelectorPtr->topLeftScreen,
+		groupSelectorPtr->topRightScreen,
+		groupSelectorPtr->bottomLeftScreen,
+		groupSelectorPtr->bottomRightScreen
+	};
+
+	for (int i = 0; i < 4; i++) {
+		Ray r = boxCollider.screenToLocalRay(points[i]);
+		if (boxCollider.rayCollide(r)) {
+			cubeEditorPtr->addCube(this);
+		}
+	}
+	*/
 }
 
 

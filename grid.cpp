@@ -8,7 +8,8 @@
 
 static float scale = 20.0f;
 
-extern MouseClickState mouseClickState;
+extern MouseClickState mousePressedState;
+extern MouseClickState mouseDownState;
 extern MouseState mouseState;
 extern bool editorHover;
 extern std::vector<Cube> cubes;
@@ -52,6 +53,8 @@ Grid::Grid() {
 	texture = Texture(filePath, textureUnit);
 
 	boxCollider = BoxCollider(transform.pos, glm::vec3(scale, scale, 0.1f), transform.rot);
+
+	// plane = Plane();
 }
 
 void Grid::update() {
@@ -62,8 +65,23 @@ void Grid::update() {
 
 	glm::vec2 screenCoords(mouseState.x, mouseState.y);
 	Ray ray = boxCollider.screenToLocalRay(screenCoords);
+	bool rayCollided = boxCollider.rayCollide(ray);
 
-	if (!editorHover && boxCollider.rayCollide(ray) && mouseClickState.left) {
+	/*
+	for (int i = 0; i < boxCollider.localColPoints.size(); i++) {
+		debugCubes[i].transform.pos = boxCollider.localToWorld(boxCollider.localColPoints[i]);
+	}
+	*/
+
+	if (boxCollider.localColPoints.size() > 0) {
+		plane.transform.pos = boxCollider.localToWorld(boxCollider.localColPoints[0]);
+
+		plane.transform.pos.x = round(plane.transform.pos.x);
+		plane.transform.pos.y = round(plane.transform.pos.y) + 0.5f;
+		plane.transform.pos.z = round(plane.transform.pos.z);
+	}
+
+	if (!editorHover && rayCollided && mousePressedState.left) {
 		Cube newCube;
 		glm::vec3 pos;
 		float closestDist = -1;
@@ -97,6 +115,19 @@ void Grid::update() {
 }
 
 void Grid::render() {
+
+	// boxCollider.render();
+
+	/*
+	for (int i = 0; i < boxCollider.localColPoints.size(); i++) {
+		debugCubes[i].render();
+	}
+	*/
+
+	if (boxCollider.localColPoints.size() > 0) {
+		plane.render();
+	}
+
 	rendererPtr->submitShader(shaderProgram, transform);
 
 	shaderProgram.setInt("texUnit", textureUnit);

@@ -24,7 +24,7 @@ static unsigned int indicies[] = {
 	5,7,8
 };
 
-extern MouseClickState mouseClickState;
+extern MouseClickState mousePressedState;
 extern MouseState mouseState;
 extern Renderer* rendererPtr;
 
@@ -63,7 +63,7 @@ void Arrow::update() {
 
 	if (boxCollider.rayCollide(ray)) {
 		arrowShader.setVec3("color", glm::value_ptr(highlightColor));
-		clickedOn = mouseClickState.left;
+		clickedOn = mousePressedState.left;
 	}
 	else {
 		arrowShader.setVec3("color", glm::value_ptr(color));

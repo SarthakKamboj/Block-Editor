@@ -49,4 +49,6 @@ public:
 
 	std::vector<glm::vec3> localColPoints;
 
+	static float vertices[24];
+
 };
