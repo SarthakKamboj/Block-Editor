@@ -69,19 +69,11 @@ void Grid::update() {
 	Ray ray = boxCollider.screenToLocalRay(screenCoords);
 	bool rayCollided = boxCollider.rayCollide(ray);
 
-	/*
-	for (int i = 0; i < boxCollider.localColPoints.size(); i++) {
-		debugCubes[i].transform.pos = boxCollider.localToWorld(boxCollider.localColPoints[i]);
-		debugCubes[i].transform.pos.y = transform.pos.y;
-	}
-	*/
-
 	if (boxCollider.localColPoints.size() > 0) {
 		plane.transform.pos = boxCollider.localToWorld(boxCollider.localColPoints[0]);
 		plane.transform.pos.y = transform.pos.y + 0.001f;
 
 		plane.transform.pos.x = round(plane.transform.pos.x);
-		// plane.transform.pos.y = round(plane.transform.pos.y) + 0.52f;
 		plane.transform.pos.z = round(plane.transform.pos.z);
 	}
 
@@ -119,14 +111,6 @@ void Grid::update() {
 }
 
 void Grid::render() {
-
-	// boxCollider.render();
-
-	/*
-	for (int i = 0; i < boxCollider.localColPoints.size(); i++) {
-		debugCubes[i].render();
-	}
-	*/
 
 	rendererPtr->submitShader(shaderProgram, transform);
 

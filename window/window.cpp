@@ -36,16 +36,7 @@ void Window::deInitializeImGui() {
 	ImGui::DestroyContext();
 }
 
-static bool firstClose = true;
 void Window::close() {
-	/*
-	if (firstClose) {
-		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplSDL2_Shutdown();
-		ImGui::DestroyContext();
-	}
-	*/
-
 	SDL_GL_DeleteContext(context);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
