@@ -11,13 +11,7 @@ extern MouseClickState mousePressedState;
 extern MouseState mouseState;
 extern ModeManager* modeManagerPtr;
 
-// static float vertices[12];
-static float vertices[8] = {
-	// -0.5f, 0.5f,
-	// 0.5f, 0.5f,
-	// -0.5f, -0.5f,
-	// 0.5f, -0.5f
-};
+static float vertices[8];
 static unsigned int indicies[6] = {
 	0,1,2,
 	1,2,3
@@ -70,18 +64,10 @@ void GroupSelector::update() {
 
 	if (!activelySelecting) return;
 
-	// std::cout << std::endl;
-
-	// for (int i = 0; i < 4; i++) {
-		// Ray r = boxCollider.screenToLocalRay(points[i]);
 	for (int cubeIdx = 0; cubeIdx < cubes.size(); cubeIdx++) {
 		for (int i = 0; i < 6; i++) {
 			glm::vec3 localPoint = { BoxCollider::vertices[(i * 3)], BoxCollider::vertices[(i * 3) + 1], BoxCollider::vertices[(i * 3) + 2] };
 			glm::vec3 cubeVertNdc = cubes[cubeIdx].boxCollider.localToNDC(localPoint);
-			// float ndcWidth = topRightNdc.x - topLeftNdc.x;
-			// float ndcHeight = topRightNdc.y - bottomRightNdc.y;
-
-			// printVec3(cubeVertNdc);
 
 			float largerNdcX = fmax(topLeftNdc.x, topRightNdc.x);
 			float smallerNdcX = fmin(topLeftNdc.x, topRightNdc.x);
@@ -95,14 +81,9 @@ void GroupSelector::update() {
 					}
 				}
 			}
-			// cubes[i].boxCollider.) {
-			// cubeEditorPtr->addCube(this);
-			// }
 		}
 	}
-	// }
 
-	// std::cout << std::endl;
 }
 
 void GroupSelector::updateVertices() {

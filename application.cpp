@@ -77,9 +77,6 @@ int Application::Init() {
 	Renderer renderer;
 	rendererPtr = &renderer;
 
-	Cube cube0;
-	cubes.push_back(cube0);
-
 	CubeEditor cubeEditor;
 	cubeEditorPtr = &cubeEditor;
 

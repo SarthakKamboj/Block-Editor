@@ -116,23 +116,6 @@ void Cube::update() {
 		}
 	}
 
-	// if (!groupSelectorPtr->activelySelecting) return;
-
-	/*
-	glm::vec2 points[4] = {
-		groupSelectorPtr->topLeftScreen,
-		groupSelectorPtr->topRightScreen,
-		groupSelectorPtr->bottomLeftScreen,
-		groupSelectorPtr->bottomRightScreen
-	};
-
-	for (int i = 0; i < 4; i++) {
-		Ray r = boxCollider.screenToLocalRay(points[i]);
-		if (boxCollider.rayCollide(r)) {
-			cubeEditorPtr->addCube(this);
-		}
-	}
-	*/
 }
 
 
